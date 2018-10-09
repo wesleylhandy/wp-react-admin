@@ -1,0 +1,19 @@
+{
+  "modules": true,
+  "plugins": {
+    "autoprefixer": {
+      "browsers": [
+        "Firefox >= 52",
+        "Chrome >= 55",
+        "ie >= 9",
+        "last 4 versions",
+        "Safari >= 9"
+      ],
+      "flexbox": "no-2009"
+    },
+    "postcss-modules": {
+      "generateScopedName": "[path]__[name]__[local]__[hash:base64:5]",
+     scopeBehaviour: 'local'
+    }
+  }
+}
