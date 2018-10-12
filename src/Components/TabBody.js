@@ -1,5 +1,7 @@
 import React from 'react'
 
+import styles from './styles/index.css'
+
 // List of Forms [DEFAULT TAB]
     // Default Admin Mode: View
     //Display List of Forms saved in DB

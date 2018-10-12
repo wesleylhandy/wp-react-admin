@@ -12,10 +12,9 @@ export async function callApi(uri, options = {}) {
         data = await loadData(uri, options);
     } catch (err) {
         console.error({err});
-        alert('Could not complete request at this time, please try again later.');
         throw new Error(err);
     }
-
+    console.log(data)
     return data;
 }
 
@@ -35,13 +34,10 @@ class HttpError extends Error {
  */
 async function loadData(uri, options = {}) {
     let response = await fetch(uri, options);
+    
     if (response.status >= 200 && response.status < 300) {
-        const contentType = resposne.headers.get("content-type");
-        if (contentType && contentType.includes('application/json')) {
-            return response.json();
-        } else {
-            return response.text();
-        }
+        console.log(response)
+        return {}
     } else {
         throw new HttpError(response);
     }

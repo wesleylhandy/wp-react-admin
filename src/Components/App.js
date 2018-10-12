@@ -1,55 +1,85 @@
 import React, { Component } from 'react'
 import { hot } from 'react-hot-loader'
-
-import './styles/admin-page.css'
+import { callApi } from './helpers/fetch-helpers'
 
 import MetaTabs from './Metatabs.js'
 import FormOptionsTabs from './FormOptionsTabs'
+import Spinner from './Spinner'
+
+import styles from './styles/index.css'
 
 class App extends Component {
-    constructor(props) {
+    constructor(props){
         super(props)
 
         this.state = {
-            adminMode: "List"
+            configured: false,
+            permissible: false,
+            adminMode: "List",
+            viewMode: "Settings",
+            formConfig: {},
+            cssConfig: {},
+            wpnonce: props.wpnonce,
+            user: {}
         }
         this.handleAdminMode = this.handleAdminMode.bind(this);
+        this.handleViewMode = this.handleViewMode.bind(this);
     }
 
-    handleAdminMode(e, adminMode) {
-        // get name of clicked element
-        // set mode
+    componentDidMount(){
+        callApi(`/wp-json/wp/v2/users/me?_nonce=${this.state.nonce}&context=edit`)
+        .then(profile=>{
+            const primaryRole = profile.roles && profile.roles.length ? profile.roles[0] : '';
+            const isAdmin = primaryRole.toLowerCase() === "administrator"
+            const user = {id: profile.id, username: profile.username, email: profile.email}
+            console.log({primaryRole, isAdmin, user})
+            this.setState({configured: true, permissible: isAdmin, user})
+        })
+        .catch(err=>{
+            console.error({err});
+            // no way to validate user
+            alert('Error validating user, please contact plugin creator.')
+        })
+    }
+
+    handleAdminMode(e, adminMode, id=""){
+        e.preventDefault();
+        if (adminMode === "Edit") {
+            callApi(`/wp-json/cbngiving/v1/admin/forms/single/${id}?_nonce=${this.state.nonce}`)
+            .then(config=>{
+                const {formConfig, cssConfig} = config
+                this.setState({formConfig, cssConfig})
+            })
+            .catch(err=>{
+                console.error({err});
+                alert('There was an error retrieving your forms.\nPlease verify that you are still connected to your wordpress installation and logged in.\nIf so, please contact Wesley.Handy@cbn.org with your issues');
+            })
+        }
+        this.setState({adminMode, formList})
+    }
+
+    handleViewMode(e, viewMode){
+        e.preventDefault();
+        this.setState({viewMode})
     }
 
     render() {
+        const {permissible, configured} = this.state
         return ( 
             <div styleName='page-wrapper' id="react-page-top"> 
-                <MetaTabs adminMode={this.state.adminMode} setAdminMode={this.handleAdminMode}/>
-                <FormOptionsTabs adminMode={this.state.adminMode}/>
                 {
-                    // Display Menu of Options in Tabs
-                    
-                    // FORM OPTIONS TABS
-                        // Form Settings
-                            // Get API KEY (if not deprecated)
-                            // Get Campaign Name
-                            // Toggles for Major Form Options
-                        // Giving Arrays - if Monthly or Single Gift Toggled On
-                            // Values and Optional Text
-                        // Products  - if Products Toggle ON
-                            // Drop Down for Number of Products
-                            // Input Groups for Each Product
-                        // Funds - if Funds Toggle On
-                            // Drop Down for Number of Funds
-                            // Input Groups for Each Fund
-                        // Subscriptions
-                            // Subscriptions to Add, Subscriptions to Remove
-                        // Style Options Tabs
-                            // Colors
-                            // Fonts
-                            // Spacing
-                            // Borders
+                    configured && permissible ? (
+                        <React.Fragment>
+                            <MetaTabs adminMode={this.state.adminMode} setAdminMode={this.handleAdminMode} wpnonce={this.state.wpnonce} user={this.state.user}/>
+                            <FormOptionsTabs {...this.state} setViewMode={this.handleViewMode}/>
+                        </React.Fragment>
+                    ) : configured && !permissible ? (
+                        <h1 styleName="not-permissible-heading">You are not Authorized to View These Settings</h1>
+                    ) : (
+                        <Spinner />
+                    )
                 }
+
             </div>
         )
     }

@@ -1,5 +1,7 @@
 import React from 'react'
 
+import styles from './styles/index.css'
+
 export default function TabHead(props) {
     const isActive = props.content.split(" ")[0] === props.adminMode;
     return (

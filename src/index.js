@@ -12,5 +12,6 @@ if (!window.Promise) {
 }
 
 const rootEntry = document.getElementById('admin-root')
+const wpnonce = rootEntry.dataset.nonce;
 
-ReactDOM.render( <App/>, rootEntry);
+ReactDOM.render( <App wpnonce={wpnonce}/>, rootEntry);

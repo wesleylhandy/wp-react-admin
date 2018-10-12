@@ -4,6 +4,8 @@ import React from 'react'
 import TabHead from './TabHead'
 import TabBody from './TabBody'
 
+import styles from './styles/index.css'
+
 export default  function MetaTabs(props) {
     const tabHeads = ["List Forms", "Add New Form", "Edit Existing Form"]
     const tabs = tabHeads.map((th, ind)=>{
