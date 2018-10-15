@@ -6,24 +6,27 @@ import TabBody from './TabBody'
 
 import styles from './styles/index.css'
 
-export default  function MetaTabs(props) {
-    const tabHeads = ["List Forms", "Add New Form", "Edit Existing Form"]
+export default function MetaTabs(props) {
+    console.log({props})
+    const {k, formList, getExistingFormInfo, adminMode, setAdminMode} = props;
+    const tabHeads = ["List Forms", "Add New Form"]
     const tabs = tabHeads.map((th, ind)=>{
         return (
             <TabHead
                 content={th}
-                onClick={props.handleAdminMode}
-                adminMode={props.adminMode}
+                handleClick={setAdminMode}
+                adminMode={adminMode}
                 key={`th-${ind}`}
             />
         )
     })
+
     return (
         <React.Fragment>
             <div styleName="tab-headers">
                 {tabs}
             </div>
-            <TabBody menuDisplay={props.adminMode}/>
+            <TabBody displayMode={adminMode} tabFunctions={{getExistingFormInfo, setAdminMode}} tabData={{k, formList}}/>
         </React.Fragment>
     )
 

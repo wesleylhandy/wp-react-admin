@@ -14,7 +14,7 @@ export async function callApi(uri, options = {}) {
         console.error({err});
         throw new Error(err);
     }
-    console.log(data)
+
     return data;
 }
 
@@ -34,10 +34,13 @@ class HttpError extends Error {
  */
 async function loadData(uri, options = {}) {
     let response = await fetch(uri, options);
-    
     if (response.status >= 200 && response.status < 300) {
-        console.log(response)
-        return {}
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes('application/json')) {
+            return response.json();
+        } else {
+            return response.text();
+        }
     } else {
         throw new HttpError(response);
     }

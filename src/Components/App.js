@@ -20,42 +20,41 @@ class App extends Component {
             formConfig: {},
             cssConfig: {},
             wpnonce: props.wpnonce,
-            user: {}
+            user: {},
+            k: '',
+            formList: []
         }
         this.handleAdminMode = this.handleAdminMode.bind(this);
         this.handleViewMode = this.handleViewMode.bind(this);
+        this.getExistingFormInfo = this.getExistingFormInfo.bind(this)
+        this.handleAPIErrors = this.handleAPIErrors.bind(this)
+        this.storeConfig = this.storeConfig.bind(this)
     }
 
-    componentDidMount(){
-        callApi(`/wp-json/wp/v2/users/me?_nonce=${this.state.nonce}&context=edit`)
-        .then(profile=>{
+    async componentDidMount(){
+        try {
+            const profile = await callApi(`/wp-json/wp/v2/users/me?_nonce=${this.state.nonce}&context=edit`)
             const primaryRole = profile.roles && profile.roles.length ? profile.roles[0] : '';
             const isAdmin = primaryRole.toLowerCase() === "administrator"
             const user = {id: profile.id, username: profile.username, email: profile.email}
             console.log({primaryRole, isAdmin, user})
             this.setState({configured: true, permissible: isAdmin, user})
-        })
-        .catch(err=>{
-            console.error({err});
-            // no way to validate user
-            alert('Error validating user, please contact plugin creator.')
-        })
+        } catch(err) {
+            this.handleAPIErrors(err);
+        }
     }
 
-    handleAdminMode(e, adminMode, id=""){
+    async handleAdminMode(e, adminMode, id=""){
         e.preventDefault();
         if (adminMode === "Edit") {
-            callApi(`/wp-json/cbngiving/v1/admin/forms/single/${id}?_nonce=${this.state.nonce}`)
-            .then(config=>{
-                const {formConfig, cssConfig} = config
+            try {
+                const {formConfig, cssConfig}  = await callApi(`/wp-json/cbngiving/v1/admin/forms/single/${id}?_nonce=${this.state.nonce}`)
                 this.setState({formConfig, cssConfig})
-            })
-            .catch(err=>{
-                console.error({err});
-                alert('There was an error retrieving your forms.\nPlease verify that you are still connected to your wordpress installation and logged in.\nIf so, please contact Wesley.Handy@cbn.org with your issues');
-            })
+            } catch(err) {
+                this.handleAPIErrors(err)
+            }
         }
-        this.setState({adminMode, formList})
+        this.setState({adminMode})
     }
 
     handleViewMode(e, viewMode){
@@ -63,15 +62,37 @@ class App extends Component {
         this.setState({viewMode})
     }
 
+    async getExistingFormInfo() {
+        let k, formList;
+        try {
+            [k, formList] = await Promise.all([callApi('/wp-json/cbngiving/v1/admin/forms/api'), callApi('/wp-json/cbngiving/v1/admin/forms/list/all')])
+            this.setState({key, formList})
+        } catch (err) {
+            this.handleAPIErrors(err)
+        }
+        return {k, formList}
+    }
+
+    async storeConfig(e, type, data) {
+        e.preventDefault()
+
+
+    }
+
+    handleAPIErrors(err) {
+        console.error({err});
+        alert('There was an error connecting with Wordpress.\nPlease verify that you are still connected to your wordpress installation and logged in.\nIf so, please contact Wesley.Handy@cbn.org with your issues');
+    }
+
     render() {
-        const {permissible, configured} = this.state
+        const {permissible, configured, ...state} = this.state
         return ( 
             <div styleName='page-wrapper' id="react-page-top"> 
                 {
                     configured && permissible ? (
                         <React.Fragment>
-                            <MetaTabs adminMode={this.state.adminMode} setAdminMode={this.handleAdminMode} wpnonce={this.state.wpnonce} user={this.state.user}/>
-                            <FormOptionsTabs {...this.state} setViewMode={this.handleViewMode}/>
+                            <MetaTabs {...state} setAdminMode={this.handleAdminMode} getExistingFormInfo={this.getExistingFormInfo} />
+                            <FormOptionsTabs {...state} setViewMode={this.handleViewMode} storeConfig={this.storeConfig}/>
                         </React.Fragment>
                     ) : configured && !permissible ? (
                         <h1 styleName="not-permissible-heading">You are not Authorized to View These Settings</h1>

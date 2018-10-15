@@ -7,7 +7,10 @@ export default function TabHead(props) {
     return (
         <div 
             styleName={`tab-headers__header${isActive ? " tab-headers__headers--active": ""}`} 
-            onClick={(e)=>props.handleAdminMode(e, props.adminMode)}
+            onClick={e => {
+                e.preventDefault();
+                props.handleClick(e, props.adminMode)
+            }}
         >
             {props.content}
         </div>

@@ -1,44 +1,38 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-export default class FormOptionsTabs extends Component {
+import TabHead from './TabHead'
+import TabBody from './TabBody'
 
-    constructor(props) {
-        super(props)
-        const {configured, permissible, ...clone} = props
-        this.state = {
-            ...clone
-        }
-    }
+import styles from './styles/index.css'
 
+export default function FormOptionsTabs(props) {
+    const {adminMode, viewMode, setViewMode, cssConfig, formConfig, storeConfig} = props
+    const subHeads = ["Donor Data", "Giving", "Products", "Funds", "Subscriptions", "Emails", "Style"]
+    const tabs = subHeads.map((th, ind)=>{
+        return (
+            <TabHead
+                content={th}
+                handleClick={setViewMode}
+                viewMode={viewMode}
+                key={`sh-${ind}`}
+            />
+        )
+    })
 
-
-    render() {
-
-    }
-
+    return (
+        <React.Fragment>
+            { 
+                adminMode !== "List" ? (
+                    <React.Fragment>
+                        <div styleName="tab-headers__submenu">
+                            {tabs}
+                        </div>
+                        <TabBody displayMode={viewMode} tabFunctions={{storeConfig}} tabData={{cssConfig, formConfig}}/>
+                    </React.Fragment>
+                ) : (
+                    null
+                )
+            }
+        </React.Fragment>
+    )
 }
-
-// FORM OPTIONS TABS
-// Form Settings
-    // Get API KEY (if not deprecated)
-    // Get Campaign Name
-    // Toggles for Major Form Options
-// Giving Arrays - if Monthly or Single Gift Toggled On
-    // Values and Optional Text
-// Products  - if Products Toggle ON
-    // Drop Down for Number of Products
-    // Input Groups for Each Product
-// Funds - if Funds Toggle On
-    // Drop Down for Number of Funds
-    // Input Groups for Each Fund
-// Subscriptions
-    // Subscriptions to Add, Subscriptions to Remove
-// Email
-    // Monthly
-    // Single
-    // Products
-// Style Options Tabs
-    // Colors
-    // Fonts
-    // Spacing
-    // Borders

@@ -1,0 +1,18 @@
+.error {
+    box-sizing: border-box;
+    position: absolute;
+    color: crimson;
+    width: auto;
+    left: 5px;
+    bottom: calc(0% - 13px);
+    font-weight: bold;
+    font-size: 14px;
+    opacity: 1;
+    overflow: hidden;
+    max-width: 100%;
+    white-space: nowrap;
+}
+
+.error.amount-error {
+    text-align: center;
+}

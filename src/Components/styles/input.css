@@ -1,0 +1,158 @@
+.form-input {
+    box-sizing: border-box;
+    position: relative;
+}
+
+.form-group {
+    box-sizing: border-box;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    position: relative;
+}
+
+.form-group>label {
+    box-sizing: border-box;
+    color: #444;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 0;
+    position: absolute;
+    opacity: 0;
+    bottom: calc(100% - 6px);
+    left: calc(14px * .35);
+    -webkit-transition: opacity 150ms ease-in-out;
+    transition: opacity 150ms ease-in-out;
+}
+
+.form-group:hover>label,
+.form-group:active>label,
+.form-group:focus>label {
+    opacity: 1;
+}
+
+.form-group>label>span {
+    box-sizing: border-box;
+    color: crimson;
+}
+
+.form-group--Title {
+    flex-basis: 83px;
+    width: 83px;
+}
+
+.form-group--Firstname,
+.form-group--Lastname {
+    box-sizing: border-box;
+}
+
+.form-group--State,
+.form-group--Country {
+    max-width: 50%;
+}
+
+.form-group--Phone,
+.form-group--Email {
+    width: 50%;
+}
+
+input[type='text'].form-control,
+select.form-control {
+    box-sizing: border-box;
+    color: #fff;
+    font-size: 14px;
+    height: calc(14px * 2);
+    display: block;
+    width: 100%;
+    margin-top: 5px;
+    padding: 6px;
+    line-height: 1.42857143;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    position: relative;
+}
+
+.form-control::-webkit-input-placeholder,
+.form-control::-moz-placeholder,
+.form-control:-ms-input-placeholder,
+.form-control::placeholder {
+    box-sizing: border-box;
+    color: #72777c;
+    font-size: 14px;
+}
+
+input[type='text'].form-control,
+select.form-control,
+.form-input {
+    appearance: none;
+    border-radius: 0;
+    box-sizing: border-box;
+}
+
+input[type='text'].form-control:focus,
+input[type='text'].form-control:active,
+input[type='text'].form-control:hover,
+select.form-control:focus,
+select.form-control:active,
+select.form-control:hover,
+.form-input:focus,
+.form-input:active,
+.form-input:hover {
+    border: 1px solid #5b9dd9;
+    background-color: #fff;
+    outline: none;
+}
+
+input[type='text'].form-control:focus,
+input[type='text'].form-control:active,
+input[type='text'].form-control:hover,
+select.form-control:focus,
+select.form-control:active,
+select.form-control:hover {
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(30, 140, 190, .8);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(30, 140, 190, .8);
+}
+
+input[type='text'].form-control:disabled {
+    background: #f1f1f1;
+}
+
+@media screen and (max-width:613px) {
+    .form-group--Lastname {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .form-group--Phone,
+    .form-group--Email {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 414px) {
+    .form-group--State,
+    .form-group--City {
+        max-width: 100%;
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 375px) {
+    .form-group--Firstname {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 365px) {
+    .form-group--Zip,
+    .form-group--Country {
+        max-width: 100%;
+        width: 100%;
+    }
+}

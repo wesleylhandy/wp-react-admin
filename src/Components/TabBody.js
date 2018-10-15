@@ -1,6 +1,8 @@
 import React from 'react'
 
+import List from './List'
 import styles from './styles/index.css'
+
 
 // List of Forms [DEFAULT TAB]
     // Default Admin Mode: View
@@ -14,22 +16,50 @@ import styles from './styles/index.css'
 // Edit Existing Form [MetaTab]
     // Set Admin Mode to Edit
 
-import FormList from './FormList'
 
 export default function TabBody(props) {
+    function renderBody() {
+        switch (props.displayMode) {
+            case "List":
+                const {k, formList} = props.tabData;
+                return <List tabFunctions={props.tabFunctions} k={k} formList={formList}/>
+                break;
+            case "Settings":
+                const { formConfig } = props.tabData;
+                return <Settings tabFunctions={props.tabFunctions} formConfig={formConfig}/>;
+                break;
+            default:
+                return null;
+        }  
+    }
     return (
         <div styleName="tab-body">
-            {
-                ()=>{
-                    switch (props.displayMode) {
-                        case "List":
-                            return <FormList/>
-                            break;
-                        default:
-                            return null;
-                    }  
-                }
-            }
+            {renderBody()}
         </div>
     )
 }
+
+// FORM OPTIONS TABS
+// Form Settings
+    // Get API KEY (if not deprecated)
+    // Get Campaign Name
+    // Toggles for Major Form Options
+// Giving Arrays - if Monthly or Single Gift Toggled On
+    // Values and Optional Text
+// Products  - if Products Toggle ON
+    // Drop Down for Number of Products
+    // Input Groups for Each Product
+// Funds - if Funds Toggle On
+    // Drop Down for Number of Funds
+    // Input Groups for Each Fund
+// Subscriptions
+    // Subscriptions to Add, Subscriptions to Remove
+// Email
+    // Monthly
+    // Single
+    // Products
+// Style Options Tabs
+    // Colors
+    // Fonts
+    // Spacing
+    // Borders
