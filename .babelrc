@@ -6,13 +6,7 @@
             "handleMissingStyleName": "warn"
         }],
         "react-hot-loader/babel",
-        "transform-object-rest-spread", [
-            "transform-runtime",
-            {
-                "polyfill": false,
-                "regenerator": true
-            }
-        ]
+        "transform-object-rest-spread"
     ],
     "presets": [
         ["env", { "useBuiltIns": true }], "react"

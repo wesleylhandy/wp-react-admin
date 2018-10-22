@@ -1,5 +1,3 @@
-import 'whatwg-fetch';
-
 /**
  * Asynchronous function
  * @param {string} uri - Endpoint being called
@@ -11,19 +9,11 @@ export async function callApi(uri, options = {}) {
     try {
         data = await loadData(uri, options);
     } catch (err) {
-        console.error({err});
-        throw new Error(err);
+        console.error(err)
+        throw new Error(err.message);
     }
 
     return data;
-}
-
-class HttpError extends Error {
-    constructor(response) {
-        super(`${response.status} for ${response.url}`);
-        this.name = 'HttpError';
-        this.response = response;
-    }
 }
 
 /**
@@ -34,14 +24,28 @@ class HttpError extends Error {
  */
 async function loadData(uri, options = {}) {
     let response = await fetch(uri, options);
-    if (response.status >= 200 && response.status < 300) {
-        const contentType = response.headers.get("content-type");
+    const contentType = response.headers.get("content-type");
+    if (response.status >= 200 && response.status < 300) { 
         if (contentType && contentType.includes('application/json')) {
             return response.json();
         } else {
             return response.text();
         }
     } else {
-        throw new HttpError(response);
+        
+        return getErrorBody(response, contentType)
+            .then(body=>{
+                return Promise.reject(body)
+            })
     }
+}
+
+async function getErrorBody(response, contentType = 'text') {
+    let body;
+    if (contentType.includes('application/json')) {
+        body = await response.json();
+    } else {
+        body = await response.text();
+    }
+    return body;
 }

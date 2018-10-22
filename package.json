@@ -18,6 +18,7 @@
         "raf": "^3.4.0",
         "react": "^16.4.0",
         "react-dom": "^16.4.0",
+        "sweetalert": "^2.1.0",
         "whatwg-fetch": "^2.0.4"
     },
     "devDependencies": {

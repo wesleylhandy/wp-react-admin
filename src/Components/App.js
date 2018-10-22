@@ -8,39 +8,54 @@ import Spinner from './Spinner'
 
 import styles from './styles/index.css'
 
+
+
 class App extends Component {
     constructor(props){
         super(props)
 
         this.state = {
+            base: (props.mode == 'local' ? 'http://givingwp.dmgdev.cbn.local' : ''),
             configured: false,
             permissible: false,
             adminMode: "List",
             viewMode: "Settings",
             formConfig: {},
             cssConfig: {},
-            wpnonce: props.wpnonce,
+            emailConfig: {},
             user: {},
             k: '',
-            formList: []
+            formList: [],
+            options: {
+                credentials: "include",
+                method: "GET",
+                headers: {
+                    "X-WP-Nonce": props.wpnonce,
+                    "Content-Type": 'application/json',
+                }
+            }
         }
         this.handleAdminMode = this.handleAdminMode.bind(this);
         this.handleViewMode = this.handleViewMode.bind(this);
         this.getExistingFormInfo = this.getExistingFormInfo.bind(this)
         this.handleAPIErrors = this.handleAPIErrors.bind(this)
         this.storeConfig = this.storeConfig.bind(this)
+        this.setApiKey = this.setApiKey.bind(this)
     }
 
     async componentDidMount(){
         try {
-            const profile = await callApi(`/wp-json/wp/v2/users/me?_nonce=${this.state.nonce}&context=edit`)
+            const profile = await callApi(`${this.state.base}/wp-json/wp/v2/users/me?context=edit`)
             const primaryRole = profile.roles && profile.roles.length ? profile.roles[0] : '';
             const isAdmin = primaryRole.toLowerCase() === "administrator"
             const user = {id: profile.id, username: profile.username, email: profile.email}
-            console.log({primaryRole, isAdmin, user})
             this.setState({configured: true, permissible: isAdmin, user})
         } catch(err) {
-            this.handleAPIErrors(err);
+            if (this.props.mode == 'local') {
+                this.setState({configured: true, permissible: true, user: {id: 1, username: 'dmg', email: 'wesley.handy@cbn.org'}})
+            } else {
+                this.handleAPIErrors(err);
+            }
         }
     }
 
@@ -48,8 +63,9 @@ class App extends Component {
         e.preventDefault();
         if (adminMode === "Edit") {
             try {
-                const {formConfig, cssConfig}  = await callApi(`/wp-json/cbngiving/v1/admin/forms/single/${id}?_nonce=${this.state.nonce}`)
-                this.setState({formConfig, cssConfig})
+                const result = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/single/${id}`, this.state.options)
+                const {formConfig, cssConfig, emailConfig}  = result;
+                this.setState({formConfig, cssConfig, emailConfig})
             } catch(err) {
                 this.handleAPIErrors(err)
             }
@@ -65,18 +81,53 @@ class App extends Component {
     async getExistingFormInfo() {
         let k, formList;
         try {
-            [k, formList] = await Promise.all([callApi('/wp-json/cbngiving/v1/admin/forms/api'), callApi('/wp-json/cbngiving/v1/admin/forms/list/all')])
-            this.setState({key, formList})
+            [k, formList] = await Promise.all([callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/api`, this.state.options), callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/list/all`, this.state.options)])
+            this.setState({k: k.key, formList})
         } catch (err) {
             this.handleAPIErrors(err)
         }
-        return {k, formList}
+        return {k: k.key, formList}
     }
 
-    async storeConfig(e, type, data) {
+    async storeConfig(e, id, type, data, method) {
         e.preventDefault()
+        try {
+            const endpoint = method === "POST" ? 'create' : `${id}`
+            const { options } = this.state;
+            options.method = method;
+            options.body = JSON.stringify({[type]: data});
+            const completed = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/${endpoint}`, options);
+            if (completed) {
+                this.setState({[type]: data})
+            }
+            return true;
+        } catch(err) {
+            this.handleAPIErrors(err)
+            return false;
+        }
 
+    }
 
+    async setApiKey(e, key, method) {
+        e.preventDefault();
+        try {
+            const { options } = this.state;
+            options.method = method;
+            options.body = JSON.stringify({api_key: key})
+            const completed = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/api`, options);
+            if (completed) {
+                this.setState({k: key})
+            }
+            return true;
+        } catch(err) {
+            if (err.message.includes("Duplicate value.")) {
+                console.error({setApiKeyErr: err})
+                return true;
+            } else {
+                this.handleAPIErrors(err)
+                return false
+            }
+        }
     }
 
     handleAPIErrors(err) {
@@ -91,7 +142,7 @@ class App extends Component {
                 {
                     configured && permissible ? (
                         <React.Fragment>
-                            <MetaTabs {...state} setAdminMode={this.handleAdminMode} getExistingFormInfo={this.getExistingFormInfo} />
+                            <MetaTabs {...state} setAdminMode={this.handleAdminMode} getExistingFormInfo={this.getExistingFormInfo} setApiKey={this.setApiKey}/>
                             <FormOptionsTabs {...state} setViewMode={this.handleViewMode} storeConfig={this.storeConfig}/>
                         </React.Fragment>
                     ) : configured && !permissible ? (

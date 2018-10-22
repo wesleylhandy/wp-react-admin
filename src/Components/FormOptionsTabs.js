@@ -6,7 +6,7 @@ import TabBody from './TabBody'
 import styles from './styles/index.css'
 
 export default function FormOptionsTabs(props) {
-    const {adminMode, viewMode, setViewMode, cssConfig, formConfig, storeConfig} = props
+    const {adminMode, viewMode, setViewMode, cssConfig, formConfig, storeConfig, emailConfig} = props
     const subHeads = ["Donor Data", "Giving", "Products", "Funds", "Subscriptions", "Emails", "Style"]
     const tabs = subHeads.map((th, ind)=>{
         return (
@@ -27,7 +27,7 @@ export default function FormOptionsTabs(props) {
                         <div styleName="tab-headers__submenu">
                             {tabs}
                         </div>
-                        <TabBody displayMode={viewMode} tabFunctions={{storeConfig}} tabData={{cssConfig, formConfig}}/>
+                        <TabBody displayMode={viewMode} tabFunctions={{storeConfig}} tabData={{cssConfig, formConfig, emailConfig}}/>
                     </React.Fragment>
                 ) : (
                     null

@@ -1,6 +1,7 @@
 import React from 'react'
 
 import List from './List'
+import Settings from './Settings'
 import styles from './styles/index.css'
 
 
@@ -25,8 +26,8 @@ export default function TabBody(props) {
                 return <List tabFunctions={props.tabFunctions} k={k} formList={formList}/>
                 break;
             case "Settings":
-                const { formConfig } = props.tabData;
-                return <Settings tabFunctions={props.tabFunctions} formConfig={formConfig}/>;
+                const { formConfig, cssConfig, emailConfig } = props.tabData;
+                return <Settings tabFunctions={props.tabFunctions} formConfig={{formConfig: JSON.parse(formConfig), cssConfig:JSON.parse(cssConfig), emailConfig:JSON.parse(emailConfig)}}/>;
                 break;
             default:
                 return null;
