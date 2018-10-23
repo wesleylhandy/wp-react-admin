@@ -7,7 +7,7 @@ import styles from './styles/index.css'
 
 export default function FormOptionsTabs(props) {
     const {adminMode, viewMode, setViewMode, cssConfig, formConfig, storeConfig, emailConfig} = props
-    const subHeads = ["Donor Data", "Giving", "Products", "Funds", "Subscriptions", "Emails", "Style"]
+    const subHeads = ["Settings", "Name/Address", "Donations", "Products", "Funds", "Subscriptions", "Emails", "Style"]
     const tabs = subHeads.map((th, ind)=>{
         return (
             <TabHead

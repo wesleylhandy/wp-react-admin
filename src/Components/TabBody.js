@@ -42,7 +42,6 @@ export default function TabBody(props) {
 
 // FORM OPTIONS TABS
 // Form Settings
-    // Get API KEY (if not deprecated)
     // Get Campaign Name
     // Toggles for Major Form Options
 // Giving Arrays - if Monthly or Single Gift Toggled On
