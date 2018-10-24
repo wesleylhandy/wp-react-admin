@@ -1,7 +1,7 @@
 {
     "plugins": [
         ["react-css-modules", {
-            "generateScopedName": "[path]__[name]__[local]__[hash:base64:5]",
+            "generateScopedName": "[local]__[hash:base64:5]",
             "webpackHotModuleReloading": true,
             "handleMissingStyleName": "warn"
         }],

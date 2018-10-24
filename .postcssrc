@@ -12,7 +12,7 @@
       "flexbox": "no-2009"
     },
     "postcss-modules": {
-      "generateScopedName": "[path]__[name]__[local]__[hash:base64:5]",
+      "generateScopedName": "[local]__[hash:base64:5]",
      scopeBehaviour: 'local'
     }
   }

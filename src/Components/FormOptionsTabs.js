@@ -3,17 +3,17 @@ import React from 'react'
 import TabHead from './TabHead'
 import TabBody from './TabBody'
 
-import styles from './styles/index.css'
+import tabs from './styles/tabs.css'
 
 export default function FormOptionsTabs(props) {
     const {adminMode, viewMode, setViewMode, cssConfig, formConfig, storeConfig, emailConfig} = props
-    const subHeads = ["Settings", "Name/Address", "Donations", "Products", "Funds", "Subscriptions", "Emails", "Style"]
+    const subHeads = ["Settings", "Name/Address", "Gifts", "Products", "Funds", "Subscriptions", "Emails", "Style"]
     const tabs = subHeads.map((th, ind)=>{
         return (
             <TabHead
                 content={th}
                 handleClick={setViewMode}
-                viewMode={viewMode}
+                mode={viewMode}
                 key={`sh-${ind}`}
             />
         )
@@ -24,10 +24,10 @@ export default function FormOptionsTabs(props) {
             { 
                 adminMode !== "List" ? (
                     <React.Fragment>
-                        <div styleName="tab-headers__submenu">
+                        <div styleName="tabs.tab-headers__submenu">
                             {tabs}
                         </div>
-                        <TabBody displayMode={viewMode} tabFunctions={{storeConfig}} tabData={{cssConfig, formConfig, emailConfig}}/>
+                        <TabBody adminMode={adminMode} displayMode={viewMode} tabFunctions={{storeConfig}} tabData={{cssConfig, formConfig, emailConfig}}/>
                     </React.Fragment>
                 ) : (
                     null

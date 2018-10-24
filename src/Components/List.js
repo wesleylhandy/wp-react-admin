@@ -2,7 +2,10 @@ import React, {Component} from 'react'
 
 import { callApi } from './helpers/fetch-helpers'
 
-import styles from './styles/index.css'
+import flex from './styles/flex.css'
+import input from './styles/input.css'
+import error from './styles/error.css'
+import form from './styles/form.css'
 
 import FormButton from './FormButton'
 import swal from 'sweetalert'
@@ -99,48 +102,88 @@ export default class List extends Component {
     
     render() {
         const self = this;   
-        const list = this.state.list.map((el, ind)=> {
+        const tableRows = this.state.list.map((el, ind)=> {
             if (el.id) {
                 return (
-                    <li key={`list-${ind}`} styleName="flex">
-                        <div styleName="">{el.id}</div>
-                        <div styleName="">{el.form_name}</div>
-                        <div styleName="">{el.form_status}</div>
-                        <FormButton val="Edit" handleClick={self.handleButtonClick} ctx={{name: "campaign", val: el.id, type: 'Edit'}} />
-                        <FormButton val="Delete" handleClick={self.handleButtonClick} ctx={{name: "campaign", val: el.id, type: 'Delete'}} />
-                    </li>
+                    <tr key={`list-${ind}`} styleName="form.table-row">
+                        <td styleName="form.table-row__cells">{el.id}</td>
+                        <td styleName="form.table-row__cells">{el.form_name}</td>
+                        <td styleName="form.table-row__cells">{el.form_status}</td>
+                        <td styleName="form.table-row__cells">
+                            <div styleName="flex.flex flex.flex-row flex.flex-axes-center">
+                                <FormButton val="Edit" handleClick={self.handleButtonClick} ctx={{name: "campaign", val: el.id, type: 'Edit'}} />
+                                <FormButton val="Delete" handleClick={self.handleButtonClick} ctx={{name: "campaign", val: el.id, type: 'Delete'}} />
+                            </div>
+                        </td>
+                    </tr>
                 )
-            } else return <li></li>
+            } else return null
         });
         return (
             <React.Fragment>
-                <form styleName="" onSubmit={ e => e.preventDefault() }>
-                    <div styleName="">
-                        <label htmlFor="apiKey">ApiKey</label>
-                        <input 
-                            styleName={this.state.stored ? "" : ""}
-                            type="text"
-                            value={this.state.inputValue}
-                            disabled={this.state.inputDisabled}
-                            name="apiKey"
-                            onChange={this.handleInputChange}
-                            placeholder="API Key assigned by Giving Services"
-                            onFocus={this.handleEditApiKey}
-                            ref={this.keyField}
-                        />
-                        <div styleName="">{this.state.error}</div>
-                        <FormButton val="Update" handleClick={this.handleButtonClick} ctx={{name: "apiKey", val: '', type: 'Edit'}} />
-                        { 
-                            this.state.allowEdit && !this.state.error ? (
-                                <FormButton val="Save" handleClick={this.handleButtonClick} ctx={{name: 'apiKey', val: '', type: 'Save'}} />
-                            ) : null
-                        }
-                    </div>
+                <form onSubmit={ e => e.preventDefault() }>
+                    <fieldset styleName='form.fieldset'>
+                        <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
+                            <div id="form-field-apiKey" styleName="input.form-group flex.flex-grow">
+                                <label htmlFor="apiKey">ApiKey</label>
+                                <input 
+                                    id="apiKey"
+                                    styleName={`input.form-control${this.state.error ? " input.error" : ""}${this.state.stored ? " input.stored" : ""}`}
+                                    type="text"
+                                    value={this.state.inputValue}
+                                    disabled={this.state.inputDisabled}
+                                    name="apiKey"
+                                    required={true}
+                                    onChange={this.handleInputChange}
+                                    placeholder="API Key assigned by Giving Services"
+                                    onFocus={this.handleEditApiKey}
+                                    aria-invalid={this.state.error ? true : false} 
+                                    ref={this.keyField}
+                                />
+                                <div styleName="">{this.state.error}</div>
+                            </div>
+                        
+                            <FormButton val="Update" handleClick={this.handleButtonClick} ctx={{name: "apiKey", val: '', type: 'Edit'}} />
+                            { 
+                                this.state.allowEdit && !this.state.error ? (
+                                    <FormButton val="Save" handleClick={this.handleButtonClick} ctx={{name: 'apiKey', val: '', type: 'Save'}} />
+                                ) : null
+                            }
+                        </div>
+                    </fieldset>
                 </form>
-                <ul styleName="">
-                    {list}
-                </ul>
-                <FormButton val="Add" handleClick={this.handleButtonClick} ctx={{name: "campaign", val: '', type: 'Add'}} />
+                <table styleName='form.table'>
+                    <thead styleName="form.table-head">
+                        <tr styleName='form.table-row'>
+                            <th styleName="form.table-row__headers">
+                                ID
+                            </th>
+                            <th styleName="form.table-row__headers">
+                                Campaign Name
+                            </th>
+                            <th styleName="form.table-row__headers">
+                                Status
+                            </th>
+                            <th styleName="form.table-row__headers">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {tableRows}
+                        <tr styleName="form.table-row">
+                            <td styleName="form.table-row__cells"></td>
+                            <td styleName="form.table-row__cells"></td>
+                            <td styleName="form.table-row__cells"></td>
+                            <td styleName="form.table-row__cells">
+                                <div styleName="flex.flex flex.flex-row flex.flex-axes-center">
+                                    <FormButton val="Add New Form" handleClick={this.handleButtonClick} ctx={{name: "campaign", val: '', type: 'Add'}} />
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
             </React.Fragment>
         )
     }

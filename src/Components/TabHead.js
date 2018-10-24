@@ -1,15 +1,17 @@
 import React from 'react'
 
-import styles from './styles/index.css'
+import tabs from './styles/tabs.css'
 
 export default function TabHead(props) {
-    const isActive = props.content.split(" ")[0] === props.adminMode;
+    const content = props.content.split(" ")[0]
+    const isActive = content.includes(props.mode);
+    // console.log({isActive, content, mode: props.mode})
     return (
         <div 
-            styleName={`tab-headers__header${isActive ? " tab-headers__headers--active": ""}`} 
+            styleName={`tabs.tab-headers__header${isActive ? " tabs.tab-headers__header--active": ""}`} 
             onClick={e => {
                 e.preventDefault();
-                props.handleClick(e, props.adminMode)
+                props.handleClick(e, content)
             }}
         >
             {props.content}

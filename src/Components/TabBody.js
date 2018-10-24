@@ -2,7 +2,9 @@ import React from 'react'
 
 import List from './List'
 import Settings from './Settings'
-import styles from './styles/index.css'
+import NameSettings from './NameSettings'
+import GivingSettings from './GivingSettings'
+import tabs from './styles/tabs.css'
 
 
 // List of Forms [DEFAULT TAB]
@@ -26,15 +28,20 @@ export default function TabBody(props) {
                 return <List tabFunctions={props.tabFunctions} k={k} formList={formList}/>
                 break;
             case "Settings":
-                const { formConfig, cssConfig, emailConfig } = props.tabData;
-                return <Settings tabFunctions={props.tabFunctions} formConfig={{formConfig: JSON.parse(formConfig), cssConfig:JSON.parse(cssConfig), emailConfig:JSON.parse(emailConfig)}}/>;
+                return <Settings adminMode={props.adminMode} tabFunctions={props.tabFunctions} formConfig={props.tabData.formConfig}/>;
+                break;
+            case "Name/Address":
+                return <NameSettings adminMode={props.adminMode} tabFunctions={props.tabFunctions} formConfig={props.tabData.formConfig}/>;
+                break;
+            case "Gifts":
+                return <GivingSettings adminMode={props.adminMode} tabFunctions={props.tabFunctions} formConfig={props.tabData.formConfig}/>;
                 break;
             default:
                 return null;
         }  
     }
     return (
-        <div styleName="tab-body">
+        <div styleName="tabs.tab-body">
             {renderBody()}
         </div>
     )

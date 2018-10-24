@@ -64,7 +64,9 @@ class App extends Component {
         if (adminMode === "Edit") {
             try {
                 const result = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/single/${id}`, this.state.options)
-                const {formConfig, cssConfig, emailConfig}  = result;
+                let {formConfig, cssConfig, emailConfig}  = result;
+                formConfig = JSON.parse(formConfig), cssConfig = JSON.parse(cssConfig), emailConfig = JSON.parse(emailConfig)
+                console.log({formConfig, cssConfig, emailConfig})
                 this.setState({formConfig, cssConfig, emailConfig})
             } catch(err) {
                 this.handleAPIErrors(err)
@@ -75,6 +77,7 @@ class App extends Component {
 
     handleViewMode(e, viewMode){
         e.preventDefault();
+        // console.log({viewMode})
         this.setState({viewMode})
     }
 

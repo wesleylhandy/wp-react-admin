@@ -17,17 +17,16 @@
     font-weight: bold;
     margin-bottom: 0;
     position: absolute;
-    opacity: 0;
-    bottom: calc(100% - 6px);
-    left: calc(14px * .35);
-    -webkit-transition: opacity 150ms ease-in-out;
-    transition: opacity 150ms ease-in-out;
+    bottom: calc(100% - 5px);
+    left: 7px;
+    -webkit-transition: color 150ms ease-in-out;
+    transition: color 150ms ease-in-out;
 }
 
 .form-group:hover>label,
 .form-group:active>label,
 .form-group:focus>label {
-    opacity: 1;
+    color: #0085ba;
 }
 
 .form-group>label>span {
@@ -56,11 +55,12 @@
 }
 
 input[type='text'].form-control,
+input[type="number"].form-control,
 select.form-control {
     box-sizing: border-box;
-    color: #fff;
+    color: #444;
     font-size: 14px;
-    height: calc(14px * 2);
+    height: 30px;
     display: block;
     width: 100%;
     margin-top: 5px;

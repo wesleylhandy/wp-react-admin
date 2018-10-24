@@ -90,7 +90,8 @@ h3.form-header,
     width: 100%;
 }
 
-.form-row>div+div {
+.form-row>div+div,
+.form-btn+.form-btn {
     box-sizing: border-box;
     margin-left: 10px;
 }
@@ -121,7 +122,8 @@ h3.form-header,
     position: relative;
 }
 
-input[type="submit"].submit-button {
+input[type="submit"].submit-button,
+.form-btn {
     background: #0085ba;
     box-sizing: border-box;
     color: #fff;
@@ -140,7 +142,16 @@ input[type="submit"].submit-button {
     transition: background-color 200ms ease-in-out, color 200ms ease-in-out, border-color 200ms ease-in-out;
 }
 
-input[type="submit"].submit-button:hover {
+.form-btn {
+    cursor: pointer;
+    pointer-events: auto;
+    margin-top: 16px;
+    width: auto;
+    height: auto;
+}
+
+input[type="submit"].submit-button:hover,
+.form-btn:hover {
     background-color: #fff;
     color: #0085ba;
     border-color: #0085ba;
@@ -156,6 +167,12 @@ input[type="submit"].submit-button>.error {
 .invalid {
     box-sizing: border-box;
     border-color: crimson !important;
+}
+
+.monthly-radio {
+    box-sizing: border-box;
+    margin: 20px 0;
+    max-width: 300px;
 }
 
 @media screen and (max-width: 365px) {

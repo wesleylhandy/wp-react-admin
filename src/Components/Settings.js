@@ -2,7 +2,8 @@ import React, {Component} from 'react'
 
 import { callApi } from './helpers/fetch-helpers'
 
-import styles from './styles/index.css'
+import form from './styles/form.css'
+import flex from './styles/flex.css'
 
 import FormButton from './FormButton'
 import swal from 'sweetalert'
@@ -12,7 +13,7 @@ import InputGroup from './InputGroup';
 export default class Settings extends Component {
     constructor(props) {
         super(props);
-        console.log({props});
+        // console.log({props});
         this.state = {
             errors: {},
             fields: {}
@@ -37,15 +38,15 @@ export default class Settings extends Component {
     handleInputChange(e) {
        
     }
-    
+   
     render() {
         const {fields, errors} = this.state;
         return (
             <React.Fragment>
                 <form>
                     <h3>Configure Main Setttings</h3>
-                    <ul>
-                        <li>
+                    <fieldset styleName="form.fieldset">
+                        <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                             <InputGroup
                                 type="text"
                                 id="form_name" 
@@ -58,24 +59,26 @@ export default class Settings extends Component {
                                 handleInputChange={this.handleInputChange} 
                                 error={errors.form_name} 
                             />
-                        </li>
-                        <li>
+                        </div>
+                        <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                             <InputGroup
                                 type="text"
                                 id="thankYouUrl" 
                                 specialStyle="" 
                                 label="Thank You Page Url" 
-                                placeholder="/thank-you" 
+                                placeholder="i.e. /thank-you" 
                                 maxLength="256" 
                                 required={true} 
                                 value={fields.thankYouUrl} 
                                 handleInputChange={this.handleInputChange} 
                                 error={errors.thankYouUrl} 
                             />
-                        </li>
-                        <li>
+                        </div>
+                    </fieldset>
+                    <fieldset styleName="form.fieldset">
+                        <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                             <Checkbox id="AddContactYN" checked={fields.AddContactYN} handleInputChange={this.handleInputChange} label="Add Contact with Transaction?"/>
-                        </li>
+                        </div>
                         {
                             fields.AddContactYN ? (
                                 <InputGroup
@@ -92,7 +95,9 @@ export default class Settings extends Component {
                                 />
                             ) : null
                         }
-                        <li>
+                        </fieldset>
+                        <fieldset styleName="form.fieldset">
+                        <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                             <InputGroup
                                 type="text"
                                 id="SectionName" 
@@ -105,8 +110,8 @@ export default class Settings extends Component {
                                 handleInputChange={this.handleInputChange} 
                                 error={errors.SectionName} 
                             />
-                        </li>
-                        <li>
+                        </div>
+                        <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                             <InputGroup
                                 type="text"
                                 id="ActivityName" 
@@ -119,8 +124,8 @@ export default class Settings extends Component {
                                 handleInputChange={this.handleInputChange} 
                                 error={errors.ActivityName} 
                             />
-                        </li>
-                        <li>
+                        </div>
+                        <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                             <InputGroup
                                 type="text"
                                 id="MotivationText" 
@@ -133,101 +138,13 @@ export default class Settings extends Component {
                                 handleInputChange={this.handleInputChange} 
                                 error={errors.MotivationText} 
                             />
-                        </li>
-                        <li>
-                            <Checkbox id="showGivingArray" checked={fields.showGivingArray} handleInputChange={this.handleInputChange} label="Show Giving Array(s)?"/>
-                        </li>
-                        {
-                            fields.showGivingArray ? (
-                                <React.Fragment>
-                                    <li>
-                                        <Checkbox id="monthlyOption" checked={fields.monthlyOption} handleInputChange={this.handleInputChange} label="Show Monthly Giving Options?"/>
-                                    </li>
-                                    { 
-                                        fields.monthlyOption ? (
-                                            <li>
-                                                <InputGroup
-                                                    type="number"
-                                                    id="numMonthlyAmounts" 
-                                                    specialStyle="" 
-                                                    label="How many monthly gift amount options?" 
-                                                    placeholder="1, 2, 3, etc" 
-                                                    min={1} 
-                                                    required={true} 
-                                                    value={fields.numMonthlyAmounts} 
-                                                    handleInputChange={this.handleInputChange} 
-                                                    error={errors.numMonthlyAmounts} 
-                                                />
-                                            </li>
-                                        ) : null
-                                    }
-                                    <li>
-                                        <Checkbox id="singleOption" checked={fields.singleOption} handleInputChange={this.handleInputChange} label="Show Single Giving Options"/>
-                                    </li>
-                                    { 
-                                        fields.singleOption ? (
-                                            <li>
-                                                <InputGroup
-                                                    type="number"
-                                                    id="numSingleAmounts" 
-                                                    specialStyle="" 
-                                                    label="How many single gift amount options?" 
-                                                    placeholder="1, 2, 3, etc" 
-                                                    min={1} 
-                                                    required={true} 
-                                                    value={fields.numSingleAmounts} 
-                                                    handleInputChange={this.handleInputChange} 
-                                                    error={errors.numSingleAmounts} 
-                                                />
-                                            </li>
-                                        ) : null
-                                    }
-                                </React.Fragment>
-                            ) : null;
-                        }
-                        <li>
-                            <Checkbox id="addFunds" checked={fields.addFunds} handleInputChange={this.handleInputChange} label="Users can Select Different Funds?"/>
-                        </li>
-                        { 
-                            fields.addFunds ? (
-                                <li>
-                                    <InputGroup
-                                        type="number"
-                                        id="numFunds" 
-                                        specialStyle="" 
-                                        label="How many fund options?" 
-                                        placeholder="1, 2, 3, etc" 
-                                        min={1} 
-                                        required={true} 
-                                        value={fields.numFunds} 
-                                        handleInputChange={this.handleInputChange} 
-                                        error={errors.numFunds} 
-                                    />
-                                </li>
-                            ) : null
-                        }
-                        <li>
-                            <Checkbox id="addProducts" checked={fields.addProducts} handleInputChange={this.handleInputChange} label="Users can Select Product(s)?"/>
-                        </li>
-                        { 
-                            fields.addProducts ? (
-                                <li>
-                                    <InputGroup
-                                        type="number"
-                                        id="numProducts" 
-                                        specialStyle="" 
-                                        label="How many fund options?" 
-                                        placeholder="1, 2, 3, etc" 
-                                        min={1} 
-                                        required={true} 
-                                        value={fields.numProducts} 
-                                        handleInputChange={this.handleInputChange} 
-                                        error={errors.numProducts} 
-                                    />
-                                </li>
-                            ) : null
-                        }
-                    </ul>
+                        </div>
+                    </fieldset>
+                    <fieldset styleName="form.fieldset">
+                        <div style={{maxWidth: "88px"}}>
+                            <FormButton val="Save" handleClick={this.handleButtonClick} ctx={{name: "store", val: '', type: 'formConfig'}} />
+                        </div>
+                    </fieldset>
                 </form>
             </React.Fragment>
         )
