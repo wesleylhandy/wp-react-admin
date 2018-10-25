@@ -14,12 +14,31 @@ export default class Settings extends Component {
     constructor(props) {
         super(props);
         // console.log({props});
+        const editMode = props.adminMode == "Edit"
         this.state = {
-            errors: {},
-            fields: {}
+            hydrate: editMode,
+            updated: false,
+            saved: false,
+            fields: {
+                form_name: editMode ? props.formConfig.form_name : true,
+                thankYouUrl: editMode ? props.formConfig.thankYouUrl : true,
+                AddContactYN: editMode ? props.formConfig.AddContactYN == "Y" : true,
+                ContactSource: editMode ? props.formConfig.ContactSource : '',
+                SectionName: editMode ? props.formConfig.SectionName : '',
+                ActivityName : editMode ? props.formConfig.ActivityName : '',
+                MotivationText: editMode ? props.formConfig.MotivationText : ''
+            },
+            errors: {
+                form_name: '',
+                thankYouUrl: '',
+                AddContactYN: '',
+                ContactSource: '',
+                SectionName: '',
+                ActivityName: '',
+                MotivationText: ''
+            }
         }
         this.handleButtonClick=this.handleButtonClick.bind(this)
-        this.handleEditApiKey = this.handleEditApiKey.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
     }
 
@@ -31,9 +50,6 @@ export default class Settings extends Component {
         
     }
 
-    async handleEditApiKey(e) {
-        
-    }
 
     handleInputChange(e) {
        

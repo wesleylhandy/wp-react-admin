@@ -66,7 +66,7 @@ class App extends Component {
                 const result = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/single/${id}`, this.state.options)
                 let {formConfig, cssConfig, emailConfig}  = result;
                 formConfig = JSON.parse(formConfig), cssConfig = JSON.parse(cssConfig), emailConfig = JSON.parse(emailConfig)
-                console.log({formConfig, cssConfig, emailConfig})
+                // console.log({formConfig, cssConfig, emailConfig})
                 this.setState({formConfig, cssConfig, emailConfig})
             } catch(err) {
                 this.handleAPIErrors(err)

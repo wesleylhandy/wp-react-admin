@@ -5,6 +5,8 @@ import Settings from './Settings'
 import NameSettings from './NameSettings'
 import GivingSettings from './GivingSettings'
 import tabs from './styles/tabs.css'
+import ProductSettings from './ProductSettings';
+import FundSettings from './FundSettings';
 
 
 // List of Forms [DEFAULT TAB]
@@ -35,6 +37,12 @@ export default function TabBody(props) {
                 break;
             case "Gifts":
                 return <GivingSettings adminMode={props.adminMode} tabFunctions={props.tabFunctions} formConfig={props.tabData.formConfig}/>;
+                break;
+            case "Products":
+                return <ProductSettings adminMode={props.adminMode} tabFunctions={props.tabFunctions} formConfig={props.tabData.formConfig}/>;
+                break;
+            case "Funds":
+                return <FundSettings adminMode={props.adminMode} tabFunctions={props.tabFunctions} formConfig={props.tabData.formConfig}/>;
                 break;
             default:
                 return null;

@@ -15,7 +15,6 @@ import SelectGroup from './SelectGroup';
 export default class GivingSettings extends Component {
     constructor(props) {
         super(props);
-        console.log({props});
         const editMode = props.adminMode == "Edit"
         this.state = {
             hydrate: editMode,
@@ -98,7 +97,6 @@ export default class GivingSettings extends Component {
 
     renderDefaultSelect(option) {
         const amounts = option === "monthly" ? this.state.fields.monthlyAmounts : this.state.fields.singleAmounts;
-        console.log({mA: this.state.monthlyAmounts, sA: this.state.singleAmounts, amounts})
         const options = amounts.map((amt, ind) => {
             return <option key={`amt-option-${ind}`} value={amt}>{amt}</option>
         })
