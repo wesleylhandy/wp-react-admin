@@ -95,6 +95,7 @@ export default function TabBody(props) {
                 break;
             case "Fonts":
                 fields = {
+                    "externalFont1": editMode ? props.tabData.cssConfig["externalFont1"]: "https://use.typekit.net/zon7onf.css",
                     "--base-font-family": editMode ? props.tabData.cssConfig["--base-font-family"] : "proxima-nova, Arial, sans-serif",
                     "--base-font-style": editMode ? props.tabData.cssConfig["--base-font-style"]: "normal",
                     "--base-font-weight": editMode ? props.tabData.cssConfig["--base-font-weight"] : "400",
