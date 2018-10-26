@@ -14,17 +14,17 @@ export default class NameSettings extends Component {
     constructor(props) {
         super(props);
         // console.log({props});
+        const editMode = props.adminMode == "Edit"
         this.state = {
-            hydrate: props.adminMode === "Edit",
             updated: false,
             saved: false,
             fields: {
-                getMiddleName: props.adminMode === "Edit" ? props.formConfig.getMIddleName : false,
-                getSuffix: props.adminMode === "Edit" ? props.formConfig.getSuffix: false,
-                getSpouseInfo: props.adminMode === "Edit" ? props.formConfig.getSpouseInfo : false,
-                getPhone: props.adminMode === "Edit" ? props.formConfig.getPhone : true,
-                international: props.adminMode === "Edit" ? props.formConfig.international : true,
-                shipping: props.adminMode === "Edit" ? props.formConfig.shipping: true
+                getMiddleName: editMode ? props.formConfig.getMIddleName : false,
+                getSuffix: editMode ? props.formConfig.getSuffix: false,
+                getSpouseInfo: editMode ? props.formConfig.getSpouseInfo : false,
+                getPhone: editMode ? props.formConfig.getPhone : true,
+                international: editMode ? props.formConfig.international : true,
+                shipping: editMode ? props.formConfig.shipping: true
             }
         }
         this.handleButtonClick=this.handleButtonClick.bind(this)

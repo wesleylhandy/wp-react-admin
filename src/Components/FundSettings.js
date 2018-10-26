@@ -9,6 +9,7 @@ import FormButton from './FormButton'
 import swal from 'sweetalert'
 import Checkbox from './Checkbox';
 import InputGroup from './InputGroup';
+import TextGroup from './TextGroup';
 
 
 export default class FundSettings extends Component {
@@ -16,7 +17,6 @@ export default class FundSettings extends Component {
         super(props);
         const editMode = props.adminMode == "Edit"
         this.state = {
-            hydrate: editMode,
             updated: false,
             saved: false,
             fields: {
@@ -34,18 +34,25 @@ export default class FundSettings extends Component {
                 singleAmounts: '',
                 defaultOption: '',
                 defaultAmount: '',
+                funds: []
             }
         }
         if (editMode) {
-            for (let i = 0; i < props.formConfig.funds.length; i++) {
-                this.state.fields["fund-" + i] = props.formConfig.funds[i]
+            for (let i = 0; i < props.formConfig.subscriptions.length; i++) {
+                this.state.errors.funds.push({
+                    [`fund-${i}-Title`]: '',
+                    [`fund-${i}-FundDescription`] : '',
+                    [`fund-${i}-DetailName`]: '',
+                    [`fund-${i}-DetailCprojMail`]: '',
+                    [`fund-${i}-DetailCprojCredit`]: '',
+                    [`fund-${i}-DetailDescription`]: ''
+                });
             }
         }
         this.handleButtonClick=this.handleButtonClick.bind(this)
-        this.handleEditApiKey = this.handleEditApiKey.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
-        this.renderAmtInputs = this.renderAmtInputs.bind(this)
-        this.renderDefaultSelect = this.renderDefaultSelect.bind(this)
+        this.handleFundInput = this.handleFundInput.bind(this)
+        this.renderFundInputs = this.renderFundInputs.bind(this)
     }
 
     async componentDidMount() {
@@ -68,32 +75,32 @@ export default class FundSettings extends Component {
         const arr = Array(num).fill(null);
         return arr.map((el, ind)=>{
             return (
-                <React.Fragment key={`fundRow-${ind}`}>
+                <fieldset key={`fundRow-${ind}`} styleName='form.fieldset__bordered'>
                     <h4>Fund {ind + 1}</h4>
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                         <InputGroup
                             type="text"
-                            id={`fund-${ind}-title`} 
+                            id={`fund-${ind}-Title`} 
                             specialStyle="" 
                             label={`Fund ${ind+1}:Title`}
                             maxLength={120}
                             placeholder="i.e. Wherever Needed Most" 
                             required={true} 
-                            value={this.state.fields[`fund-${ind}`].Title} 
+                            value={this.state.fields.funds[ind].Title} 
                             handleInputChange={this.handleFundInput} 
-                            error={this.state.errors[`fund-${ind}`].Title} 
+                            error={this.state.errors.funds[ind][`fund-${ind}-title`]} 
                         />
-                        <InputGroup
-                            type="text"
-                            id={`fund-${ind}-description`} 
+                        <TextGroup
+                            id={`fund-${ind}-FundDescription`} 
                             specialStyle="" 
                             label={`Fund ${ind+1}:Description`}
+                            rows={3}
                             maxLength={512}
                             placeholder="Can include html tags, < 320 visible characters" 
                             required={true} 
-                            value={this.state.fields[`fund-${ind}`].FundDescription} 
+                            value={this.state.fields.funds[ind].FundDescription} 
                             handleInputChange={this.handleFundInput} 
-                            error={this.state.errors[`fund-${ind}`].FundDescription} 
+                            error={this.state.errors.funds[ind][`fund-${ind}-FundDescription`]} 
                         />
                     </div>
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
@@ -105,9 +112,9 @@ export default class FundSettings extends Component {
                             maxLength={32}
                             placeholder="i.e. Superbook, OrphansPromise, 700Club, etc" 
                             required={true} 
-                            value={this.state.fields[`fund-${ind}`].DetailName} 
+                            value={this.state.fields.funds[ind].DetailName} 
                             handleInputChange={this.handleFundInput} 
-                            error={this.state.errors[`fund-${ind}`].DetailName} 
+                            error={this.state.errors.funds[ind][`fund-${ind}-DetailName`]} 
                         />
                         <InputGroup
                             type="text"
@@ -117,9 +124,9 @@ export default class FundSettings extends Component {
                             maxLength={6}
                             placeholder="i.e. 043251" 
                             required={true} 
-                            value={this.state.fields[`fund-${ind}`].DetailCprojMail} 
+                            value={this.state.fields.funds[ind].DetailCprojMail} 
                             handleInputChange={this.handleFundInput} 
-                            error={this.state.errors[`fund-${ind}`].DetailCprojMail} 
+                            error={this.state.errors.funds[ind][`fund-${ind}-DetailCprojMail`]} 
                         />
                         <InputGroup
                             type="text"
@@ -129,24 +136,24 @@ export default class FundSettings extends Component {
                             maxLength={6}
                             placeholder="i.e. 043250" 
                             required={true} 
-                            value={this.state.fields[`fund-${ind}`].DetailCprojCredit} 
+                            value={this.state.fields.funds[ind].DetailCprojCredit} 
                             handleInputChange={this.handleFundInput} 
-                            error={this.state.errors[`fund-${ind}`].DetailCprojCredit} 
+                            error={this.state.errors.funds[ind][`fund-${ind}-DetailCprojCredit`]} 
                         />
                         <InputGroup
                             type="text"
                             id={`fund-${ind}-DetailDescription`} 
                             specialStyle="" 
                             label={`Fund ${ind+1}:Solicitation Description`}
-                            maxLength={6}
+                            maxLength={32}
                             placeholder="i.e. Orphan's Promise Vietname, Superbook Translation, etc" 
                             required={true} 
-                            value={this.state.fields[`fund-${ind}`].DetailDescription} 
+                            value={this.state.fields.funds[ind].DetailDescription} 
                             handleInputChange={this.handleFundInput} 
-                            error={this.state.errors[`fund-${ind}`].DetailDescription} 
+                            error={this.state.errors.funds[ind][`fund-${ind}-DetailDescription`]} 
                         />
                     </div>
-                </React.Fragment>
+                </fieldset>
             )
         })
     }
@@ -162,24 +169,16 @@ export default class FundSettings extends Component {
                         <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                             <Checkbox id="addFunds" checked={fields.addFunds} handleInputChange={this.handleInputChange} label="Users can Select Different Funds?"/>
                         </div>
+                        { this.renderFundInputs(fields.numFunds) }
                         { 
                             fields.addFunds ? (
                                 <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
-                                    <InputGroup
-                                        type="text"
-                                        id="numFunds" 
-                                        specialStyle="" 
-                                        label="How many fund options?" 
-                                        placeholder="1, 2, 3, etc" 
-                                        required={true} 
-                                        value={fields.numFunds} 
-                                        handleInputChange={this.handleInputChange} 
-                                        error={errors.numFunds} 
-                                    />
+                                    <div style={{maxWidth: "157px"}}>
+                                        <FormButton val="Add Setting" handleClick={this.handleButtonClick} ctx={{name: "funds", val: '', type: 'Add'}} />
+                                    </div>
                                 </div>
                             ) : null
                         }
-                        { this.renderFundInputs(fields.numFunds) }
                     </fieldset>
                     <fieldset styleName="form.fieldset">
                         <div style={{maxWidth: "88px"}}>

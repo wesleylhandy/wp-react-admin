@@ -10,7 +10,7 @@ import form from './styles/form.css'
 import FormButton from './FormButton'
 import swal from 'sweetalert'
 
-export default class List extends Component {
+export default class ListForms extends Component {
     constructor(props) {
         super(props);
         this.keyField = React.createRef();

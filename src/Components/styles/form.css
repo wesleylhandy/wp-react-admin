@@ -10,7 +10,8 @@
     width: 100%;
 }
 
-.fieldset {
+.fieldset,
+.fieldset__bordered {
     -webkit-margin-start: 0;
     -webkit-margin-end: 0;
     -webkit-padding-before: 0;
@@ -23,6 +24,15 @@
     border-image: none;
     box-sizing: border-box;
     width: 100%;
+}
+
+.fieldset__bordered {
+    padding: 10px;
+    border: 1px solid #444;
+}
+
+.fieldset__bordered+.fieldset__bordered {
+    margin-top: 20px;
 }
 
 h3.form-header,

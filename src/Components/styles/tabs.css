@@ -1,5 +1,6 @@
 .tab-headers,
-.tab-headers__submenu {
+.tab-headers__submenu,
+.tab-headers__submenu--tertiary {
     box-sizing: border-box;
     width: 100%;
     display: flex;
@@ -8,16 +9,21 @@
     align-items: center;
 }
 
-.tab-headers__submenu {
+.tab-headers__submenu,
+.tab-headers__submenu--tertiary {
     margin-top: -10px;
 }
 
 .tab-headers>.tab-headers__header {
-    background: #ededed;
+    background: #bababa;
 }
 
 .tab-headers__submenu>.tab-headers__header {
-    background: #bababa;
+    background: #cbcbcb;
+}
+
+.tab-headers__submenu--tertiary>.tab-headers__header {
+    background: #ededed;
 }
 
 .tab-headers__header {
@@ -32,6 +38,10 @@
     pointer-events: auto;
     padding: 20px 30px;
     transition: color 200ms ease-in-out, border-color 200ms ease-in-out, background-color 200ms ease-in-out;
+}
+
+.tab-headers__header.tab-headers__header--disabled {
+    cursor: wait;
 }
 
 .tab-headers__header.tab-headers__header--active {

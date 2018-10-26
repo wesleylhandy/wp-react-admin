@@ -9,6 +9,7 @@ import FormButton from './FormButton'
 import swal from 'sweetalert'
 import Checkbox from './Checkbox';
 import InputGroup from './InputGroup';
+import TextGroup from './TextGroup';
 
 
 export default class ProductSettings extends Component {
@@ -16,7 +17,6 @@ export default class ProductSettings extends Component {
         super(props);
         const editMode = props.adminMode == "Edit"
         this.state = {
-            hydrate: editMode,
             updated: false,
             saved: false,
             fields: {
@@ -34,17 +34,30 @@ export default class ProductSettings extends Component {
                 singleAmounts: '',
                 defaultOption: '',
                 defaultAmount: '',
+                products: []
             }
         }
         if (editMode) {
-            for (let i = 0; i < props.formConfig.products.length; i++) {
-                this.state.fields["product-" + i] = props.formConfig.products[i]
+            for (let i = 0; i < props.formConfig.subscriptions.length; i++) {
+                this.state.errors.products.push({
+                    [`product-${i}-productTitle`]: '',
+                    [`product-${i}-productMessage`]: '',
+                    [`product-${i}-productImgUrl`]: '',
+                    [`product-${i}-DetailName`]: '',
+                    [`product-${i}-DetailCprojMail`]: '',
+                    [`product-${i}-DetailCprojCredit`]: '',
+                    [`product-${i}-DetailDescription`]: ''
+                });
             }
         }
         this.handleButtonClick=this.handleButtonClick.bind(this)
         this.handleProductInput = this.handleProductInput.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
         this.renderProductInputs = this.renderProductInputs.bind(this)
+    }
+
+    handleButtonClick(e) {
+
     }
 
     async componentDidMount() {
@@ -63,46 +76,46 @@ export default class ProductSettings extends Component {
         const arr = Array(num).fill(null);
         return arr.map((el, ind)=>{
             return (
-                <React.Fragment key={`productRow-${ind}`}>
+                <fieldset styleName="form.fieldset__bordered" key={`productRow-${ind}`}>
                     <h4>Product {ind + 1}</h4>
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                         <InputGroup
                             type="text"
-                            id={`product-${ind}-title`} 
+                            id={`product-${ind}-productTitle`} 
                             specialStyle="" 
                             label={`Product ${ind+1}:Title`}
                             maxLength={120}
                             placeholder="i.e. To Life DVD" 
                             required={true} 
-                            value={this.state.fields[`product-${ind}`].productTitle} 
+                            value={this.state.fields.products[ind].productTitle} 
                             handleInputChange={this.handleProductInput} 
-                            error={this.state.errors[`product-${ind}`].productTitle} 
+                            error={this.state.errors.products[ind][`product-${ind}-productTitle`]} 
                         />
-                        <InputGroup
-                            type="text"
-                            id={`product-${ind}-message`} 
+                        <TextGroup
+                            id={`product-${ind}-productMessage`} 
                             specialStyle="" 
                             label={`Product ${ind+1}:Description`}
                             maxLength={512}
+                            rows={3}
                             placeholder="Can include html tags, < 320 visible characters" 
                             required={true} 
-                            value={this.state.fields[`product-${ind}`].productMessage} 
+                            value={this.state.fields.products[ind].productMessage} 
                             handleInputChange={this.handleProductInput} 
-                            error={this.state.errors[`product-${ind}`].productMessage} 
+                            error={this.state.errors.products[ind][`product-${ind}-productMessage`]} 
                         />
                     </div>
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                         <InputGroup
                             type="text"
-                            id={`product-${ind}-imgUrl`} 
+                            id={`product-${ind}-productImgUrl`} 
                             specialStyle="" 
                             label={`Product ${ind+1}:Product Image Url`}
                             maxLength={256}
                             placeholder="i.e. https://www.cbn.com/giving/special/tolife/assets/images/dvd-img.png" 
                             required={true} 
-                            value={this.state.fields[`product-${ind}`].productMessage} 
+                            value={this.state.fields.products[ind].productImgUrl} 
                             handleInputChange={this.handleProductInput} 
-                            error={this.state.errors[`product-${ind}`].productMessage} 
+                            error={this.state.errors.products[ind][`product-${ind}-productImgUrl`]} 
                         />
                         <InputGroup
                             type="text"
@@ -112,63 +125,63 @@ export default class ProductSettings extends Component {
                             maxLength={7}
                             placeholder={15} 
                             required={true} 
-                            value={this.state.fields[`product-${ind}`].PledgeAmount} 
+                            value={this.state.fields.products[ind].PledgeAmount} 
                             handleInputChange={this.handleProductInput} 
-                            error={this.state.errors[`product-${ind}`].PledgeAmount} 
+                            error={this.state.errors.products[ind].PledgeAmount} 
                         />
                     </div>
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
 
                         <InputGroup
                             type="text"
-                            id={`Product-${ind}-DetailName`} 
+                            id={`product-${ind}-DetailName`} 
                             specialStyle="" 
                             label={`Product ${ind+1}:Detail Name`}
                             maxLength={4}
                             placeholder="i.e. CC01" 
                             required={true} 
-                            value={this.state.fields[`Product-${ind}`].DetailName} 
+                            value={this.state.fields.products[ind].DetailName} 
                             handleInputChange={this.handleProductInput} 
-                            error={this.state.errors[`Product-${ind}`].DetailName} 
+                            error={this.state.errors.products[ind][`product-${ind}-DetailName`]} 
                         />
                         <InputGroup
                             type="text"
-                            id={`Product-${ind}-DetailCprojMail`} 
+                            id={`product-${ind}-DetailCprojMail`} 
                             specialStyle="" 
                             label={`Product ${ind+1}:WhiteMail Solicitation`}
                             maxLength={6}
                             placeholder="i.e. 043251" 
                             required={true} 
-                            value={this.state.fields[`Product-${ind}`].DetailCprojMail} 
+                            value={this.state.fields.products[ind].DetailCprojMail} 
                             handleInputChange={this.handleProductInput} 
-                            error={this.state.errors[`Product-${ind}`].DetailCprojMail} 
+                            error={this.state.errors.products[ind][`product-${ind}-DetailCprojMail`]} 
                         />
                         <InputGroup
                             type="text"
-                            id={`Product-${ind}-DetailCprojCredit`} 
+                            id={`product-${ind}-DetailCprojCredit`} 
                             specialStyle="" 
                             label={`Product ${ind+1}:Credit Solicitation`}
                             maxLength={6}
                             placeholder="i.e. 043250" 
                             required={true} 
-                            value={this.state.fields[`Product-${ind}`].DetailCprojCredit} 
+                            value={this.state.fields.products[ind].DetailCprojCredit} 
                             handleInputChange={this.handleProductInput} 
-                            error={this.state.errors[`Product-${ind}`].DetailCprojCredit} 
+                            error={this.state.errors.products[ind][`product-${ind}-DetailCprojCredit`]} 
                         />
                         <InputGroup
                             type="text"
-                            id={`Product-${ind}-DetailDescription`} 
+                            id={`product-${ind}-DetailDescription`} 
                             specialStyle="" 
                             label={`Product ${ind+1}:Solicitation Description`}
                             maxLength={6}
                             placeholder="i.e. Orphan's Promise Vietname, Superbook Translation, etc" 
                             required={true} 
-                            value={this.state.fields[`Product-${ind}`].DetailDescription} 
+                            value={this.state.fields.products[ind].DetailDescription} 
                             handleInputChange={this.handleProductInput} 
-                            error={this.state.errors[`Product-${ind}`].DetailDescription} 
+                            error={this.state.errors.products[ind][`product-${ind}-DetailDescription`]} 
                         />
                     </div>
-                </React.Fragment>
+                </fieldset>
             )
         })
     }
@@ -184,25 +197,16 @@ export default class ProductSettings extends Component {
                         <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                             <Checkbox id="addProducts" checked={fields.addProducts} handleInputChange={this.handleInputChange} label="Users can Select Product(s)?"/>
                         </div>
+                        { this.renderProductInputs(fields.numProducts) }
                         { 
                             fields.addProducts ? (
                                 <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
-                                    <InputGroup
-                                        type="number"
-                                        id="numProducts" 
-                                        specialStyle="" 
-                                        label="How many Product options?" 
-                                        placeholder="1, 2, 3, etc" 
-                                        min={1} 
-                                        required={true} 
-                                        value={fields.numProducts} 
-                                        handleInputChange={this.handleInputChange} 
-                                        error={errors.numProducts} 
-                                    />
+                                    <div style={{maxWidth: "157px"}}>
+                                        <FormButton val="Add Setting" handleClick={this.handleButtonClick} ctx={{name: "products", val: '', type: 'Add'}} />
+                                    </div>
                                 </div>
                             ) : null
                         }
-                        { this.renderProductInputs(fields.numProducts) }
                     </fieldset>
                     <fieldset styleName="form.fieldset">
                         <div style={{maxWidth: "88px"}}>

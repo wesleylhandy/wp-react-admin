@@ -17,7 +17,6 @@ export default class GivingSettings extends Component {
         super(props);
         const editMode = props.adminMode == "Edit"
         this.state = {
-            hydrate: editMode,
             updated: false,
             saved: false,
             fields: {
@@ -103,6 +102,7 @@ export default class GivingSettings extends Component {
         return (
             <SelectGroup 
                 id="DefaultAmount"
+                label="Default Amount"
                 specialStyle=""
                 required={false}
                 value={this.state.fields.defaultAmount}

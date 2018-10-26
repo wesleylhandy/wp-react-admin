@@ -16,7 +16,6 @@ export default class Settings extends Component {
         // console.log({props});
         const editMode = props.adminMode == "Edit"
         this.state = {
-            hydrate: editMode,
             updated: false,
             saved: false,
             fields: {

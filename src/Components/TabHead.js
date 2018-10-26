@@ -8,10 +8,12 @@ export default function TabHead(props) {
     // console.log({isActive, content, mode: props.mode})
     return (
         <div 
-            styleName={`tabs.tab-headers__header${isActive ? " tabs.tab-headers__header--active": ""}`} 
+            styleName={`tabs.tab-headers__header${isActive ? " tabs.tab-headers__header--active": ""}${props.enabled ? "": " tabs.tab-headers__header--disabled"}`} 
             onClick={e => {
                 e.preventDefault();
-                props.handleClick(e, content)
+                if (props.enabled) {
+                    props.handleClick(e, content)
+                }
             }}
         >
             {props.content}

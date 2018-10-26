@@ -6,7 +6,8 @@ import MetaTabs from './Metatabs.js'
 import FormOptionsTabs from './FormOptionsTabs'
 import Spinner from './Spinner'
 
-import styles from './styles/index.css'
+import main from './styles/main.css'
+import StyleOptionsTabs from './StyleOptionsTabs';
 
 
 
@@ -16,10 +17,13 @@ class App extends Component {
 
         this.state = {
             base: (props.mode == 'local' ? 'http://givingwp.dmgdev.cbn.local' : ''),
+            btnsEnabled: false,
             configured: false,
             permissible: false,
             adminMode: "List",
+            currentFormId: -1,
             viewMode: "Settings",
+            styleMode: "Colors",
             formConfig: {},
             cssConfig: {},
             emailConfig: {},
@@ -37,6 +41,7 @@ class App extends Component {
         }
         this.handleAdminMode = this.handleAdminMode.bind(this);
         this.handleViewMode = this.handleViewMode.bind(this);
+        this.handleStyleMode = this.handleStyleMode.bind(this);
         this.getExistingFormInfo = this.getExistingFormInfo.bind(this)
         this.handleAPIErrors = this.handleAPIErrors.bind(this)
         this.storeConfig = this.storeConfig.bind(this)
@@ -49,30 +54,33 @@ class App extends Component {
             const primaryRole = profile.roles && profile.roles.length ? profile.roles[0] : '';
             const isAdmin = primaryRole.toLowerCase() === "administrator"
             const user = {id: profile.id, username: profile.username, email: profile.email}
-            this.setState({configured: true, permissible: isAdmin, user})
+            this.setState({configured: true, permissible: isAdmin, user, btnsEnabled: true})
         } catch(err) {
             if (this.props.mode == 'local') {
-                this.setState({configured: true, permissible: true, user: {id: 1, username: 'dmg', email: 'wesley.handy@cbn.org'}})
+                this.setState({configured: true, permissible: true, btnsEnabled: true, user: {id: 1, username: 'dmg', email: 'wesley.handy@cbn.org'}})
             } else {
                 this.handleAPIErrors(err);
             }
         }
     }
 
-    async handleAdminMode(e, adminMode, id=""){
+    handleAdminMode(e, adminMode, id=""){
         e.preventDefault();
         if (adminMode === "Edit") {
-            try {
-                const result = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/single/${id}`, this.state.options)
-                let {formConfig, cssConfig, emailConfig}  = result;
-                formConfig = JSON.parse(formConfig), cssConfig = JSON.parse(cssConfig), emailConfig = JSON.parse(emailConfig)
-                // console.log({formConfig, cssConfig, emailConfig})
-                this.setState({formConfig, cssConfig, emailConfig})
-            } catch(err) {
-                this.handleAPIErrors(err)
-            }
+            this.setState({btnsEnabled: false}, async ()=> {
+                try {
+                    const result = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/single/${id}`, this.state.options)
+                    let {formConfig, cssConfig, emailConfig}  = result;
+                    formConfig = JSON.parse(formConfig), cssConfig = JSON.parse(cssConfig), emailConfig = JSON.parse(emailConfig)
+                    // console.log({formConfig, cssConfig, emailConfig})
+                    this.setState({formConfig, cssConfig, emailConfig, currentFormId: id, adminMode, btnsEnabled: true})
+                } catch(err) {
+                    this.handleAPIErrors(err)
+                }
+            })
+        } else {
+            this.setState({adminMode})
         }
-        this.setState({adminMode})
     }
 
     handleViewMode(e, viewMode){
@@ -81,13 +89,27 @@ class App extends Component {
         this.setState({viewMode})
     }
 
-    async getExistingFormInfo() {
+    handleStyleMode(e, styleMode){
+        e.preventDefault();
+        // console.log({styleMode})
+        this.setState({styleMode})
+    }
+
+    getExistingFormInfo() {
         let k, formList;
-        try {
-            [k, formList] = await Promise.all([callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/api`, this.state.options), callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/list/all`, this.state.options)])
-            this.setState({k: k.key, formList})
-        } catch (err) {
-            this.handleAPIErrors(err)
+        this.setState({btnsEnabled: false}, async ()=> {
+            try {
+                [k, formList] = await Promise.all([callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/api`, this.state.options), callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/list/all`, this.state.options)])
+                this.setState({k: k.key, formList, btnsEnabled: true})
+            } catch (err) {
+
+                this.handleAPIErrors(err)
+                this.setState({btnsEnabled: true})
+            }
+        })
+        if ( !k ) {
+            k = {key : ""}
+            formList=[]
         }
         return {k: k.key, formList}
     }
@@ -139,17 +161,44 @@ class App extends Component {
     }
 
     render() {
-        const {permissible, configured, ...state} = this.state
+        const {permissible, configured, btnsEnabled, ...state} = this.state
         return ( 
-            <div styleName='page-wrapper' id="react-page-top"> 
+            <div styleName='main.page-wrapper' id="react-page-top"> 
                 {
                     configured && permissible ? (
                         <React.Fragment>
-                            <MetaTabs {...state} setAdminMode={this.handleAdminMode} getExistingFormInfo={this.getExistingFormInfo} setApiKey={this.setApiKey}/>
-                            <FormOptionsTabs {...state} setViewMode={this.handleViewMode} storeConfig={this.storeConfig}/>
+                            <MetaTabs 
+                                k={state.k} 
+                                formList={state.formList} 
+                                adminMode={state.adminMode} 
+                                enabled={btnsEnabled} 
+                                setAdminMode={this.handleAdminMode} 
+                                getExistingFormInfo={this.getExistingFormInfo} 
+                                setApiKey={this.setApiKey}
+                            />
+                            <FormOptionsTabs 
+                                adminMode={state.adminMode} 
+                                viewMode={state.viewMode} 
+                                formConfig={state.formConfig}
+                                emailConfig={state.emailConfig}
+                                currentFormId={state.currentFormId}
+                                enabled={btnsEnabled} 
+                                setViewMode={this.handleViewMode}
+                                storeConfig={this.storeConfig}
+                            />
+                            <StyleOptionsTabs
+                                adminMode={state.adminMode} 
+                                viewMode={state.viewMode} 
+                                styleMode={state.styleMode}
+                                cssConfig={state.cssConfig}
+                                currentFormId={state.currentFormId}
+                                enabled={btnsEnabled} 
+                                setStyleMode={this.handleStyleMode} 
+                                storeConfig={this.storeConfig}
+                            />
                         </React.Fragment>
                     ) : configured && !permissible ? (
-                        <h1 styleName="not-permissible-heading">You are not Authorized to View These Settings</h1>
+                        <h1 styleName="main.not-permissible-heading">You are not Authorized to View These Settings</h1>
                     ) : (
                         <Spinner />
                     )
