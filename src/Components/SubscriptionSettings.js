@@ -60,27 +60,31 @@ export default class SubscriptionSettings extends Component {
             return (
 
                 <fieldset key={`subInput-${ind}`} styleName='form.fieldset__bordered'>
-                    <SelectGroup
-                        label={`Subscription ${ind}:Type`} 
-                        id={`sub-${ind}-key`} 
-                        specialStyle=""
-                        required={false}
-                        value={this.state.fields.subscriptions[ind].key}
-                        error={this.state.errors.subscriptions[ind][`sub-${ind}-key`]}
-                        handleInputChange={this.handleInputChange}
-                        options={options}
-                    />
-                    <InputGroup
-                        type="text"
-                        id={`sub-${ind}-value`} 
-                        specialStyle="" 
-                        label={`Subscription ${ind+1}:Name`}
-                        placeholder="i.e. Welcome, CBN, etc" 
-                        required={true} 
-                        value={this.state.fields.subscriptions[ind].value} 
-                        handleInputChange={this.handleInputChange} 
-                        error={this.state.errors.subscriptions[ind][`sub-${ind}-value`]} 
-                    />
+                    <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
+                        <SelectGroup
+                            label={`Subscription ${ind + 1}: Type`} 
+                            id={`sub-${ind}-key`} 
+                            specialStyle=""
+                            required={false}
+                            value={this.state.fields.subscriptions[ind].key}
+                            error={this.state.errors.subscriptions[ind][`sub-${ind}-key`]}
+                            handleInputChange={this.handleInputChange}
+                            options={options}
+                        />
+                    </div>
+                    <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
+                        <InputGroup
+                            type="text"
+                            id={`sub-${ind}-value`} 
+                            specialStyle="" 
+                            label={`Subscription ${ind + 1}: Name`}
+                            placeholder="i.e. Welcome, CBN, etc" 
+                            required={true} 
+                            value={this.state.fields.subscriptions[ind].value} 
+                            handleInputChange={this.handleInputChange} 
+                            error={this.state.errors.subscriptions[ind][`sub-${ind}-value`]} 
+                        />
+                    </div>
                 </fieldset>
             )
         })

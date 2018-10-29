@@ -82,7 +82,7 @@ export default class FundSettings extends Component {
                             type="text"
                             id={`fund-${ind}-Title`} 
                             specialStyle="" 
-                            label={`Fund ${ind+1}:Title`}
+                            label={`Fund ${ind+1}: Title`}
                             maxLength={120}
                             placeholder="i.e. Wherever Needed Most" 
                             required={true} 
@@ -93,7 +93,7 @@ export default class FundSettings extends Component {
                         <TextGroup
                             id={`fund-${ind}-FundDescription`} 
                             specialStyle="" 
-                            label={`Fund ${ind+1}:Description`}
+                            label={`Fund ${ind+1}: Description`}
                             rows={3}
                             maxLength={512}
                             placeholder="Can include html tags, < 320 visible characters" 
@@ -108,7 +108,7 @@ export default class FundSettings extends Component {
                             type="text"
                             id={`fund-${ind}-DetailName`} 
                             specialStyle="" 
-                            label={`Fund ${ind+1}:Detail Name`}
+                            label={`Fund ${ind+1}: Detail Name`}
                             maxLength={32}
                             placeholder="i.e. Superbook, OrphansPromise, 700Club, etc" 
                             required={true} 
@@ -120,7 +120,7 @@ export default class FundSettings extends Component {
                             type="text"
                             id={`fund-${ind}-DetailCprojMail`} 
                             specialStyle="" 
-                            label={`Fund ${ind+1}:WhiteMail Solicitation`}
+                            label={`Fund ${ind+1}: WhiteMail SOL`}
                             maxLength={6}
                             placeholder="i.e. 043251" 
                             required={true} 
@@ -132,7 +132,7 @@ export default class FundSettings extends Component {
                             type="text"
                             id={`fund-${ind}-DetailCprojCredit`} 
                             specialStyle="" 
-                            label={`Fund ${ind+1}:Credit Solicitation`}
+                            label={`Fund ${ind+1}: Credit SOL`}
                             maxLength={6}
                             placeholder="i.e. 043250" 
                             required={true} 
@@ -144,7 +144,7 @@ export default class FundSettings extends Component {
                             type="text"
                             id={`fund-${ind}-DetailDescription`} 
                             specialStyle="" 
-                            label={`Fund ${ind+1}:Solicitation Description`}
+                            label={`Fund ${ind+1}: SOL Description`}
                             maxLength={32}
                             placeholder="i.e. Orphan's Promise Vietname, Superbook Translation, etc" 
                             required={true} 

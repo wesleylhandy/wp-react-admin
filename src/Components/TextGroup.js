@@ -4,7 +4,7 @@ import flex from './styles/flex.css'
 import input from './styles/input.css'
 import error from './styles/error.css'
 
-export default function InputGroup(props) {
+export default function TextGroup(props) {
     return (
         <div id={`form-field-${props.id}`} styleName={`${props.specialStyle ? props.specialStyle : ""} input.form-group flex.flex-grow`}>
             <label htmlFor={props.id}>{props.label}<span>{props.required ? '*' : ''}</span></label>
@@ -17,6 +17,7 @@ export default function InputGroup(props) {
                 onChange={props.handleInputChange}
                 value={props.value}
                 aria-invalid={props.error ? true : false} 
+                onBlur={props.handleBlur}
             />
             <div styleName="error.error">{props.error}</div>
         </div>

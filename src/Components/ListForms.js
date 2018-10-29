@@ -1,7 +1,5 @@
 import React, {Component} from 'react'
 
-import { callApi } from './helpers/fetch-helpers'
-
 import flex from './styles/flex.css'
 import input from './styles/input.css'
 import error from './styles/error.css'
@@ -15,8 +13,8 @@ export default class ListForms extends Component {
         super(props);
         this.keyField = React.createRef();
         this.state = {
-            base: props.base,
             k: props.k,
+            base: props.base,
             list: [...props.formList],
             inputValue: props.k,
             inputDisabled: props.k != '' ? false : true,
@@ -30,20 +28,22 @@ export default class ListForms extends Component {
         this.handleInputChange = this.handleInputChange.bind(this)
     }
 
-    async componentDidMount() {
-        const {k, formList} = await this.props.tabFunctions.getExistingFormInfo();
-        this.setState((state, props) => {
-            const updateK = state.k !== k
-            const updateFormList = JSON.stringify(formList) !== JSON.stringify(state.formList)
-            // console.log({k, formList, state, props, updateK, updateFormList})
-            if (updateK && updateFormList) {
-                return { k, inputValue: k , list: [...formList], inputDisabled: true, allowEdit: false, saveMethod: 'PUT' }
-            } else if (updateK) {
-                return { k, inputValue: k, inputDisabled: true, allowEdit: false, saveMethod: 'PUT'}
-            } else if (updateFormList) {
-                return { formList }
-            }
-        });
+    componentDidMount() {
+        this.props.tabFunctions.getExistingFormInfo();
+    }
+
+    static getDerivedStateFromProps(props, state) {
+        const updateK = state.k !== props.k
+        const updateFormList = JSON.stringify(props.formList) !== JSON.stringify(state.list)
+        if (updateK && updateFormList) {
+            return { k: props.k, inputValue: props.k , list: [...props.formList], inputDisabled: true, allowEdit: false, saveMethod: 'PUT' }
+        } else if (updateK) {
+            return { k: props.k, inputValue: k, inputDisabled: true, allowEdit: false, saveMethod: 'PUT'}
+        } else if (updateFormList) {
+            return { list: props.formList }
+        } else {
+            return {}
+        }
     }
 
     handleButtonClick(e, ctx) {

@@ -46,6 +46,8 @@ class App extends Component {
         this.handleAPIErrors = this.handleAPIErrors.bind(this)
         this.storeConfig = this.storeConfig.bind(this)
         this.setApiKey = this.setApiKey.bind(this)
+        this.toggleBtnEnable = this.toggleBtnEnable.bind(this)
+        this.createForm = this.createForm.bind(this)
     }
 
     async componentDidMount(){
@@ -95,33 +97,64 @@ class App extends Component {
         this.setState({styleMode})
     }
 
-    getExistingFormInfo() {
-        let k, formList;
-        this.setState({btnsEnabled: false}, async ()=> {
-            try {
-                [k, formList] = await Promise.all([callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/api`, this.state.options), callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/list/all`, this.state.options)])
-                this.setState({k: k.key, formList, btnsEnabled: true})
-            } catch (err) {
+    /**
+     * Function to enable or disable buttons
+     * @param {Boolean} enableVal 
+     */
+    toggleBtnEnable(enableVal) {
+        console.log({enableVal, priorState: this.state.btnsEnabled})
+        this.setState((state, props) => { 
+            return {
+                btnsEnabled: state.btnsEnabled !== enableVal ? enableVal : state.btnsEnabled 
+            }
+        });
+    }
 
+    async getExistingFormInfo() {
+        this.setState({btnsEnabled: false}, callback)
+        
+        async function callback () {
+            try {
+                const [k, list] = await Promise.all([callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/api`, this.state.options), callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/list/all`, this.state.options)])
+                this.setState({k: k.key, formList: list, btnsEnabled: true})
+            } catch (err) {
                 this.handleAPIErrors(err)
                 this.setState({btnsEnabled: true})
             }
-        })
-        if ( !k ) {
-            k = {key : ""}
-            formList=[]
         }
-        return {k: k.key, formList}
     }
 
-    async storeConfig(e, id, type, data, method) {
+    async createForm(e, form_name, created_by){
         e.preventDefault()
         try {
-            const endpoint = method === "POST" ? 'create' : `${id}`
-            const { options } = this.state;
+            const options = {...this.state.options}
+            options.method = "POST";
+            options.body = JSON.stringify({form_name, created_by});
+            const {completed, id} = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/single/create`, options);
+            if (completed) {
+                this.setState({currentFormId: id})
+            }
+            return id;
+        } catch(err) {
+            this.handleAPIErrors(err)
+            return false;
+        }
+    }
+    /**
+     * Stores form config into DB and returns true oif complete
+     * @param {Event} e 
+     * @param {Number} id - DB id of form
+     * @param {String} type - formConfig, cssConfig, or emailConfig
+     * @param {Object} data - entire config object to be updated
+     * @param {String} method - PUT is default
+     */
+    async storeConfig(e, id, type, data, method="PUT") {
+        e.preventDefault()
+        try {
+            const options = {...this.state.options}
             options.method = method;
             options.body = JSON.stringify({[type]: data});
-            const completed = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/${endpoint}`, options);
+            const completed = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/${id}`, options);
             if (completed) {
                 this.setState({[type]: data})
             }
@@ -136,7 +169,7 @@ class App extends Component {
     async setApiKey(e, key, method) {
         e.preventDefault();
         try {
-            const { options } = this.state;
+            const options = {...this.state}
             options.method = method;
             options.body = JSON.stringify({api_key: key})
             const completed = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/api`, options);
@@ -175,6 +208,9 @@ class App extends Component {
                                 setAdminMode={this.handleAdminMode} 
                                 getExistingFormInfo={this.getExistingFormInfo} 
                                 setApiKey={this.setApiKey}
+                                createForm={this.createForm}
+                                toggleBtnEnable={this.toggleBtnEnable}
+                                user={state.user}
                             />
                             <FormOptionsTabs 
                                 adminMode={state.adminMode} 
@@ -185,6 +221,7 @@ class App extends Component {
                                 enabled={btnsEnabled} 
                                 setViewMode={this.handleViewMode}
                                 storeConfig={this.storeConfig}
+                                toggleBtnEnable={this.toggleBtnEnable}
                             />
                             <StyleOptionsTabs
                                 adminMode={state.adminMode} 
@@ -195,6 +232,7 @@ class App extends Component {
                                 enabled={btnsEnabled} 
                                 setStyleMode={this.handleStyleMode} 
                                 storeConfig={this.storeConfig}
+                                toggleBtnEnable={this.toggleBtnEnable}
                             />
                         </React.Fragment>
                     ) : configured && !permissible ? (

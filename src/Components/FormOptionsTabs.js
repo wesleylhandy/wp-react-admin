@@ -6,7 +6,7 @@ import TabBody from './TabBody'
 import tabs from './styles/tabs.css'
 
 export default function FormOptionsTabs(props) {
-    const {adminMode, viewMode, setViewMode, formConfig, storeConfig, emailConfig, currentFormId, enabled} = props
+    const {adminMode, viewMode, setViewMode, formConfig, storeConfig, emailConfig, currentFormId, enabled, toggleBtnEnable} = props
     const subHeads = ["Settings", "Name/Address", "Gifts", "Products", "Funds", "Subscriptions", "Emails", "Style"]
     const tabs = subHeads.map((th, ind)=>{
         return (
@@ -16,6 +16,7 @@ export default function FormOptionsTabs(props) {
                 handleClick={setViewMode}
                 mode={viewMode}
                 key={`sh-${ind}`}
+                toggleBtnEnable={toggleBtnEnable}
             />
         )
     })
@@ -30,7 +31,7 @@ export default function FormOptionsTabs(props) {
                         </div>
                         { 
                             viewMode !== "Style" ? (
-                                <TabBody currentFormId={currentFormId} adminMode={adminMode} displayMode={viewMode} tabFunctions={{storeConfig}} tabData={{formConfig, emailConfig}}/>
+                                <TabBody currentFormId={currentFormId} adminMode={adminMode} displayMode={viewMode} tabFunctions={{storeConfig, toggleBtnEnable}} tabData={{formConfig, emailConfig}}/>
                             ) : null
                         }
                     </React.Fragment>

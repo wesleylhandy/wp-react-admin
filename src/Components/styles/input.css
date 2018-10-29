@@ -78,7 +78,7 @@ select.form-control {
 }
 
 textarea.form-control {
-    min-height: 50px;
+    min-height: 100px;
 }
 
 textarea.form-control.textarea__large {

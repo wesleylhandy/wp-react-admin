@@ -8,3 +8,7 @@
 h1.not-permissible-heading {
     font-size: 32px;
 }
+
+.hidden {
+    display: none;
+}

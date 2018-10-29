@@ -10,7 +10,7 @@ import swal from 'sweetalert'
 import Checkbox from './Checkbox';
 import InputGroup from './InputGroup';
 
-export default class Settings extends Component {
+export default class FormSettings extends Component {
     constructor(props) {
         super(props);
         // console.log({props});

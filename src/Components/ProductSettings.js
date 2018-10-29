@@ -78,12 +78,12 @@ export default class ProductSettings extends Component {
             return (
                 <fieldset styleName="form.fieldset__bordered" key={`productRow-${ind}`}>
                     <h4>Product {ind + 1}</h4>
-                    <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
+                    <div styleName="form.form-row flex.flex flex.flex-row">
                         <InputGroup
                             type="text"
                             id={`product-${ind}-productTitle`} 
                             specialStyle="" 
-                            label={`Product ${ind+1}:Title`}
+                            label={`Product ${ind+1}: Title`}
                             maxLength={120}
                             placeholder="i.e. To Life DVD" 
                             required={true} 
@@ -94,7 +94,7 @@ export default class ProductSettings extends Component {
                         <TextGroup
                             id={`product-${ind}-productMessage`} 
                             specialStyle="" 
-                            label={`Product ${ind+1}:Description`}
+                            label={`Product ${ind+1}: Description`}
                             maxLength={512}
                             rows={3}
                             placeholder="Can include html tags, < 320 visible characters" 
@@ -109,7 +109,7 @@ export default class ProductSettings extends Component {
                             type="text"
                             id={`product-${ind}-productImgUrl`} 
                             specialStyle="" 
-                            label={`Product ${ind+1}:Product Image Url`}
+                            label={`Product ${ind+1}: Product Image URL`}
                             maxLength={256}
                             placeholder="i.e. https://www.cbn.com/giving/special/tolife/assets/images/dvd-img.png" 
                             required={true} 
@@ -121,7 +121,7 @@ export default class ProductSettings extends Component {
                             type="text"
                             id={`product-${ind}-PledgeAmount`} 
                             specialStyle="" 
-                            label={`Product ${ind+1}:Pledge Amount`}
+                            label={`Product ${ind+1}: Pledge Amount`}
                             maxLength={7}
                             placeholder={15} 
                             required={true} 
@@ -136,7 +136,7 @@ export default class ProductSettings extends Component {
                             type="text"
                             id={`product-${ind}-DetailName`} 
                             specialStyle="" 
-                            label={`Product ${ind+1}:Detail Name`}
+                            label={`Product ${ind+1}: Detail Name`}
                             maxLength={4}
                             placeholder="i.e. CC01" 
                             required={true} 
@@ -148,7 +148,7 @@ export default class ProductSettings extends Component {
                             type="text"
                             id={`product-${ind}-DetailCprojMail`} 
                             specialStyle="" 
-                            label={`Product ${ind+1}:WhiteMail Solicitation`}
+                            label={`Product ${ind+1}: WhiteMail SOL`}
                             maxLength={6}
                             placeholder="i.e. 043251" 
                             required={true} 
@@ -160,7 +160,7 @@ export default class ProductSettings extends Component {
                             type="text"
                             id={`product-${ind}-DetailCprojCredit`} 
                             specialStyle="" 
-                            label={`Product ${ind+1}:Credit Solicitation`}
+                            label={`Product ${ind+1}: Credit SOL`}
                             maxLength={6}
                             placeholder="i.e. 043250" 
                             required={true} 
@@ -172,7 +172,7 @@ export default class ProductSettings extends Component {
                             type="text"
                             id={`product-${ind}-DetailDescription`} 
                             specialStyle="" 
-                            label={`Product ${ind+1}:Solicitation Description`}
+                            label={`Product ${ind+1}: SOL Description`}
                             maxLength={6}
                             placeholder="i.e. Orphan's Promise Vietname, Superbook Translation, etc" 
                             required={true} 

@@ -1,6 +1,7 @@
 import React from 'react'
 
 import tabs from './styles/tabs.css'
+import swal from 'sweetalert'
 
 export default function TabHead(props) {
     const content = props.content.split(" ")[0]
@@ -13,10 +14,33 @@ export default function TabHead(props) {
                 e.preventDefault();
                 if (props.enabled) {
                     props.handleClick(e, content)
+                } else {
+                    clickAlert().then(update=>{
+                        props.toggleBtnEnable(update)
+                        if (update) {
+                            props.handleClick(e, content)
+                        }
+                    })
                 }
             }}
         >
             {props.content}
         </div>
     )
+}
+
+async function clickAlert() {
+    const willEdit = await swal({
+        title: "Are you sure?",
+        text: 'Leaving this page without saving may result in lost data or a broken form. Are you ready to leave this page with unsaved changes anyway?',
+        icon: "warning",
+        buttons: true,
+        dangerMode: true
+    })
+
+    if (willEdit) {
+        return true
+    } else {
+        return false
+    }
 }
