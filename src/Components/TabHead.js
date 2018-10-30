@@ -14,7 +14,7 @@ export default function TabHead(props) {
                 e.preventDefault();
                 if (props.enabled) {
                     props.handleClick(e, content)
-                } else {
+                } else if (props.mode !== "List") {
                     clickAlert().then(update=>{
                         props.toggleBtnEnable(update)
                         if (update) {

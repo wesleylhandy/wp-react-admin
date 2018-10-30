@@ -13,6 +13,7 @@ export default class ListForms extends Component {
         super(props);
         this.keyField = React.createRef();
         this.state = {
+            submitting: false,
             k: props.k,
             base: props.base,
             list: [...props.formList],
@@ -47,22 +48,27 @@ export default class ListForms extends Component {
     }
 
     handleButtonClick(e, ctx) {
-        if (ctx.type == "Edit" && ctx.name == "apiKey") {
-            this.handleEditApiKey(e);
-        } else if (ctx.type == "Save" && ctx.name == "apiKey") {
-            const method = this.state.saveMethod
-            this.props.tabFunctions.setApiKey(e, this.state.inputValue, method).then(success=>{
-                if (success) {
-                    this.setState({stored: true, inputDisabled: true, allowEdit: false})
-                } else {
-                    this.setState({error: "Unable to Save"})
-                }
-            });
-            
-        } else {
-            e.preventDefault();
-            return this.props.tabFunctions.setAdminMode(e, ctx.type, ctx.val)
-        }
+        this.setState({submitting: true}, ()=>{
+            this.props.tabFunctions.toggleBtnEnable( false )
+            if (ctx.type == "Edit" && ctx.name == "apiKey") {
+                this.handleEditApiKey(e);
+                this.setState({submitting: false}, ()=> this.props.tabFunctions.toggleBtnEnable( true ))
+            } else if (ctx.type == "Save" && ctx.name == "apiKey") {
+                const method = this.state.saveMethod
+                this.props.tabFunctions.setApiKey(e, this.state.inputValue, method).then(success=>{
+                    if (success) {
+                        this.setState({stored: true, inputDisabled: true, allowEdit: false, submitting: false})
+                    } else {
+                        this.setState({error: "Unable to Save", submitting: false})
+                    }
+                    this.props.tabFunctions.toggleBtnEnable( true )
+                });
+                
+            } else {
+                this.props.tabFunctions.toggleBtnEnable( true )
+                this.props.tabFunctions.setAdminMode(e, ctx.type, ctx.val)
+            }
+        })
     }
 
     async handleEditApiKey(e) {
@@ -76,10 +82,11 @@ export default class ListForms extends Component {
                     buttons: true,
                     dangerMode: true
                 })
+                console.log({willEdit})
                 if (willEdit) {
                     inputDisabled = false;
                 } 
-                this.setState({inputDisabled, allowEdit: true})
+                this.setState({inputDisabled, allowEdit: inputDisabled ? false : true})
                 this.keyField.current.focus()
                 this.keyField.current.setSelectionRange(0, 1000);
             } catch (err) {
@@ -121,7 +128,7 @@ export default class ListForms extends Component {
         });
         return (
             <React.Fragment>
-                <form onSubmit={ e => e.preventDefault() }>
+                <form>
                     <fieldset styleName='form.fieldset'>
                         <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                             <div id="form-field-apiKey" styleName="input.form-group flex.flex-grow">
@@ -140,13 +147,13 @@ export default class ListForms extends Component {
                                     aria-invalid={this.state.error ? true : false} 
                                     ref={this.keyField}
                                 />
-                                <div styleName="">{this.state.error}</div>
+                                <div styleName="error.error">{this.state.error}</div>
                             </div>
                         
-                            <FormButton val="Update" handleClick={this.handleButtonClick} ctx={{name: "apiKey", val: '', type: 'Edit'}} />
+                            <FormButton val="Update" handleClick={this.handleButtonClick} ctx={{name: "apiKey", val: '', type: 'Edit'}} submitting={this.state.submitting}/>
                             { 
                                 this.state.allowEdit && !this.state.error ? (
-                                    <FormButton val="Save" handleClick={this.handleButtonClick} ctx={{name: 'apiKey', val: '', type: 'Save'}} />
+                                    <FormButton val="Save" handleClick={this.handleButtonClick} ctx={{name: 'apiKey', val: '', type: 'Save'}} submitting={this.state.submitting}/>
                                 ) : null
                             }
                         </div>
@@ -172,11 +179,8 @@ export default class ListForms extends Component {
                     <tbody>
                         {tableRows}
                         <tr styleName="form.table-row">
-                            <td styleName="form.table-row__cells"></td>
-                            <td styleName="form.table-row__cells"></td>
-                            <td styleName="form.table-row__cells"></td>
-                            <td styleName="form.table-row__cells">
-                                <div styleName="flex.flex flex.flex-row flex.flex-axes-center">
+                            <td colSpan="4" styleName="form.table-row__cells">
+                                <div styleName="flex.flex flex.flex-row flex.flex-center flex.flex-axes-center">
                                     <FormButton val="Add New Form" handleClick={this.handleButtonClick} ctx={{name: "campaign", val: '', type: 'Add'}} />
                                 </div>
                             </td>

@@ -37,7 +37,7 @@ export default class FontSettings extends Component {
     constructor(props) {
         super(props);
         // console.log({props});
-        const editMode = props.adminMode === "Edit";
+        const editMode = props.adminMode == "Edit" && props.currentForm.form_status && props.currentForm.form_status !== "new"
         const { fonts, count: numFonts } = getFontInfo(editMode, "font-family", props.cssConfig)
         const { fonts: externalFonts, count: numExternalFonts } = getFontInfo(editMode, "externalFont", props.cssConfig)
         this.state = {

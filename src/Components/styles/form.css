@@ -100,9 +100,12 @@ h3.form-header,
     width: 100%;
 }
 
-.form-row>div+div,
-.form-btn+.form-btn {
+.form-btn--wrapper {
     box-sizing: border-box;
+}
+
+.form-row>div+div,
+.form-btn--wrapper+.form-btn--wrapper {
     margin-left: 10px;
 }
 
@@ -167,6 +170,13 @@ input[type="submit"].submit-button:hover,
     border-color: #0085ba;
 }
 
+input[type="submit"].submit-button:disabled,
+.form-btn:disabled {
+    cursor: wait;
+    background-color: #a0a0a0;
+    color: #fff;
+}
+
 input[type="submit"].submit-button>.error {
     left: 50%;
     transform: translateX(-50%);
@@ -183,6 +193,29 @@ input[type="submit"].submit-button>.error {
     box-sizing: border-box;
     margin: 20px 0;
     max-width: 300px;
+}
+
+table.table {
+    border-collapse: collapse;
+}
+
+thead.table-head {
+    background: #f1f1f1;
+}
+
+tbody>tr.table-row:nth-child(even):not(:last-child) {
+    background: #aaf1f1;
+}
+
+th.table-row__headers,
+td.table-row__cells {
+    padding: 5px 20px;
+    text-align: left;
+    border: 1px solid #444;
+}
+
+tbody>tr.table-row:last-child>td.table-row__cells+td.table-row__cells {
+    border-left: none;
 }
 
 @media screen and (max-width: 365px) {

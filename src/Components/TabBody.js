@@ -2,6 +2,8 @@ import React from 'react'
 
 import tabs from './styles/tabs.css'
 
+import {getDefaultValues} from './helpers/getDefaultValues'
+
 import ListForms from './ListForms'
 import AddForm from './AddForm'
 import FormSettings from './FormSettings'
@@ -11,50 +13,77 @@ import ProductSettings from './ProductSettings';
 import FundSettings from './FundSettings';
 import SubscriptionSettings from './SubscriptionSettings';
 import EmailSettings from './EmailSettings';
-import ColorSettings from './ColorSettings';
+import StyleSettings from './StyleSettings';
 import FontSettings from './FontSettings';
 import SpacingSettings from './SpacingSettings';
 
 export default function TabBody(props) {
     function renderBody(props) {
+        const editMode = props.adminMode == "Edit" && props.currentForm.form_status && props.currentForm.form_status !== "new"
+        let defaultValues;
+        // console.log({k, formList, user})
         switch (props.displayMode) {
             case "List":
                 const {k, formList} = props.tabData;
                 return <ListForms tabFunctions={props.tabFunctions} k={k} formList={formList}/>
                 break;
             case "Add": 
-                return <AddForm tabFunctions={props.tabFunctions} k={k}/>
+                const {user} = props.tabData;
+                return <AddForm tabFunctions={props.tabFunctions} user={user}/>
                 break;
             case "Settings":
-                return <FormSettings currentFormId={props.currentFormId} adminMode={props.adminMode} tabFunctions={props.tabFunctions} formConfig={props.tabData.formConfig}/>;
+                return <FormSettings currentForm={props.currentForm} editMode={editMode} tabFunctions={props.tabFunctions} formConfig={props.tabData.formConfig}/>;
                 break;
             case "Name/Address":
-                return <NameSettings currentFormId={props.currentFormId} adminMode={props.adminMode} tabFunctions={props.tabFunctions} formConfig={props.tabData.formConfig}/>;
+                return <NameSettings currentForm={props.currentForm} editMode={editMode} tabFunctions={props.tabFunctions} formConfig={props.tabData.formConfig}/>;
                 break;
             case "Gifts":
-                return <GivingSettings currentFormId={props.currentFormId} adminMode={props.adminMode} tabFunctions={props.tabFunctions} formConfig={props.tabData.formConfig}/>;
+                return <GivingSettings currentForm={props.currentForm} editMode={editMode} tabFunctions={props.tabFunctions} formConfig={props.tabData.formConfig}/>;
                 break;
             case "Products":
-                return <ProductSettings currentFormId={props.currentFormId} adminMode={props.adminMode} tabFunctions={props.tabFunctions} formConfig={props.tabData.formConfig}/>;
+                return <ProductSettings currentForm={props.currentForm} editMode={editMode} tabFunctions={props.tabFunctions} formConfig={props.tabData.formConfig}/>;
                 break;
             case "Funds":
-                return <FundSettings currentFormId={props.currentFormId} adminMode={props.adminMode} tabFunctions={props.tabFunctions} formConfig={props.tabData.formConfig}/>;
+                return <FundSettings currentForm={props.currentForm} editMode={editMode} tabFunctions={props.tabFunctions} formConfig={props.tabData.formConfig}/>;
                 break;
             case "Subscriptions":
-                return <SubscriptionSettings currentFormId={props.currentFormId} adminMode={props.adminMode} tabFunctions={props.tabFunctions} formConfig={props.tabData.formConfig}/>;
+                return <SubscriptionSettings currentForm={props.currentForm} editMode={editMode} tabFunctions={props.tabFunctions} formConfig={props.tabData.formConfig}/>;
                 break;
             case "Emails":
-                return <EmailSettings currentFormId={props.currentFormId} adminMode={props.adminMode} tabFunctions={props.tabFunctions} emailConfig={props.tabData.emailConfig}/>;
+                return <EmailSettings currentForm={props.currentForm} editMode={editMode} tabFunctions={props.tabFunctions} emailConfig={props.tabData.emailConfig}/>;
                 break;
             case "Colors":
-                return <ColorSettings currentFormId={props.currentFormId} tabFunctions={props.tabFunctions} adminMode={props.adminMode} cssConfig={props.tabData.cssConfig}/>;
+                defaultValues = getDefaultValues(editMode, props.displayMode, props.tabData.cssConfig)
+                return <StyleSettings 
+                    currentForm={props.currentForm} 
+                    tabFunctions={props.tabFunctions} 
+                    defaultValues={defaultValues} 
+                    editMode={editMode} 
+                    config={props.tabData.cssConfig} 
+                    displayMode={props.displayMode}
+                />
                 break;
             case "Fonts":
-                return <FontSettings currentFormId={props.currentFormId} tabFunctions={props.tabFunctions} adminMode={props.adminMode} cssConfig={props.tabData.cssConfig} />;
+                defaultValues = getDefaultValues(editMode, props.displayMode, props.tabData.cssConfig)
+                return <StyleSettings 
+                    currentForm={props.currentForm} 
+                    tabFunctions={props.tabFunctions} 
+                    defaultValues={defaultValues} 
+                    editMode={editMode} 
+                    config={props.tabData.cssConfig} 
+                    displayMode={props.displayMode}
+                />
                 break;
-     
             case "Spacing":
-                return <SpacingSettings currentFormId={props.currentFormId} tabFunctions={props.tabFunctions} adminMode={props.adminMode} cssConfig={props.tabData.cssConfig}/>;
+                defaultValues = getDefaultValues(editMode, props.displayMode, props.tabData.cssConfig)
+                return <StyleSettings 
+                    currentForm={props.currentForm} 
+                    tabFunctions={props.tabFunctions} 
+                    defaultValues={defaultValues} 
+                    editMode={editMode} 
+                    config={props.tabData.cssConfig} 
+                    displayMode={props.displayMode}
+                />
                 break;
             default:
                 return null;

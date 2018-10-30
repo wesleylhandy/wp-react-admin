@@ -21,7 +21,11 @@ class App extends Component {
             configured: false,
             permissible: false,
             adminMode: "List",
-            currentFormId: -1,
+            currentForm: {
+                id: -1,
+                form_name: '',
+                form_status: ''
+            },
             viewMode: "Settings",
             styleMode: "Colors",
             formConfig: {},
@@ -66,33 +70,36 @@ class App extends Component {
         }
     }
 
+    /**
+     * 
+     * @param {Event} e 
+     * @param {String} adminMode - "List, Edit, or Add"
+     * @param {Number} id - WPDB ID of form being edited
+     */
     handleAdminMode(e, adminMode, id=""){
-        e.preventDefault();
         if (adminMode === "Edit") {
             this.setState({btnsEnabled: false}, async ()=> {
                 try {
                     const result = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/single/${id}`, this.state.options)
-                    let {formConfig, cssConfig, emailConfig}  = result;
+                    let {formConfig, cssConfig, emailConfig, form_name, form_status}  = result;
                     formConfig = JSON.parse(formConfig), cssConfig = JSON.parse(cssConfig), emailConfig = JSON.parse(emailConfig)
                     // console.log({formConfig, cssConfig, emailConfig})
-                    this.setState({formConfig, cssConfig, emailConfig, currentFormId: id, adminMode, btnsEnabled: true})
+                    this.setState({formConfig, cssConfig, emailConfig, currentForm: {id, form_name, form_status}, adminMode, btnsEnabled: true})
                 } catch(err) {
                     this.handleAPIErrors(err)
                 }
             })
         } else {
-            this.setState({adminMode})
+            this.setState({adminMode, currentForm: {id: -1, form_name: '', form_status: ''}, formConfig: {}, cssConfig: {}, emailConfig:{}})
         }
     }
 
     handleViewMode(e, viewMode){
-        e.preventDefault();
         // console.log({viewMode})
         this.setState({viewMode})
     }
 
     handleStyleMode(e, styleMode){
-        e.preventDefault();
         // console.log({styleMode})
         this.setState({styleMode})
     }
@@ -102,7 +109,7 @@ class App extends Component {
      * @param {Boolean} enableVal 
      */
     toggleBtnEnable(enableVal) {
-        console.log({enableVal, priorState: this.state.btnsEnabled})
+        // console.log({enableVal, priorState: this.state.btnsEnabled})
         this.setState((state, props) => { 
             return {
                 btnsEnabled: state.btnsEnabled !== enableVal ? enableVal : state.btnsEnabled 
@@ -124,6 +131,13 @@ class App extends Component {
         }
     }
 
+    /**
+     * In response to btn click, accepts form_name and user.id to insert a new form record in WPDB
+     * @param {Event} e 
+     * @param {String} form_name - unique string
+     * @param {Number} created_by - user.id
+     * @returns either integer ID of new form or Boolean False
+     */
     async createForm(e, form_name, created_by){
         e.preventDefault()
         try {
@@ -146,13 +160,12 @@ class App extends Component {
      * @param {Number} id - DB id of form
      * @param {String} type - formConfig, cssConfig, or emailConfig
      * @param {Object} data - entire config object to be updated
-     * @param {String} method - PUT is default
+     * @returns {Boolean} true on success
      */
-    async storeConfig(e, id, type, data, method="PUT") {
-        e.preventDefault()
+    async storeConfig(e, id, type, data) {
         try {
             const options = {...this.state.options}
-            options.method = method;
+            options.method = "PUT";
             options.body = JSON.stringify({[type]: data});
             const completed = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/${id}`, options);
             if (completed) {
@@ -167,7 +180,6 @@ class App extends Component {
     }
 
     async setApiKey(e, key, method) {
-        e.preventDefault();
         try {
             const options = {...this.state}
             options.method = method;
@@ -217,7 +229,7 @@ class App extends Component {
                                 viewMode={state.viewMode} 
                                 formConfig={state.formConfig}
                                 emailConfig={state.emailConfig}
-                                currentFormId={state.currentFormId}
+                                currentForm={state.currentForm}
                                 enabled={btnsEnabled} 
                                 setViewMode={this.handleViewMode}
                                 storeConfig={this.storeConfig}
@@ -228,7 +240,7 @@ class App extends Component {
                                 viewMode={state.viewMode} 
                                 styleMode={state.styleMode}
                                 cssConfig={state.cssConfig}
-                                currentFormId={state.currentFormId}
+                                currentForm={state.currentForm}
                                 enabled={btnsEnabled} 
                                 setStyleMode={this.handleStyleMode} 
                                 storeConfig={this.storeConfig}

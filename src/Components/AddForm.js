@@ -12,12 +12,14 @@ import swal from 'sweetalert'
 export default class AddForm extends Component {
     constructor(props) {
         super(props);
-
+        // console.log({props})
         this.state = {
+            submitting: false,
             updated: false,
             saved: false,
             form_name: '',
-            created_by: props.user.id
+            created_by: props.user.id,
+            error: ''
         }
         this.handleButtonClick=this.handleButtonClick.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
@@ -25,15 +27,20 @@ export default class AddForm extends Component {
 
     handleButtonClick(e, ctx) {
         this.props.tabFunctions.toggleBtnEnable( false )
-        this.props.tabFunctions.createForm(e, ctx.val, this.state["created_by"]).then(id=>{
-            if (id) {
-                this.setState({saved: true}, () => {
-                    this.props.tabFunctions.toggleBtnEnable( true )
-                    this.props.setAdminMode("Edit", id);
-                })
-            } else {
-                this.setState({error: "Unable to Save"})
-            }
+        this.setState({submitting: true}, ()=> {
+                   
+            this.props.tabFunctions.createForm(e, ctx.val, this.state["created_by"])
+            .then(id=>{
+                if (id) {
+                    this.setState({saved: true, submitting: false}, () => {
+                        this.props.tabFunctions.toggleBtnEnable( true )
+                        this.props.tabFunctions.setAdminMode("Edit", id);
+                    })
+                } else {
+                    this.setState({error: "Unable to Save"})
+                }
+            })
+            .catch(err=>console.error(err));
         });
     }
 
@@ -43,11 +50,10 @@ export default class AddForm extends Component {
         let inputValue = target.type === 'checkbox' ? target.checked : target.value.trim();
         let {error} = this.state;
         const updated = inputValue ? true : false
-        this.setState({form_name: inputValue, error, updated}, ()=> this.props.tabFunctions.toggleBtnEnable( updated ? false : true ))
+        this.setState({form_name: inputValue, error, updated})
     }
     
     render() {
-        const {fields, errors} = this.state;
         return (
             <React.Fragment>
                 <form>
@@ -62,15 +68,20 @@ export default class AddForm extends Component {
                                 placeholder="i.e. Giving, or End-of-Year" 
                                 maxLength="256" 
                                 required={true} 
-                                value={fields.form_name} 
+                                value={this.state.form_name} 
                                 handleInputChange={this.handleInputChange} 
-                                error={errors.form_name} 
+                                error={this.state.error}
                             />
                         </div>
                     </fieldset>
                     <fieldset styleName="form.fieldset">
                         <div style={{maxWidth: "88px"}}>
-                            <FormButton val="Save" handleClick={this.handleButtonClick} ctx={{name: "create", val: fields.form_name, type: 'form_name'}} />
+                            <FormButton 
+                                val="Save" 
+                                handleClick={this.handleButtonClick} 
+                                ctx={{name: "create", val: this.state.form_name, type: 'form_name'}}
+                                submitting={this.state.submitting}
+                            />
                         </div>
                     </fieldset>
                 </form>

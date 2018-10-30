@@ -2,16 +2,16 @@ import React, {Component} from 'react'
 
 import form from './styles/form.css'
 import flex from './styles/flex.css'
-import error from './styles/error.css'
 
-import FormButton from './FormButton'
 import TextGroup from './TextGroup';
+import SaveButton from './SaveButton';
 
 export default class SubscriptionSettings extends Component {
     constructor(props) {
         super(props);
-        const editMode = props.adminMode == "Edit"
+        const editMode = props.adminMode == "Edit" && props.currentForm.form_status && props.currentForm.form_status !== "new"
         this.state = {
+            submitting: false,
             updated: false,
             saved: false,
             initialState: {
@@ -33,8 +33,8 @@ export default class SubscriptionSettings extends Component {
                 product: '',
                 formError: '',
             },
-            savedMsg: 'Saved',
-            currentFormId: props.currentFormId,
+            formMsg: '',
+            currentForm: props.currentForm
         }
 
         this.handleButtonClick=this.handleButtonClick.bind(this)
@@ -53,30 +53,39 @@ export default class SubscriptionSettings extends Component {
     }
 
     handleButtonClick(e, ctx) {
-        const emailConfig = JSON.stringify(this.state.fields);
-        const initialState = JSON.stringify(this.state.initialState);
-        const errors = {...this.state.errors};
-        for (error in errors) {
-            errors[error] = ''
-        }
-        if (emailConfig != initialState  && id > 0) {
-            const method = this.state.currentFormId > 0 ? "PUT" : "POST"
-            this.props.tabFunctions.storeConfig(e, this.state.currentFormId, "cssConfig", emailConfig, method).then(success=>{
-                if (success) {
-                    this.setState({updated: false, saved: true, initialState: JSON.parse(emailConfig), errors}, () => setTimeout(() => {
+        this.setState({submitting: true}, ()=>{
+            this.props.tabFunctions.toggleBtnEnable( false )
+            const emailConfig = JSON.stringify(this.state.fields);
+            const initialState = JSON.stringify(this.state.initialState);
+            const errors = {...this.state.errors};
+            for (error in errors) {
+                errors[error] = ''
+            }
+            if (emailConfig != initialState) {
+                this.props.tabFunctions.storeConfig(e, this.state.currentForm.id, "cssConfig", emailConfig)
+                .then(success=>{
+                    if (success) {
+                        this.setState({updated: false, saved: true, submitting: false, formMsg: "Saved.", initialState: JSON.parse(emailConfig), errors}, () => {
+                            this.props.tabFunctions.toggleBtnEnable( true )
+                            setTimeout(() => {
+                                this.setState({saved: false})
+                            }, 3000)
+                        })
+                    } else {
+                        errors['formError'] = "Unable to Save"
+                        this.setState({errors})
+                    }
+                });
+            } else {
+                this.setState({updated: false, saved: true, errors, submitting: false}, () => {
+                    this.props.tabFunctions.toggleBtnEnable( true )
+                    setTimeout(() => {
                         this.setState({saved: false})
-                    }, 3000))
-                } else {
-                    errors['formError'] = "Unable to Save"
-                    this.setState({errors})
-                }
-            });
-        } else {
-            this.setState({updated: false, saved: true, errors}, () => setTimeout(() => {
-                this.setState({saved: false})
-            }, 3000))
-        }
+                    }, 3000)
+                })
+            }
             
+        });
 
     }
 
@@ -101,8 +110,8 @@ export default class SubscriptionSettings extends Component {
         errors[name] = error;     
         fields[name] = value;
         const updated = value !== this.state.initialState[name]
-        console.log({updated, value, initialState: this.state.initialState[name]})
-        this.setState({ fields, errors, updated }, ()=> this.props.tabFunctions.toggleBtnEnable( updated ? false : true ));
+        // console.log({updated, value, initialState: this.state.initialState[name]})
+        this.setState({ fields, errors, updated, formMsg: updated ? "You have unsaved data" : "" }, ()=> this.props.tabFunctions.toggleBtnEnable( updated ? false : true ));
     }
 
     handleUnload(e) {
@@ -184,15 +193,9 @@ export default class SubscriptionSettings extends Component {
                             />
                         </div>
                     </fieldset>
-                    <fieldset styleName="form.fieldset" style={{position: "relative"}}>
-                        <div style={{maxWidth: "88px"}}>
-                            <FormButton val="Save" handleClick={this.handleButtonClick} ctx={{name: "store", val: '', type: 'emailConfig'}} />
-                        </div>
-                        <div styleName="error.error">{errors.formError}</div>
-                        <div styleName="flex.flex flex.row flex.center" style={{textAlign: "center", color: "darkblue", opacity: this.state.saved ? "1" : "0", transition: "opacity 200ms ease-in-out"}}>
-                            {this.state.savedMsg}
-                        </div>
-                    </fieldset>
+
+                    <SaveButton handleClick={this.handleButtonClick} submitting={this.state.submitting} ctx={{name: "store", val: '', type: 'emailConfig'}} error={errors.formError} formMsg={this.state.formMsg}/>
+
                 </form>
             </React.Fragment>
 

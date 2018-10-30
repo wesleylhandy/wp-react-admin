@@ -11,7 +11,7 @@ import tabs from './styles/tabs.css'
     // Borders
 
 export default function StyleOptionsTabs(props) {
-    const {adminMode, viewMode, styleMode, setStyleMode, cssConfig, storeConfig, currentFormId, enabled, toggleBtnEnable} = props
+    const {adminMode, viewMode, styleMode, setStyleMode, cssConfig, storeConfig, currentForm, enabled, toggleBtnEnable} = props
     const subHeads = ["Colors", "Fonts", "Spacing"]
     const tabs = subHeads.map((th, ind)=>{
         return (
@@ -34,7 +34,7 @@ export default function StyleOptionsTabs(props) {
                         <div styleName="tabs.tab-headers__submenu--tertiary">
                             {tabs}
                         </div>
-                        <TabBody currentFormId={currentFormId} adminMode={adminMode} displayMode={styleMode} tabFunctions={{storeConfig, toggleBtnEnable}} tabData={{cssConfig}}/>
+                        <TabBody currentForm={currentForm} adminMode={adminMode} displayMode={styleMode} tabFunctions={{storeConfig, toggleBtnEnable}} tabData={{cssConfig}}/>
                     </React.Fragment>
                 ) : (
                     null

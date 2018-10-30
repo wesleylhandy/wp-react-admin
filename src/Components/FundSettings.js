@@ -1,7 +1,5 @@
 import React, {Component} from 'react'
 
-import { callApi } from './helpers/fetch-helpers'
-
 import form from './styles/form.css'
 import flex from './styles/flex.css'
 
@@ -15,7 +13,7 @@ import TextGroup from './TextGroup';
 export default class FundSettings extends Component {
     constructor(props) {
         super(props);
-        const editMode = props.adminMode == "Edit"
+        const editMode = props.adminMode == "Edit" && props.currentForm.form_status && props.currentForm.form_status !== "new"
         this.state = {
             updated: false,
             saved: false,
@@ -173,7 +171,7 @@ export default class FundSettings extends Component {
                         { 
                             fields.addFunds ? (
                                 <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
-                                    <div style={{maxWidth: "157px"}}>
+                                    <div style={{maxWidth: "170px"}}>
                                         <FormButton val="Add Setting" handleClick={this.handleButtonClick} ctx={{name: "funds", val: '', type: 'Add'}} />
                                     </div>
                                 </div>

@@ -18,6 +18,7 @@ export default function InputGroup(props) {
                 value={props.value}
                 onChange={props.handleInputChange}
                 aria-invalid={props.error ? true : false} 
+                disabled={props.disabled}
             />
             <div styleName="error.error">{props.error}</div>
         </div>

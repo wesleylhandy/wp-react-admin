@@ -1,7 +1,5 @@
 import React, {Component} from 'react'
 
-import { callApi } from './helpers/fetch-helpers'
-
 import form from './styles/form.css'
 import flex from './styles/flex.css'
 
@@ -13,7 +11,7 @@ import SelectGroup from './SelectGroup';
 export default class SubscriptionSettings extends Component {
     constructor(props) {
         super(props);
-        const editMode = props.adminMode == "Edit"
+        const editMode = props.adminMode == "Edit" && props.currentForm.form_status && props.currentForm.form_status !== "new"
         this.state = {
             updated: false,
             saved: false,
@@ -108,7 +106,7 @@ export default class SubscriptionSettings extends Component {
 
                     { this.renderSubInputs(fields.subscriptions.length) }
                     <fieldset styleName="form.fieldset">
-                        <div style={{maxWidth: "157px"}}>
+                        <div style={{maxWidth: "170px"}}>
                             <FormButton val="Add Setting" handleClick={this.handleButtonClick} ctx={{name: "subscription", val: '', type: 'Add'}} />
                         </div>
                     </fieldset>

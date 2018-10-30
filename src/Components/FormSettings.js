@@ -1,12 +1,9 @@
 import React, {Component} from 'react'
 
-import { callApi } from './helpers/fetch-helpers'
-
 import form from './styles/form.css'
 import flex from './styles/flex.css'
 
 import FormButton from './FormButton'
-import swal from 'sweetalert'
 import Checkbox from './Checkbox';
 import InputGroup from './InputGroup';
 
@@ -14,13 +11,13 @@ export default class FormSettings extends Component {
     constructor(props) {
         super(props);
         // console.log({props});
-        const editMode = props.adminMode == "Edit"
+        const editMode = props.adminMode == "Edit" && props.currentForm.form_status && props.currentForm.form_status !== "new"
         this.state = {
             updated: false,
             saved: false,
             fields: {
-                form_name: editMode ? props.formConfig.form_name : true,
-                thankYouUrl: editMode ? props.formConfig.thankYouUrl : true,
+                form_name: props.currentForm.form_name,
+                thankYouUrl: editMode ? props.formConfig.thankYouUrl : '',
                 AddContactYN: editMode ? props.formConfig.AddContactYN == "Y" : true,
                 ContactSource: editMode ? props.formConfig.ContactSource : '',
                 SectionName: editMode ? props.formConfig.SectionName : '',
@@ -67,12 +64,8 @@ export default class FormSettings extends Component {
                                 id="form_name" 
                                 specialStyle="" 
                                 label="Campaign Name/URL Slug" 
-                                placeholder="i.e. Giving, or End-of-Year" 
-                                maxLength="256" 
-                                required={true} 
                                 value={fields.form_name} 
-                                handleInputChange={this.handleInputChange} 
-                                error={errors.form_name} 
+                                disabled={true}
                             />
                         </div>
                         <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">

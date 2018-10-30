@@ -145,6 +145,17 @@ textarea.form-control:disabled {
     background: #f1f1f1;
 }
 
+input[type='text'].form-control:disabled:hover,
+input[type='text'].form-control:disabled:focus,
+input[type='text'].form-control:disabled:active,
+textarea.form-control:disabled:hover,
+textarea.form-control:disabled:focus,
+textarea.form-control:disabled:active {
+    border-color: #ccc;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
 @media screen and (max-width:613px) {
     .form-group--Lastname {
         width: 100%;
