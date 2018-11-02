@@ -158,7 +158,7 @@ class App extends Component {
      * Stores form config into DB and returns true oif complete
      * @param {Event} e 
      * @param {Number} id - DB id of form
-     * @param {String} type - formConfig, cssConfig, or emailConfig
+     * @param {String} type - form_setup, css_setup, or email_setup
      * @param {Object} data - entire config object to be updated
      * @returns {Boolean} true on success
      */
@@ -167,7 +167,7 @@ class App extends Component {
             const options = {...this.state.options}
             options.method = "PUT";
             options.body = JSON.stringify({[type]: data});
-            const completed = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/${id}`, options);
+            const completed = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/${id}?type=${type}`, options);
             if (completed) {
                 this.setState({[type]: data})
             }

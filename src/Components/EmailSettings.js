@@ -62,7 +62,7 @@ export default class SubscriptionSettings extends Component {
                 errors[error] = ''
             }
             if (emailConfig != initialState) {
-                this.props.tabFunctions.storeConfig(e, this.state.currentForm.id, "cssConfig", emailConfig)
+                this.props.tabFunctions.storeConfig(e, this.state.currentForm.id, "email_setup", emailConfig)
                 .then(success=>{
                     if (success) {
                         this.setState({updated: false, saved: true, submitting: false, formMsg: "Saved.", initialState: JSON.parse(emailConfig), errors}, () => {

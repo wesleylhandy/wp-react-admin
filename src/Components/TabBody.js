@@ -14,8 +14,6 @@ import FundSettings from './FundSettings';
 import SubscriptionSettings from './SubscriptionSettings';
 import EmailSettings from './EmailSettings';
 import StyleSettings from './StyleSettings';
-import FontSettings from './FontSettings';
-import SpacingSettings from './SpacingSettings';
 
 export default function TabBody(props) {
     function renderBody(props) {
@@ -53,27 +51,7 @@ export default function TabBody(props) {
                 return <EmailSettings currentForm={props.currentForm} editMode={editMode} tabFunctions={props.tabFunctions} emailConfig={props.tabData.emailConfig}/>;
                 break;
             case "Colors":
-                defaultValues = getDefaultValues(editMode, props.displayMode, props.tabData.cssConfig)
-                return <StyleSettings 
-                    currentForm={props.currentForm} 
-                    tabFunctions={props.tabFunctions} 
-                    defaultValues={defaultValues} 
-                    editMode={editMode} 
-                    config={props.tabData.cssConfig} 
-                    displayMode={props.displayMode}
-                />
-                break;
             case "Fonts":
-                defaultValues = getDefaultValues(editMode, props.displayMode, props.tabData.cssConfig)
-                return <StyleSettings 
-                    currentForm={props.currentForm} 
-                    tabFunctions={props.tabFunctions} 
-                    defaultValues={defaultValues} 
-                    editMode={editMode} 
-                    config={props.tabData.cssConfig} 
-                    displayMode={props.displayMode}
-                />
-                break;
             case "Spacing":
                 defaultValues = getDefaultValues(editMode, props.displayMode, props.tabData.cssConfig)
                 return <StyleSettings 

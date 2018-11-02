@@ -8,7 +8,7 @@ import FormButton from './FormButton'
 import swal from 'sweetalert'
 import InputGroup from './InputGroup';
 
-import getFontInfo from './helpers/getFontInfo'
+import {getFontInfo} from './helpers/getFontInfo'
 
 export default class ColorSettings extends Component {
     constructor(props) {
@@ -30,6 +30,7 @@ export default class ColorSettings extends Component {
             },
             currentForm: props.currentForm   
         }
+        // initialize errors
         for (let defaultValue in props.defaultValues) {
             this.state.errors[defaultValue] = ''
         }
@@ -37,20 +38,34 @@ export default class ColorSettings extends Component {
         this.handleInputChange = this.handleInputChange.bind(this)
         this.renderInputs = this.renderInputs.bind(this)
     }
-
+    // update state only if new default values, otherwise, let class functions manage state
     static getDerivedStateFromProps(props, state) {
         const updateDefaults = JSON.stringify(props.defaultValues) !== JSON.stringify(state.defaultValues)
         if (updateDefaults) {
-            return { initialState: {...props.defaultValues}, fields: {...props.defaultValues} }
+            const errors = { formError: props.editMode ? "" : "Above Values Are Not Stored in the DB" }
+            for (let defaultValue in props.defaultValues) {
+                errors[defaultValue] = ''
+            }
+            return { 
+                editMode: props.editMode,
+                submitting: false,
+                updated: false,
+                saved: false,
+                currentForm: props.currentForm,
+                initialState: {...props.defaultValues}, 
+                fields: {...props.defaultValues},
+                errors
+            }
         } else {
             return {}
         }
     }
 
+    // don't let users leave page without warning
     componentDidMount() {
         window.addEventListener('beforeunload', this.handleUnload)
     }
-
+    // remove event listeners on unmount
     componentWillUnmount() {
         window.removeEventListener('beforeunload', this.handleUnload)
     }
@@ -190,7 +205,7 @@ export default class ColorSettings extends Component {
                     <SaveButton 
                         handleClick={this.handleButtonClick} 
                         submitting={this.state.submitting} 
-                        ctx={{name: "store", val: '', type: 'cssConfig'}} 
+                        ctx={{name: "store", val: '', type: 'css_setup'}} 
                         error={errors.formError} 
                         formMsg={this.state.formMsg}
                     />

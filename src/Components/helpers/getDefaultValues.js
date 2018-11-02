@@ -44,6 +44,9 @@ export function getDefaultValues(editMode, type, config) {
                 "--error-font-style": editMode && config.hasOwnProperty("--error-font-style") ? config["--error-font-style"]: "normal",
                 "--error-font-weight": editMode && config.hasOwnProperty("--error-font-weight") ? config["--error-font-weight"]: "700"
             }
+            const keys = Object.keys(config)
+            const externalFonts = keys.filter(k=> k.includes("externalFont"))
+            externalFonts.forEach(externalFont=> defaultValues[externalFont] = config[externalFont] )
             break;
         case "colors":
             defaultValues = {
