@@ -109,6 +109,35 @@ h3.form-header,
     margin-left: 10px;
 }
 
+p.form-info {
+    font-size: 14px;
+    margin: -15px 0 20px 7px;
+    line-height: 1.5;
+}
+
+code.form-code {
+    font-size: 14px;
+    background-color: #eee;
+    padding: 1px 2px;
+}
+
+code.code-block {
+    background-color: #eee;
+    border: 1px solid #999;
+    display: block;
+    padding: 20px;
+}
+
+.form-msg {
+    color: crimson;
+    position: absolute;
+    width: calc(90vw - 88px);
+    top: 50%;
+    transform: translateY(-50%);
+    left: 100px;
+    transition: opacity 200ms ease-in-out;
+}
+
 .error {
     box-sizing: border-box;
     position: absolute;

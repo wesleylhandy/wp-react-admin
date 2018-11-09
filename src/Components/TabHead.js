@@ -13,12 +13,12 @@ export default function TabHead(props) {
             onClick={e => {
                 e.preventDefault();
                 if (props.enabled) {
-                    props.handleClick(e, content)
+                    props.handleClick(content)
                 } else if (props.mode !== "List") {
                     clickAlert().then(update=>{
                         props.toggleBtnEnable(update)
                         if (update) {
-                            props.handleClick(e, content)
+                            props.handleClick(content)
                         }
                     })
                 }

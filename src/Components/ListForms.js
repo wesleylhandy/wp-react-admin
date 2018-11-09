@@ -47,11 +47,11 @@ export default class ListForms extends Component {
         }
     }
 
-    handleButtonClick(e, ctx) {
+    handleButtonClick(ctx) {
         this.setState({submitting: true}, ()=>{
             this.props.tabFunctions.toggleBtnEnable( false )
             if (ctx.type == "Edit" && ctx.name == "apiKey") {
-                this.handleEditApiKey(e);
+                this.handleEditApiKey();
                 this.setState({submitting: false}, ()=> this.props.tabFunctions.toggleBtnEnable( true ))
             } else if (ctx.type == "Save" && ctx.name == "apiKey") {
                 const method = this.state.saveMethod
@@ -66,12 +66,12 @@ export default class ListForms extends Component {
                 
             } else {
                 this.props.tabFunctions.toggleBtnEnable( true )
-                this.props.tabFunctions.setAdminMode(e, ctx.type, ctx.val)
+                this.props.tabFunctions.setAdminMode(ctx.type, ctx.val)
             }
         })
     }
 
-    async handleEditApiKey(e) {
+    async handleEditApiKey() {
         if (this.state.inputValue && !this.state.allowEdit) {
             try {
                 let inputDisabled = true;
@@ -128,7 +128,7 @@ export default class ListForms extends Component {
         });
         return (
             <React.Fragment>
-                <form>
+                <form onSubmit={(e)=>e.preventDefault()}>
                     <fieldset styleName='form.fieldset'>
                         <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                             <div id="form-field-apiKey" styleName="input.form-group flex.flex-grow">
@@ -181,7 +181,7 @@ export default class ListForms extends Component {
                         <tr styleName="form.table-row">
                             <td colSpan="4" styleName="form.table-row__cells">
                                 <div styleName="flex.flex flex.flex-row flex.flex-center flex.flex-axes-center">
-                                    <FormButton val="Add New Form" handleClick={this.handleButtonClick} ctx={{name: "campaign", val: '', type: 'Add'}} />
+                                    <FormButton val="Add New Form" handleClick={this.handleButtonClick} ctx={{name: "campaign", val: '', type: 'Add'}} submitting={this.state.submitting}/>
                                 </div>
                             </td>
                         </tr>

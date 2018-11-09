@@ -16,9 +16,9 @@ import EmailSettings from './EmailSettings';
 import StyleSettings from './StyleSettings';
 
 export default function TabBody(props) {
-    function renderBody(props) {
-        const editMode = props.adminMode == "Edit" && props.currentForm.form_status && props.currentForm.form_status !== "new"
-        let defaultValues;
+    const editMode = props.adminMode == "Edit" && props.currentForm.form_status && props.currentForm.form_status !== "new"
+    const defaultValues = getDefaultValues(editMode, props.displayMode, props.tabData.cssConfig)
+    function renderBody(props, editMode, defaultValues) {  
         // console.log({k, formList, user})
         switch (props.displayMode) {
             case "List":
@@ -30,30 +30,29 @@ export default function TabBody(props) {
                 return <AddForm tabFunctions={props.tabFunctions} user={user}/>
                 break;
             case "Settings":
-                return <FormSettings currentForm={props.currentForm} editMode={editMode} tabFunctions={props.tabFunctions} formConfig={props.tabData.formConfig}/>;
+                return <FormSettings currentForm={props.currentForm} editMode={editMode} tabFunctions={props.tabFunctions} config={props.tabData.formConfig}/>;
                 break;
             case "Name/Address":
-                return <NameSettings currentForm={props.currentForm} editMode={editMode} tabFunctions={props.tabFunctions} formConfig={props.tabData.formConfig}/>;
+                return <NameSettings currentForm={props.currentForm} editMode={editMode} tabFunctions={props.tabFunctions} config={props.tabData.formConfig}/>;
                 break;
             case "Gifts":
-                return <GivingSettings currentForm={props.currentForm} editMode={editMode} tabFunctions={props.tabFunctions} formConfig={props.tabData.formConfig}/>;
+                return <GivingSettings currentForm={props.currentForm} editMode={editMode} tabFunctions={props.tabFunctions} config={props.tabData.formConfig}/>;
                 break;
             case "Products":
-                return <ProductSettings currentForm={props.currentForm} editMode={editMode} tabFunctions={props.tabFunctions} formConfig={props.tabData.formConfig}/>;
+                return <ProductSettings currentForm={props.currentForm} editMode={editMode} tabFunctions={props.tabFunctions} config={props.tabData.formConfig}/>;
                 break;
             case "Funds":
-                return <FundSettings currentForm={props.currentForm} editMode={editMode} tabFunctions={props.tabFunctions} formConfig={props.tabData.formConfig}/>;
+                return <FundSettings currentForm={props.currentForm} editMode={editMode} tabFunctions={props.tabFunctions} config={props.tabData.formConfig}/>;
                 break;
             case "Subscriptions":
-                return <SubscriptionSettings currentForm={props.currentForm} editMode={editMode} tabFunctions={props.tabFunctions} formConfig={props.tabData.formConfig}/>;
+                return <SubscriptionSettings currentForm={props.currentForm} editMode={editMode} tabFunctions={props.tabFunctions} config={props.tabData.formConfig}/>;
                 break;
             case "Emails":
-                return <EmailSettings currentForm={props.currentForm} editMode={editMode} tabFunctions={props.tabFunctions} emailConfig={props.tabData.emailConfig}/>;
+                return <EmailSettings currentForm={props.currentForm} editMode={editMode} tabFunctions={props.tabFunctions} config={props.tabData.emailConfig}/>;
                 break;
             case "Colors":
             case "Fonts":
             case "Spacing":
-                defaultValues = getDefaultValues(editMode, props.displayMode, props.tabData.cssConfig)
                 return <StyleSettings 
                     currentForm={props.currentForm} 
                     tabFunctions={props.tabFunctions} 
@@ -69,7 +68,7 @@ export default function TabBody(props) {
     }
     return (
         <div styleName="tabs.tab-body">
-            {renderBody(props)}
+            {renderBody(props, editMode, defaultValues)}
         </div>
     )
 }

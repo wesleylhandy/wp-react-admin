@@ -25,11 +25,11 @@ export default class AddForm extends Component {
         this.handleInputChange = this.handleInputChange.bind(this)
     }
 
-    handleButtonClick(e, ctx) {
+    handleButtonClick(ctx) {
         this.props.tabFunctions.toggleBtnEnable( false )
         this.setState({submitting: true}, ()=> {
                    
-            this.props.tabFunctions.createForm(e, ctx.val, this.state["created_by"])
+            this.props.tabFunctions.createForm(ctx.val, this.state["created_by"])
             .then(id=>{
                 if (id) {
                     this.setState({saved: true, submitting: false}, () => {
@@ -56,7 +56,7 @@ export default class AddForm extends Component {
     render() {
         return (
             <React.Fragment>
-                <form>
+                <form onSubmit={(e)=>{e.preventDefault(); this.handleButtonClick({name: "create", val: this.state.form_name, type: 'form_name'})}}>
                     <h3>Add New Form</h3>
                     <fieldset styleName="form.fieldset">
                         <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">

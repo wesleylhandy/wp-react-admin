@@ -5,7 +5,6 @@ import flex from './styles/flex.css'
 
 import SaveButton from './SaveButton'
 import FormButton from './FormButton'
-import swal from 'sweetalert'
 import InputGroup from './InputGroup';
 
 import {getFontInfo} from './helpers/getFontInfo'
@@ -15,6 +14,7 @@ export default class ColorSettings extends Component {
         super(props);
         // console.log({props});
         this.state = {
+            hydrated: false,
             editMode: props.editMode,
             submitting: false,
             updated: false,
@@ -37,27 +37,37 @@ export default class ColorSettings extends Component {
         this.handleButtonClick=this.handleButtonClick.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
         this.renderInputs = this.renderInputs.bind(this)
+        this.handleUnload=this.handleUnload.bind(this)
     }
-    // update state only if new default values, otherwise, let class functions manage state
-    static getDerivedStateFromProps(props, state) {
-        const updateDefaults = JSON.stringify(props.defaultValues) !== JSON.stringify(state.defaultValues)
-        if (updateDefaults) {
-            const errors = { formError: props.editMode ? "" : "Above Values Are Not Stored in the DB" }
-            for (let defaultValue in props.defaultValues) {
+
+    // NEED TO HANDLE UPDATES TO STATE OUTSIDE OF THIS COMPONENT SOMEHOW !!!
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (nextProps.displayMode !== prevState.displayMode) {
+            const newDefaults = JSON.stringify(nextProps.defaultValues)
+            const oldDefaults = JSON.stringify(prevState.defaultValues)
+            const errors = {
+                formError: nextProps.editMode ? "" : "Above Values Are Not Stored in the DB"
+            }
+            for (let defaultValue in nextProps.defaultValues) {
                 errors[defaultValue] = ''
             }
-            return { 
-                editMode: props.editMode,
-                submitting: false,
-                updated: false,
-                saved: false,
-                currentForm: props.currentForm,
-                initialState: {...props.defaultValues}, 
-                fields: {...props.defaultValues},
-                errors
+            if (oldDefaults !== newDefaults) {
+                return {
+                    hydrated: true,
+                    editMode: nextProps.editMode,
+                    submitting: false,
+                    updated: false,
+                    saved: false,
+                    initialState: {...nextProps.defaultValues},
+                    fields: {...nextProps.defaultValues},
+                    currentForm: nextProps.currentForm,
+                    errors
+                }
+            } else {
+                return null
             }
         } else {
-            return {}
+            return null
         }
     }
 
@@ -80,30 +90,32 @@ export default class ColorSettings extends Component {
         return void (0);
     }
 
-    handleButtonClick(e, ctx) {
+    handleButtonClick(ctx) {
         const fields = {...this.state.fields}, errors = {...this.state.errors}
         if (ctx.name === "externalFonts") {
             const {count} = getFontInfo(true, "externalFont", fields)
-            fields[`externalFont${count}`] = '', errors[`externalFont${count}`] = ''
+            fields[`externalFont${count}`] = ''
+            errors[`externalFont${count}`] = ''
+            // console.log({count, fields, errors})
             this.setState({fields, errors});
         } else {
             this.setState({submitting: true}, ()=>{
                 this.props.tabFunctions.toggleBtnEnable( false )
                 const currentState = JSON.stringify(fields);
                 const initialState = JSON.stringify(this.state.initialState);
-                for (error in errors) {
+                for (let error in errors) {
                     errors[error] = ''
                 }
                 if (currentState != initialState) {
                     const config = {...this.props.config, ...this.state.fields};
-                    this.props.tabFunctions.storeConfig(e, this.state.currentForm.id, ctx.type, config)
+                    this.props.tabFunctions.storeConfig(this.state.currentForm.id, ctx.type, config)
                     .then(success=>{
                         if (success) {
-                            this.setState({updated: false, saved: true, submitting: false, initialState: JSON.parse(fields), errors}, () => {
+                            this.setState({updated: false, saved: true, submitting: false, initialState: fields, errors}, () => {
                                 this.props.tabFunctions.toggleBtnEnable( true )
                                 setTimeout(() => {
                                     this.setState({saved: false})
-                                }, 3000)
+                                }, 300)
                             })
                         } else {
                             errors['formError'] = "Unable to Save"
@@ -115,7 +127,7 @@ export default class ColorSettings extends Component {
                         this.props.tabFunctions.toggleBtnEnable( true )
                         setTimeout(() => {
                             this.setState({saved: false})
-                        }, 3000)
+                        }, 300)
                     })
                 }
             });
@@ -131,8 +143,8 @@ export default class ColorSettings extends Component {
         const error = '';
         errors[name] = error;     
         fields[name] = value;
-        const updated = value !== this.state.initialState[name]
-        // console.log({updated, value, initialState: this.state.initialState[name]})
+        const updated = JSON.stringify(fields) !== JSON.stringify(this.state.initialState)
+        // console.log({updated, value, fields})
         this.setState({ fields, errors, updated }, ()=> this.props.tabFunctions.toggleBtnEnable( updated ? false : true ));
     }
 
@@ -156,11 +168,11 @@ export default class ColorSettings extends Component {
                             type="text"
                             id={field}
                             specialStyle="" 
-                            label={field.substring(2)}
+                            label={field.includes('externalFont') ? field : field.substring(2)}
                             placeholder="CSS"
                             maxLength={32} 
                             required={true} 
-                            value={this.state.fields[field]} 
+                            value={fields[field]} 
                             handleInputChange={this.handleInputChange} 
                             error={this.state.errors[field]} 
                         />
@@ -187,7 +199,7 @@ export default class ColorSettings extends Component {
         let title = this.props.displayMode == "Spacing" ? "Spacing" : this.props.displayMode.slice(0, -1);
         return (
             <React.Fragment>
-                <form>
+                <form onSubmit={(e)=>{e.preventDefault(); this.handleButtonClick({name: "store", val: '', type: 'css_setup'})}}>
                     <h3>Configure {title} Setttings</h3>
                     <fieldset styleName="form.fieldset">
                         {this.renderInputs(fields)}
@@ -207,7 +219,7 @@ export default class ColorSettings extends Component {
                         submitting={this.state.submitting} 
                         ctx={{name: "store", val: '', type: 'css_setup'}} 
                         error={errors.formError} 
-                        formMsg={this.state.formMsg}
+                        formMsg={this.state.updated && !this.state.saved ? "Changes require saving": ''}
                     />
                  </form>
             </React.Fragment>

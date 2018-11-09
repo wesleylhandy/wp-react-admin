@@ -129,7 +129,7 @@ export default class SubscriptionSettings extends Component {
         const { fields, errors } = this.state;
         return (
             <React.Fragment>
-                <form>
+                <form onSubmit={(e)=>{e.preventDefault(); this.handleButtonClick({name: "store", val: '', type: 'email_setup'})}}>
                     <h3>Configure Email Setttings</h3>
                     <fieldset styleName="form.fieldset">
                         <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
@@ -194,7 +194,7 @@ export default class SubscriptionSettings extends Component {
                         </div>
                     </fieldset>
 
-                    <SaveButton handleClick={this.handleButtonClick} submitting={this.state.submitting} ctx={{name: "store", val: '', type: 'emailConfig'}} error={errors.formError} formMsg={this.state.formMsg}/>
+                    <SaveButton handleClick={this.handleButtonClick} submitting={this.state.submitting} ctx={{name: "store", val: '', type: 'email_setup'}} error={errors.formError} formMsg={this.state.formMsg}/>
 
                 </form>
             </React.Fragment>

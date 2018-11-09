@@ -35,7 +35,7 @@ export default class SubscriptionSettings extends Component {
         
     }
 
-    handleButtonClick(e, ctx) {
+    handleButtonClick(ctx) {
         
     }
 
@@ -101,7 +101,7 @@ export default class SubscriptionSettings extends Component {
         const { fields } = this.state;
         return (
             <React.Fragment>
-                <form>
+                <form onSubmit={(e)=>{e.preventDefault(); this.handleButtonClick({name: "store", val: '', type: 'form_setup'})}}>
                     <h3>Configure Subscription Setttings</h3>
 
                     { this.renderSubInputs(fields.subscriptions.length) }
@@ -112,7 +112,7 @@ export default class SubscriptionSettings extends Component {
                     </fieldset>
                     <fieldset styleName="form.fieldset">
                         <div style={{maxWidth: "88px"}}>
-                            <FormButton val="Save" handleClick={this.handleButtonClick} ctx={{name: "store", val: '', type: 'formConfig'}} />
+                            <FormButton val="Save" handleClick={this.handleButtonClick} ctx={{name: "store", val: '', type: 'form_setup'}} />
                         </div>
                     </fieldset>
                 </form>

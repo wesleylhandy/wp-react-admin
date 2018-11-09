@@ -124,7 +124,7 @@ export default class GivingSettings extends Component {
         const { fields, errors } = this.state;
         return (
             <React.Fragment>
-                <form>
+                <form onSubmit={(e)=>{e.preventDefault(); this.handleButtonClick({name: "store", val: '', type: 'form_setup'})}}>
                     <h3>Configure Giving Setttings</h3>
                     <fieldset styleName="form.fieldset">
                         <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
@@ -216,7 +216,7 @@ export default class GivingSettings extends Component {
                     </fieldset>
                     <fieldset styleName="form.fieldset">
                         <div style={{maxWidth: "88px"}}>
-                            <FormButton val="Save" handleClick={this.handleButtonClick} ctx={{name: "store", val: '', type: 'formConfig'}} />
+                            <FormButton val="Save" handleClick={this.handleButtonClick} ctx={{name: "store", val: '', type: 'form_setup'}} />
                         </div>
                     </fieldset>
                 </form>

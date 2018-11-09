@@ -72,11 +72,10 @@ class App extends Component {
 
     /**
      * 
-     * @param {Event} e 
      * @param {String} adminMode - "List, Edit, or Add"
      * @param {Number} id - WPDB ID of form being edited
      */
-    handleAdminMode(e, adminMode, id=""){
+    handleAdminMode(adminMode, id=""){
         if (adminMode === "Edit") {
             this.setState({btnsEnabled: false}, async ()=> {
                 try {
@@ -94,12 +93,12 @@ class App extends Component {
         }
     }
 
-    handleViewMode(e, viewMode){
+    handleViewMode(viewMode){
         // console.log({viewMode})
         this.setState({viewMode})
     }
 
-    handleStyleMode(e, styleMode){
+    handleStyleMode(styleMode){
         // console.log({styleMode})
         this.setState({styleMode})
     }
@@ -133,13 +132,11 @@ class App extends Component {
 
     /**
      * In response to btn click, accepts form_name and user.id to insert a new form record in WPDB
-     * @param {Event} e 
      * @param {String} form_name - unique string
      * @param {Number} created_by - user.id
      * @returns either integer ID of new form or Boolean False
      */
-    async createForm(e, form_name, created_by){
-        e.preventDefault()
+    async createForm(form_name, created_by){
         try {
             const options = {...this.state.options}
             options.method = "POST";
@@ -156,13 +153,12 @@ class App extends Component {
     }
     /**
      * Stores form config into DB and returns true oif complete
-     * @param {Event} e 
      * @param {Number} id - DB id of form
      * @param {String} type - form_setup, css_setup, or email_setup
      * @param {Object} data - entire config object to be updated
      * @returns {Boolean} true on success
      */
-    async storeConfig(e, id, type, data) {
+    async storeConfig(id, type, data) {
         try {
             const options = {...this.state.options}
             options.method = "PUT";
@@ -179,7 +175,7 @@ class App extends Component {
 
     }
 
-    async setApiKey(e, key, method) {
+    async setApiKey(key, method) {
         try {
             const options = {...this.state}
             options.method = method;
