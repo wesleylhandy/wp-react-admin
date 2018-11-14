@@ -58,6 +58,7 @@ input[type="radio"].radio-group__input:disabled+label:before {
     border-color: #bfbfbf;
     background: #bfbfbf;
     box-sizing: border-box;
+    cursor: not-allowed;
 }
 
 input[type="radio"].radio-group__input+label:empty:before {

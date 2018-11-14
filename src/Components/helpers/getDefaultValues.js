@@ -7,7 +7,7 @@
  */
 export function getDefaultValues(editMode, type, config) {
 
-    let defaultValues;
+    let defaultValues, errors;
     
     switch (type.toLowerCase()) {
         case "fonts":
@@ -94,54 +94,148 @@ export function getDefaultValues(editMode, type, config) {
             break;
         case "settings":
             defaultValues = {
-                thankYouUrl: editMode && config.hasOwnProperty("thankYouUrl") ? config.thankYouUrl : '',
-                AddContactYN: editMode && config.hasOwnProperty("AddContactYN") ? config.AddContactYN : "Y",
-                ContactSource: editMode && config.hasOwnProperty("ContactSource") ? config.ContactSource : '',
-                SectionName: editMode && config.hasOwnProperty("SectionName") ? config.SectionName : '',
-                ActivityName : editMode && config.hasOwnProperty("ActivityName") ? config.ActivityName : '',
-                MotivationText: editMode && config.hasOwnProperty("MotivationText") ? config.MotivationText : '042712'
+                fields: {
+                    thankYouUrl: editMode && config.hasOwnProperty("thankYouUrl") ? config.thankYouUrl : '',
+                    AddContactYN: editMode && config.hasOwnProperty("AddContactYN") ? config.AddContactYN : "Y",
+                    ContactSource: editMode && config.hasOwnProperty("ContactSource") ? config.ContactSource : '',
+                    SectionName: editMode && config.hasOwnProperty("SectionName") ? config.SectionName : '',
+                    ActivityName : editMode && config.hasOwnProperty("ActivityName") ? config.ActivityName : '',
+                    MotivationText: editMode && config.hasOwnProperty("MotivationText") ? config.MotivationText : '042712',
+                    form_status: config.form_status
+                },
+                errors : {
+                    thankYouUrl: '',
+                    AddContactYN: '',
+                    ContactSource: '',
+                    SectionName: '',
+                    ActivityName: '',
+                    MotivationText: '',
+                    formError: '',
+                    form_status: ''
+                }
             }
             break;
         case "name/address":
             defaultValues = {
-                getMiddleName: editMode && config.hasOwnProperty("getMiddleName") ? config.getMiddleName : false,
-                getSuffix: editMode && config.hasOwnProperty("getSuffix") ? config.getSuffix: false,
-                getSpouseInfo: editMode && config.hasOwnProperty("getSpouseInfo") ? config.getSpouseInfo : false,
-                getPhone: editMode && config.hasOwnProperty("getPhone") ? config.getPhone : true,
-                international: editMode && config.hasOwnProperty("international") ? config.international : true,
-                shipping: editMode && config.hasOwnProperty("shipping") ? config.shipping: true
+                fields: {
+                    getMiddleName: editMode && config.hasOwnProperty("getMiddleName") ? config.getMiddleName : false,
+                    getSuffix: editMode && config.hasOwnProperty("getSuffix") ? config.getSuffix: false,
+                    getSpouseInfo: editMode && config.hasOwnProperty("getSpouseInfo") ? config.getSpouseInfo : false,
+                    getPhone: editMode && config.hasOwnProperty("getPhone") ? config.getPhone : true,
+                    international: editMode && config.hasOwnProperty("international") ? config.international : true,
+                    shipping: editMode && config.hasOwnProperty("shipping") ? config.shipping: true
+                },
+                errors: {
+                    formError: '',
+                }
             }
             break;
         case "gifts":
             defaultValues = {
-                showGivingArray: editMode && config.hasOwnProperty("showGivingArray") ? config.showGivingArray : true,
-                monthlyOption: editMode && config.hasOwnProperty("monthlyOption") ? config.monthlyOption : true,
-                singleOption: editMode && config.hasOwnProperty("singleOption") ? config.singleOption : true,
-                numMonthlyAmounts: editMode && config.hasOwnProperty("monthlyAmounts") ? config.monthlyAmounts.length : 0,
-                monthlyAmounts: editMode && config.hasOwnProperty("monthlyAmounts") ? [...config.monthlyAmounts] : [],
-                numSingleAmounts: editMode && config.hasOwnProperty("singleAmounts") ? config.singleAmounts : 0,
-                singleAmounts: editMode && config.hasOwnProperty("singleAmounts") ? [...config.singleAmounts] : [],
-                defaultOption: editMode && config.hasOwnProperty("defaultOption") ? config.defaultOption : "",
-                defaultAmount: editMode && config.hasOwnProperty("defaultAmount") ? config.defaultAmount : -1
+                fields: {
+                    showGivingArray: editMode && config.hasOwnProperty("showGivingArray") ? config.showGivingArray : true,
+                    monthlyOption: editMode && config.hasOwnProperty("monthlyOption") ? config.monthlyOption : true,
+                    singleOption: editMode && config.hasOwnProperty("singleOption") ? config.singleOption : true,
+                    numMonthlyAmounts: editMode && config.hasOwnProperty("monthlyAmounts") ? config.monthlyAmounts.length : 0,
+                    monthlyAmounts: editMode && config.hasOwnProperty("monthlyAmounts") ? [...config.monthlyAmounts] : [],
+                    numSingleAmounts: editMode && config.hasOwnProperty("singleAmounts") ? config.singleAmounts : 0,
+                    singleAmounts: editMode && config.hasOwnProperty("singleAmounts") ? [...config.singleAmounts] : [],
+                    defaultOption: editMode && config.hasOwnProperty("defaultOption") ? config.defaultOption : "",
+                    defaultAmount: editMode && config.hasOwnProperty("defaultAmount") ? config.defaultAmount : -1
+                }, 
+                errors: {
+                    showGivingArray: '',
+                    monthlyOption: '',
+                    singleOption: '',
+                    numMonthlyAmounts: '',
+                    monthlyAmounts: '',
+                    numSingleAmounts: '',
+                    singleAmounts: '',
+                    defaultOption: '',
+                    defaultAmount: ''
+                }
+            }
+            if (editMode) {
+                for (let i = 0; i < config.monthlyAmounts.length; i++) {
+                    defaultValues.fields["monthlyAmt-" + i] = config.monthlyAmounts[i]
+                    defaultValues.errors["monthlyAmt-" + i] = '';
+                }
+                for (let j = 0; j < config.singleAmounts.length; j++) {
+                    defaultValues.fields["singleAmt-" + j] = config.singleAmounts[j]
+                    defaultValues.errors["singleAmt-" + j] = '';
+                }
             }
             break;
         case "products":
+            errors = {
+                addProducts: '',
+                numProducts: '',
+                products: []
+            }
+            if (editMode) {
+                for (let i = 0; i < config.products.length; i++) {
+                    errors.products.push({
+                        productTitle: '',
+                        productMessage: '',
+                        productImgUrl: '',
+                        DetailName: '',
+                        DetailCprojMail: '',
+                        DetailCprojCredit: '',
+                        DetailDescription: '',
+                        PledgeAmt:''
+                    });
+                }
+            }
             defaultValues = {
-                addProducts: editMode && config.hasOwnProperty("numProducts") ? config.numProducts > 0 : false,
-                numProducts: editMode && config.hasOwnProperty("numProducts") ? config.numProducts : 0,
-                products: editMode && config.hasOwnProperty("products") ? [...config.products] : []
+                fields: {
+                    addProducts: editMode && config.hasOwnProperty("numProducts") ? config.numProducts > 0 : false,
+                    numProducts: editMode && config.hasOwnProperty("numProducts") ? config.numProducts : 0,
+                    products: editMode && config.hasOwnProperty("products") ? [...config.products] : []
+                },
+                errors
             }
             break;
         case "funds":
+            errors = {
+                addFunds: '',
+                numFunds: '',
+                funds: []
+            }
+            if (editMode) {
+                for (let i = 0; i < config.funds.length; i++) {
+                    errors.funds.push({
+                        Title: '',
+                        FundDescription: '',
+                        DetailName: '',
+                        DetailCprojMail: '',
+                        DetailCprojCredit: '',
+                        DetailDescription: ''
+                    });
+                }
+            }
             defaultValues = {
-                addFunds: editMode && config.hasOwnProperty("numFunds") ? config.numFunds > 0 : false,
-                numFunds: editMode && config.hasOwnProperty("numFunds") ? config.numFunds : 0,
-                funds: editMode && config.hasOwnProperty("funds") ? [...config.funds] : []
+                fields: {
+                    addFunds: editMode && config.hasOwnProperty("numFunds") ? config.numFunds > 0 : false,
+                    numFunds: editMode && config.hasOwnProperty("numFunds") ? config.numFunds : 0,
+                    funds: editMode && config.hasOwnProperty("funds") ? [...config.funds] : []
+                },
+                errors
             }
             break;
         case "subscriptions":
+            errors = {
+                subscriptions: []
+            }
+            if (editMode) {
+                for (let i = 0; i < config.subscriptions.length; i++) {
+                    errors.subscriptions.push({key: '', value : ''});
+                }
+            }
             defaultValues = {
-                subscriptions: editMode && config.hasOwnProperty("subscriptions") ? [...config.subscriptions] : []
+                fields: {
+                    subscriptions: editMode && config.hasOwnProperty("subscriptions") ? [...config.subscriptions] : []
+                }, 
+                errors
             }
             break;
     }

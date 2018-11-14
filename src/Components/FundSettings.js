@@ -13,63 +13,103 @@ import TextGroup from './TextGroup';
 export default class FundSettings extends Component {
     constructor(props) {
         super(props);
-        const editMode = props.adminMode == "Edit" && props.currentForm.form_status && props.currentForm.form_status !== "new"
         this.state = {
+            editMode: props.editMode,
             updated: false,
             saved: false,
             initialState: {
-                ...props.defaultValues
+                ...props.defaultValues.funds
             },
             fields: {
-                addFunds: editMode ? props.formConfig.numFunds > 0 : false,
-                numFunds: editMode ? props.formConfig.numFunds : 0,
-                funds: editMode ? [...props.formConfig.funds] : []
+                addFunds: props.editMode ? props.config.numFunds > 0 : false,
+                numFunds: props.editMode ? props.config.numFunds : 0,
+                funds: props.editMode ? [...props.config.funds] : []
             },
             errors: {
-                showGivingArray: '',
-                monthlyOption: '',
-                singleOption: '',
-                numMonthlyAmounts: '',
-                monthlyAmounts: '',
-                numSingleAmounts: '',
-                singleAmounts: '',
-                defaultOption: '',
-                defaultAmount: '',
-                funds: []
+                ...props.defaultValues.errors
             }
         }
-        if (editMode) {
-            for (let i = 0; i < props.formConfig.subscriptions.length; i++) {
-                this.state.errors.funds.push({
-                    [`fund-${i}-Title`]: '',
-                    [`fund-${i}-FundDescription`] : '',
-                    [`fund-${i}-DetailName`]: '',
-                    [`fund-${i}-DetailCprojMail`]: '',
-                    [`fund-${i}-DetailCprojCredit`]: '',
-                    [`fund-${i}-DetailDescription`]: ''
-                });
-            }
-        }
+        
         this.handleButtonClick=this.handleButtonClick.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
         this.handleFundInput = this.handleFundInput.bind(this)
         this.renderFundInputs = this.renderFundInputs.bind(this)
     }
 
-    async componentDidMount() {
-        
+    // don't let users leave page without warning
+    componentDidMount() {
+        window.addEventListener('beforeunload', this.handleUnload)
+    }
+    // remove event listeners on unmount
+    componentWillUnmount() {
+        window.removeEventListener('beforeunload', this.handleUnload)
+    }
+
+    handleUnload(e) {
+        // console.log({updated: this.state.updated, saved: this.state.saved})
+        if (this.state.updated && !this.state.saved) {
+            e.preventDefault();
+            e.returnValue = "Are you sure you want to go back?\n You may lose all your changes to this page."
+            return "Are you sure you want to go back?\n You may lose all your changes to this page."
+        }
+        return void (0);
     }
 
     handleButtonClick(ctx) {
-        
-    }
-
-    async handleFundInput(e) {
-        
+        const fields = {...this.state.fields}, errors = {...this.state.errors}
+        this.setState({submitting: true}, ()=>{
+            this.props.tabFunctions.toggleBtnEnable( false )
+            const currentState = JSON.stringify(fields);
+            const initialState = JSON.stringify(this.state.initialState);
+            for (let error in errors) {
+                // data validation???
+                errors[error] = ''
+            }
+            if (currentState != initialState) {
+                const config = {...this.props.config, ...fields};
+                this.props.tabFunctions.storeConfig(this.state.currentForm.id, ctx.type, config)
+                .then(success=>{
+                    if (success) {
+                         this.setState({updated: false, saved: true, submitting: false, initialState: fields, errors}, () => {
+                            this.props.tabFunctions.toggleBtnEnable( true )
+                            setTimeout(() => {
+                                this.setState({saved: false})
+                            }, 300)
+                        })
+                    } else {
+                        errors['formError'] = "Unable to Save"
+                        this.setState({errors})
+                    }
+                });
+            } else {
+                this.setState({updated: false, saved: true, errors, submitting: false}, () => {
+                    this.props.tabFunctions.toggleBtnEnable( true )
+                    setTimeout(() => {
+                        this.setState({saved: false})
+                    }, 300)
+                })
+            }
+        });
     }
 
     handleInputChange(e) {
-       
+        const target = e.target;
+        let value = target.type === 'checkbox' ? target.checked : target.value;
+        let name = target.name;
+        const fields = {...this.state.fields},  errors = {...this.state.errors};
+        const error = '';
+        if (name.includes("funds-")) {
+            const index = name.split("-")[1]
+            const setting = name.split("-")[3]
+            fields.funds[index][setting] = value;
+            errors.funds[index][setting] = '';
+        } else {
+            errors[name] = error;     
+            fields[name] = value;
+        }
+        const updated = JSON.stringify(fields) !== JSON.stringify(this.state.initialState)
+        // console.log({updated, value, initialState: this.state.initialState[name]})
+        this.setState({ fields, errors, updated }, ()=> this.props.tabFunctions.toggleBtnEnable( updated ? false : true ));
     }
 
     renderFundInputs(num) {
@@ -81,18 +121,18 @@ export default class FundSettings extends Component {
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                         <InputGroup
                             type="text"
-                            id={`fund-${ind}-Title`} 
+                            id={`funds-${ind}-Title`} 
                             specialStyle="" 
                             label={`Fund ${ind+1}: Title`}
                             maxLength={120}
                             placeholder="i.e. Wherever Needed Most" 
                             required={true} 
                             value={this.state.fields.funds[ind].Title} 
-                            handleInputChange={this.handleFundInput} 
-                            error={this.state.errors.funds[ind][`fund-${ind}-title`]} 
+                            handleInputChange={this.handleInputChange} 
+                            error={this.state.errors.funds[ind].Title} 
                         />
                         <TextGroup
-                            id={`fund-${ind}-FundDescription`} 
+                            id={`funds-${ind}-FundDescription`} 
                             specialStyle="" 
                             label={`Fund ${ind+1}: Description`}
                             rows={3}
@@ -100,58 +140,58 @@ export default class FundSettings extends Component {
                             placeholder="Can include html tags, < 320 visible characters" 
                             required={true} 
                             value={this.state.fields.funds[ind].FundDescription} 
-                            handleInputChange={this.handleFundInput} 
-                            error={this.state.errors.funds[ind][`fund-${ind}-FundDescription`]} 
+                            handleInputChange={this.handleInputChange} 
+                            error={this.state.errors.funds[ind].FundDescription} 
                         />
                     </div>
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                         <InputGroup
                             type="text"
-                            id={`fund-${ind}-DetailName`} 
+                            id={`funds-${ind}-DetailName`} 
                             specialStyle="" 
                             label={`Fund ${ind+1}: Detail Name`}
                             maxLength={32}
                             placeholder="i.e. Superbook, OrphansPromise, 700Club, etc" 
                             required={true} 
                             value={this.state.fields.funds[ind].DetailName} 
-                            handleInputChange={this.handleFundInput} 
-                            error={this.state.errors.funds[ind][`fund-${ind}-DetailName`]} 
+                            handleInputChange={this.handleInputChange} 
+                            error={this.state.errors.funds[ind].DetailName} 
                         />
                         <InputGroup
                             type="text"
-                            id={`fund-${ind}-DetailCprojMail`} 
+                            id={`funds-${ind}-DetailCprojMail`} 
                             specialStyle="" 
                             label={`Fund ${ind+1}: WhiteMail SOL`}
                             maxLength={6}
                             placeholder="i.e. 043251" 
                             required={true} 
                             value={this.state.fields.funds[ind].DetailCprojMail} 
-                            handleInputChange={this.handleFundInput} 
-                            error={this.state.errors.funds[ind][`fund-${ind}-DetailCprojMail`]} 
+                            handleInputChange={this.handleInputChange} 
+                            error={this.state.errors.funds[ind].DetailCprojMail} 
                         />
                         <InputGroup
                             type="text"
-                            id={`fund-${ind}-DetailCprojCredit`} 
+                            id={`funds-${ind}-DetailCprojCredit`} 
                             specialStyle="" 
                             label={`Fund ${ind+1}: Credit SOL`}
                             maxLength={6}
                             placeholder="i.e. 043250" 
                             required={true} 
                             value={this.state.fields.funds[ind].DetailCprojCredit} 
-                            handleInputChange={this.handleFundInput} 
-                            error={this.state.errors.funds[ind][`fund-${ind}-DetailCprojCredit`]} 
+                            handleInputChange={this.handleInputChange} 
+                            error={this.state.errors.funds[ind].DetailCprojCredit} 
                         />
                         <InputGroup
                             type="text"
-                            id={`fund-${ind}-DetailDescription`} 
+                            id={`funds-${ind}-DetailDescription`} 
                             specialStyle="" 
                             label={`Fund ${ind+1}: SOL Description`}
                             maxLength={32}
                             placeholder="i.e. Orphan's Promise Vietname, Superbook Translation, etc" 
                             required={true} 
                             value={this.state.fields.funds[ind].DetailDescription} 
-                            handleInputChange={this.handleFundInput} 
-                            error={this.state.errors.funds[ind][`fund-${ind}-DetailDescription`]} 
+                            handleInputChange={this.handleInputChange} 
+                            error={this.state.errors.funds[ind].DetailDescription} 
                         />
                     </div>
                 </fieldset>
