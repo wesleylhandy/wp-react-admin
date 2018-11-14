@@ -9,22 +9,19 @@ import SaveButton from './SaveButton';
 export default class SubscriptionSettings extends Component {
     constructor(props) {
         super(props);
-        const editMode = props.adminMode == "Edit" && props.currentForm.form_status && props.currentForm.form_status !== "new"
         this.state = {
+            editMode: props.editMode,
             submitting: false,
             updated: false,
             saved: false,
             initialState: {
-                header: editMode ? props.emailConfig.header : '',
-                single: editMode ? props.emailConfig.single: '',
-                monthly: editMode ? props.emailConfig.monthly: '',
-                product: editMode ? props.emailConfig.product: ''
+                ...props.defaultValues
             },
             fields: {
-                header: editMode ? props.emailConfig.header : '',
-                single: editMode ? props.emailConfig.single: '',
-                monthly: editMode ? props.emailConfig.monthly: '',
-                product: editMode ? props.emailConfig.product: ''
+                header: props.editMode ? props.config.header : '',
+                single: props.editMode ? props.config.single: '',
+                monthly: props.editMode ? props.config.monthly: '',
+                product: props.editMode ? props.config.product: ''
             },
             errors: {
                 header: '',

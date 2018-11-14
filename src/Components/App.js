@@ -9,7 +9,7 @@ import Spinner from './Spinner'
 import main from './styles/main.css'
 import StyleOptionsTabs from './StyleOptionsTabs';
 
-
+import {getFontInfo} from './helpers/getFontInfo'
 
 class App extends Component {
     constructor(props){
@@ -41,6 +41,13 @@ class App extends Component {
                     "X-WP-Nonce": props.wpnonce,
                     "Content-Type": 'application/json',
                 }
+            },
+            styleSettings: {
+                errors: {},
+                fields: {},
+                updated: false,
+                saved: false,
+                submitting: false
             }
         }
         this.handleAdminMode = this.handleAdminMode.bind(this);
@@ -52,6 +59,8 @@ class App extends Component {
         this.setApiKey = this.setApiKey.bind(this)
         this.toggleBtnEnable = this.toggleBtnEnable.bind(this)
         this.createForm = this.createForm.bind(this)
+        this.handleStyleButtonClick = this.handleStyleButtonClick.bind(this)
+        this.handleStyleInputChange = this.handleStyleInputChange.bind(this)
     }
 
     async componentDidMount(){
@@ -156,23 +165,25 @@ class App extends Component {
      * @param {Number} id - DB id of form
      * @param {String} type - form_setup, css_setup, or email_setup
      * @param {Object} data - entire config object to be updated
+     * @param {String} form_status - status of current form
      * @returns {Boolean} true on success
      */
     async storeConfig(id, type, data) {
+        console.log({type})
         try {
             const options = {...this.state.options}
             options.method = "PUT";
             options.body = JSON.stringify({[type]: data});
-            const completed = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/${id}?type=${type}`, options);
-            if (completed) {
-                this.setState({[type]: data})
+            const completed = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/single/${id}?type=${type}`, options);
+            if (completed && type !== "form_status") {
+                const config = type === "css_setup" ? "cssConfig" : type === "form_setup" ? "formConfig" : emailConfig;
+                this.setState({[config]: data})
             }
             return true;
         } catch(err) {
             this.handleAPIErrors(err)
             return false;
         }
-
     }
 
     async setApiKey(key, method) {
@@ -193,6 +204,81 @@ class App extends Component {
                 this.handleAPIErrors(err)
                 return false
             }
+        }
+    }
+
+    /**
+     * 
+     * @param {Object} fields 
+     * @param {Object} errors 
+     * @param {boolean} updated 
+     */
+    handleStyleInputChange(fields, errors, updated) {
+        const styleSettings = {...this.state.styleSettings}
+        styleSettings.fields = fields;
+        styleSettings.errors = errors;
+        styleSettings.updated = updated;
+        this.setState({ styleSettings }, ()=> this.toggleBtnEnable( updated ? false : true ));
+    }
+
+    /**
+     * 
+     * @param {Object} ctx 
+     * @param {Object} initialState 
+     * @param {Object} fields 
+     * @param {Object} errors 
+     */
+    handleStyleButtonClick(ctx, fields, errors, form_status) {
+        const styleSettings = {...this.state.styleSettings}
+        if (ctx.name === "externalFonts") {
+            const {count} = getFontInfo(true, "externalFont", fields)
+            //add empty field to setting
+            fields[`externalFont${count}`] = ''
+            errors[`externalFont${count}`] = ''
+            //update styleSettings
+            styleSettings.fields = fields;
+            styleSettings.errors = errors;
+            styleSettings.updated = true;
+
+            this.setState({styleSettings})
+        } else {
+            styleSettings.submitting = true;
+            styleSettings.fields = fields;
+            styleSettings.errors = errors;
+            this.setState({styleSettings}, ()=>{
+                this.toggleBtnEnable( false )
+                const currentState = JSON.stringify(fields);
+                const initialState = JSON.stringify(this.state.cssConfig);
+                if (currentState !== initialState) {
+                    const cssConfig = {...this.state.cssConfig, ...fields};
+                    this.storeConfig(this.state.currentForm.id, ctx.type, cssConfig, form_status)
+                    .then(success=>{
+                        if (success) {
+                            //update settings
+                            styleSettings.submitting = false;
+                            styleSettings.updated = false;
+                            styleSettings.saved = true;
+                            styleSettings.errors = {};
+                            styleSettings.fields = {};
+
+                            this.setState({styleSettings, cssConfig}, () => {
+                                this.toggleBtnEnable( true )
+                            })
+                        } else {
+                            errors['formError'] = "Unable to Save"
+                            styleSettings.submitting = false;
+                            styleSettings.saved = false;
+                            styleSettings.errors = errors;
+                            this.setState({styleSettings})
+                        }
+                    });
+                } else {
+                    styleSettings.submitting = false;
+                    this.setState({styleSettings}, () => {
+                        this.toggleBtnEnable( true )
+                    })
+                }
+            });
         }
     }
 
@@ -241,6 +327,9 @@ class App extends Component {
                                 setStyleMode={this.handleStyleMode} 
                                 storeConfig={this.storeConfig}
                                 toggleBtnEnable={this.toggleBtnEnable}
+                                handleStyleInputChange={this.handleStyleInputChange}
+                                handleStyleButtonClick={this.handleStyleButtonClick}
+                                styleSettings={state.styleSettings}
                             />
                         </React.Fragment>
                     ) : configured && !permissible ? (

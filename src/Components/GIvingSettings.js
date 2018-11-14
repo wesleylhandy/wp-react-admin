@@ -13,20 +13,23 @@ import SelectGroup from './SelectGroup';
 export default class GivingSettings extends Component {
     constructor(props) {
         super(props);
-        const editMode = props.adminMode == "Edit" && props.currentForm.form_status && props.currentForm.form_status !== "new"
         this.state = {
+            editMode: props.editMode,
             updated: false,
             saved: false,
+            initialState: {
+                ...props.defaultValues
+            },
             fields: {
-                showGivingArray: editMode ? props.formConfig.showGivingArray : true,
-                monthlyOption: editMode ? props.formConfig.monthlyOption : true,
-                singleOption: editMode ? props.formConfig.singleOption : true,
-                numMonthlyAmounts: editMode ? props.formConfig.monthlyAmounts.length : 0,
-                monthlyAmounts: editMode ? [...props.formConfig.monthlyAmounts] : [],
-                numSingleAmounts: editMode ? props.formConfig.singleAmounts : 0,
-                singleAmounts: editMode ? [...props.formConfig.singleAmounts] : [],
-                defaultOption: editMode ? props.formConfig.monthlyOption : "",
-                defaultAmount: editMode ? props.formConfig.defaultAmount : -1,
+                showGivingArray: props.editMode ? props.config.showGivingArray : true,
+                monthlyOption: props.editMode ? props.config.monthlyOption : true,
+                singleOption: props.editMode ? props.config.singleOption : true,
+                numMonthlyAmounts: props.editMode ? props.config.monthlyAmounts.length : 0,
+                monthlyAmounts: props.editMode ? [...props.config.monthlyAmounts] : [],
+                numSingleAmounts: props.editMode ? props.config.singleAmounts : 0,
+                singleAmounts: props.editMode ? [...props.config.singleAmounts] : [],
+                defaultOption: props.editMode ? props.config.monthlyOption : "",
+                defaultAmount: props.editMode ? props.config.defaultAmount : -1,
             },
             errors: {
                 showGivingArray: '',
@@ -40,12 +43,12 @@ export default class GivingSettings extends Component {
                 defaultAmount: '',
             }
         }
-        if (editMode) {
-            for (let i = 0; i < props.formConfig.monthlyAmounts.length; i++) {
-                this.state.fields["monthlyAmt-" + i] = props.formConfig.monthlyAmounts[i]
+        if (props.editMode) {
+            for (let i = 0; i < props.config.monthlyAmounts.length; i++) {
+                this.state.fields["monthlyAmt-" + i] = props.config.monthlyAmounts[i]
             }
-            for (let j = 0; j < props.formConfig.singleAmounts.length; j++) {
-                this.state.fields["singleAmt-" + j] = props.formConfig.singleAmounts[j]
+            for (let j = 0; j < props.config.singleAmounts.length; j++) {
+                this.state.fields["singleAmt-" + j] = props.config.singleAmounts[j]
             }
         }
         this.handleButtonClick=this.handleButtonClick.bind(this)

@@ -14,12 +14,7 @@ export default class NameSettings extends Component {
             updated: false,
             saved: false,
             initialState: {
-                getMiddleName: props.editMode ? props.config.getMiddleName : false,
-                getSuffix: props.editMode ? props.config.getSuffix: false,
-                getSpouseInfo: props.editMode ? props.config.getSpouseInfo : false,
-                getPhone: props.editMode ? props.config.getPhone : true,
-                international: props.editMode ? props.config.international : true,
-                shipping: props.editMode ? props.config.shipping: true
+                ...props.defaultValues
             },
             fields: {
                 getMiddleName: props.editMode ? props.config.getMiddleName : false,

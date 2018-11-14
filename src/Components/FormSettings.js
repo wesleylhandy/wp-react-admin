@@ -16,16 +16,11 @@ export default class FormSettings extends Component {
             updated: false,
             saved: false,
             initialState: {
-                thankYouUrl: props.editMode ? props.config.thankYouUrl : '',
-                AddContactYN: props.editMode ? props.config.AddContactYN == "Y" : true,
-                ContactSource: props.editMode ? props.config.ContactSource : '',
-                SectionName: props.editMode ? props.config.SectionName : '',
-                ActivityName : props.editMode ? props.config.ActivityName : '',
-                MotivationText: props.editMode ? props.config.MotivationText : ''
+                ...props.defaultValues
             },
             fields: {
                 thankYouUrl: props.editMode ? props.config.thankYouUrl : '',
-                AddContactYN: props.editMode ? props.config.AddContactYN == "Y" : true,
+                AddContactYN: props.editMode ? props.config.AddContactYN : "Y",
                 ContactSource: props.editMode ? props.config.ContactSource : '',
                 SectionName: props.editMode ? props.config.SectionName : '',
                 ActivityName : props.editMode ? props.config.ActivityName : '',
@@ -78,13 +73,11 @@ export default class FormSettings extends Component {
                 errors[error] = ''
             }
             if (currentState != initialState) {
-                fields['AddContactYN'] = fields['AddContactYN'] === true ? "Y" : "N";
                 const config = {...this.props.config, ...fields};
                 this.props.tabFunctions.storeConfig(this.state.currentForm.id, ctx.type, config)
                 .then(success=>{
                     if (success) {
-                        fields['AddContactYN'] = fields['AddContactYN'] === "Y" ? true : false;
-                        this.setState({updated: false, saved: true, submitting: false, initialState: fields, errors}, () => {
+                         this.setState({updated: false, saved: true, submitting: false, initialState: fields, errors}, () => {
                             this.props.tabFunctions.toggleBtnEnable( true )
                             setTimeout(() => {
                                 this.setState({saved: false})
@@ -111,7 +104,9 @@ export default class FormSettings extends Component {
         const target = e.target;
         let value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
-
+        if (name === "AddContactYN") {
+            value = value ? "Y" : "N"
+        } 
         const fields = {...this.state.fields},  errors = {...this.state.errors};
         const error = '';
         errors[name] = error;     
@@ -157,10 +152,10 @@ export default class FormSettings extends Component {
                     </fieldset>
                     <fieldset styleName="form.fieldset">
                         <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
-                            <Checkbox id="AddContactYN" checked={fields.AddContactYN} handleInputChange={this.handleInputChange} label="Add Contact with Transaction?"/>
+                            <Checkbox id="AddContactYN" checked={fields.AddContactYN === "Y"} handleInputChange={this.handleInputChange} label="Add Contact with Transaction?"/>
                         </div>
                         {
-                            fields.AddContactYN ? (
+                            fields.AddContactYN === "Y" ? (
                                 <InputGroup
                                     type="text"
                                     id="ContactSource" 

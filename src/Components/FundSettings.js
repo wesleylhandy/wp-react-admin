@@ -17,6 +17,9 @@ export default class FundSettings extends Component {
         this.state = {
             updated: false,
             saved: false,
+            initialState: {
+                ...props.defaultValues
+            },
             fields: {
                 addFunds: editMode ? props.formConfig.numFunds > 0 : false,
                 numFunds: editMode ? props.formConfig.numFunds : 0,

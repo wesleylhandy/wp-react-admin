@@ -44,8 +44,8 @@ export function getDefaultValues(editMode, type, config) {
                 "--error-font-style": editMode && config.hasOwnProperty("--error-font-style") ? config["--error-font-style"]: "normal",
                 "--error-font-weight": editMode && config.hasOwnProperty("--error-font-weight") ? config["--error-font-weight"]: "700"
             }
-            const keys = Object.keys(config)
-            const externalFonts = keys.filter(k=> k.includes("externalFont"))
+            const keys = config ? Object.keys(config) : []
+            const externalFonts = keys.length ? keys.filter(k=> k.includes("externalFont")) : [];
             externalFonts.forEach(externalFont=> defaultValues[externalFont] = config[externalFont] )
             break;
         case "colors":
@@ -85,10 +85,64 @@ export function getDefaultValues(editMode, type, config) {
             }
             break;
         case "email":
-            defaultValues = {}
+            defaultValues = {
+                header: editMode && config.hasOwnProperty('header') ? config.header : "<body><table width='553' border='0' align='center' cellpadding='0' cellspacing='5'><tr><td height='43' align='left' valign='top'><img src='http://www.cbn.com/images/CBN-header-email.gif' alt='CBN.com' width='553' height='41' /></td></tr><tr><td align='left' valign='top'>",
+                single: editMode && config.hasOwnProperty('single') ? config.single : "<p>Dear #FirstName#,</p><p>Thank you for giving to CBN. It is with the help of friends like you that CBN is able to take  the Gospel to the nations - and people are hearing a message of hope in Jesus  Christ.&nbsp; Every day, through <em>The 700 Club</em>,  CBN News, and other CBN programs, the truth of God's Word is being broadcast to  precious people through satellite, terrestrial television, and cable, as well  as the Internet.</p><p>Thank you for your  help in making all of this possible. May God richly bless you for your  faithfulness to Him.</p><p>In Christ,<br /><img src='http://www.cbn.com/images/PRobertson_signature.jpg' alt='Signature' width='124' height='49' /><br />Pat Robertson<br /></p><p><a href='http://www1.cbn.com/cbn-partners'>Find out more about CBN Ministries</a></p><hr />",
+                monthly: editMode && config.hasOwnProperty('monthly') ? config.monthly : "<p>Dear #FirstName#,</p><p>Thank you for giving to CBN. It is with the help of friends like you that CBN is able to take  the Gospel to the nations - and people are hearing a message of hope in Jesus  Christ.&nbsp; Every day, through <em>The 700 Club</em>,  CBN News, and other CBN programs, the truth of God's Word is being broadcast to  precious people through satellite, terrestrial television, and cable, as well  as the Internet.</p><p>Thank you for your  help in making all of this possible. May God richly bless you for your  faithfulness to Him.</p><p>In Christ,<br /><img src='http://www.cbn.com/images/PRobertson_signature.jpg' alt='Signature' width='124' height='49' /><br />Pat Robertson<br /></p><p><a href='http://www1.cbn.com/cbn-partners'>Find out more about CBN Ministries</a></p><hr />",
+                product: editMode && config.hasOwnProperty('product') ? config.products : "<p>Dear #FirstName#,</p><p>Thank you for giving to CBN. It is with the help of friends like you that CBN is able to take  the Gospel to the nations - and people are hearing a message of hope in Jesus  Christ.&nbsp; Every day, through <em>The 700 Club</em>,  CBN News, and other CBN programs, the truth of God's Word is being broadcast to  precious people through satellite, terrestrial television, and cable, as well  as the Internet.</p><p>Thank you for your  help in making all of this possible. May God richly bless you for your  faithfulness to Him.</p><p>In Christ,<br /><img src='http://www.cbn.com/images/PRobertson_signature.jpg' alt='Signature' width='124' height='49' /><br />Pat Robertson<br /></p><p><a href='http://www1.cbn.com/cbn-partners'>Find out more about CBN Ministries</a></p><hr />",
+            }
             break;
-        case "form":
-            defaultValues = {}
+        case "settings":
+            defaultValues = {
+                thankYouUrl: editMode && config.hasOwnProperty("thankYouUrl") ? config.thankYouUrl : '',
+                AddContactYN: editMode && config.hasOwnProperty("AddContactYN") ? config.AddContactYN : "Y",
+                ContactSource: editMode && config.hasOwnProperty("ContactSource") ? config.ContactSource : '',
+                SectionName: editMode && config.hasOwnProperty("SectionName") ? config.SectionName : '',
+                ActivityName : editMode && config.hasOwnProperty("ActivityName") ? config.ActivityName : '',
+                MotivationText: editMode && config.hasOwnProperty("MotivationText") ? config.MotivationText : '042712'
+            }
+            break;
+        case "name/address":
+            defaultValues = {
+                getMiddleName: editMode && config.hasOwnProperty("getMiddleName") ? config.getMiddleName : false,
+                getSuffix: editMode && config.hasOwnProperty("getSuffix") ? config.getSuffix: false,
+                getSpouseInfo: editMode && config.hasOwnProperty("getSpouseInfo") ? config.getSpouseInfo : false,
+                getPhone: editMode && config.hasOwnProperty("getPhone") ? config.getPhone : true,
+                international: editMode && config.hasOwnProperty("international") ? config.international : true,
+                shipping: editMode && config.hasOwnProperty("shipping") ? config.shipping: true
+            }
+            break;
+        case "gifts":
+            defaultValues = {
+                showGivingArray: editMode && config.hasOwnProperty("showGivingArray") ? config.showGivingArray : true,
+                monthlyOption: editMode && config.hasOwnProperty("monthlyOption") ? config.monthlyOption : true,
+                singleOption: editMode && config.hasOwnProperty("singleOption") ? config.singleOption : true,
+                numMonthlyAmounts: editMode && config.hasOwnProperty("monthlyAmounts") ? config.monthlyAmounts.length : 0,
+                monthlyAmounts: editMode && config.hasOwnProperty("monthlyAmounts") ? [...config.monthlyAmounts] : [],
+                numSingleAmounts: editMode && config.hasOwnProperty("singleAmounts") ? config.singleAmounts : 0,
+                singleAmounts: editMode && config.hasOwnProperty("singleAmounts") ? [...config.singleAmounts] : [],
+                defaultOption: editMode && config.hasOwnProperty("defaultOption") ? config.defaultOption : "",
+                defaultAmount: editMode && config.hasOwnProperty("defaultAmount") ? config.defaultAmount : -1
+            }
+            break;
+        case "products":
+            defaultValues = {
+                addProducts: editMode && config.hasOwnProperty("numProducts") ? config.numProducts > 0 : false,
+                numProducts: editMode && config.hasOwnProperty("numProducts") ? config.numProducts : 0,
+                products: editMode && config.hasOwnProperty("products") ? [...config.products] : []
+            }
+            break;
+        case "funds":
+            defaultValues = {
+                addFunds: editMode && config.hasOwnProperty("numFunds") ? config.numFunds > 0 : false,
+                numFunds: editMode && config.hasOwnProperty("numFunds") ? config.numFunds : 0,
+                funds: editMode && config.hasOwnProperty("funds") ? [...config.funds] : []
+            }
+            break;
+        case "subscriptions":
+            defaultValues = {
+                subscriptions: editMode && config.hasOwnProperty("subscriptions") ? [...config.subscriptions] : []
+            }
             break;
     }
 

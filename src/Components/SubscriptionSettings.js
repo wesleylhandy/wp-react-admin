@@ -11,19 +11,22 @@ import SelectGroup from './SelectGroup';
 export default class SubscriptionSettings extends Component {
     constructor(props) {
         super(props);
-        const editMode = props.adminMode == "Edit" && props.currentForm.form_status && props.currentForm.form_status !== "new"
         this.state = {
+            editMode:props.editMode,
             updated: false,
             saved: false,
+            initialState: {
+                ...props.defaultValues
+            },
             fields: {
-                subscriptions: editMode ? [...props.formConfig.subscriptions] : [],
+                subscriptions: props.editMode ? [...props.config.subscriptions] : [],
             },
             errors: {
                 subscriptions: [],
             }
         }
-        if (editMode) {
-            for (let i = 0; i < props.formConfig.subscriptions.length; i++) {
+        if (props.editMode) {
+            for (let i = 0; i < props.config.subscriptions.length; i++) {
                 this.state.errors.subscriptions.push({[`sub-${i}-key`]: '', [`sub-${i}-value`] : ''});
             }
         }

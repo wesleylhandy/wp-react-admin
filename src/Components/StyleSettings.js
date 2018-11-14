@@ -7,14 +7,14 @@ import SaveButton from './SaveButton'
 import FormButton from './FormButton'
 import InputGroup from './InputGroup';
 
-import {getFontInfo} from './helpers/getFontInfo'
-
-export default class ColorSettings extends Component {
+export default class StyleSettings extends Component {
     constructor(props) {
         super(props);
-        // console.log({props});
+        let errors = {"formError": props.editMode ? "" : "Above Values Are Not Stored in the DB"}
+        for (let defaultValue in props.defaultValues) {
+            errors[defaultValue] = '';
+        }
         this.state = {
-            hydrated: false,
             editMode: props.editMode,
             submitting: false,
             updated: false,
@@ -25,15 +25,10 @@ export default class ColorSettings extends Component {
             fields: {
                 ...props.defaultValues
             },
-            errors: {
-                "formError": props.editMode ? "" : "Above Values Are Not Stored in the DB"
-            },
-            currentForm: props.currentForm   
+            currentForm: props.currentForm,
+            errors   
         }
-        // initialize errors
-        for (let defaultValue in props.defaultValues) {
-            this.state.errors[defaultValue] = ''
-        }
+
         this.handleButtonClick=this.handleButtonClick.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
         this.renderInputs = this.renderInputs.bind(this)
@@ -42,18 +37,23 @@ export default class ColorSettings extends Component {
 
     // NEED TO HANDLE UPDATES TO STATE OUTSIDE OF THIS COMPONENT SOMEHOW !!!
     static getDerivedStateFromProps(nextProps, prevState) {
-        if (nextProps.displayMode !== prevState.displayMode) {
-            const newDefaults = JSON.stringify(nextProps.defaultValues)
-            const oldDefaults = JSON.stringify(prevState.defaultValues)
+        console.info("Here We Go!")
+        const {styleSettings, displayMode} = nextProps
+        const newSettings = styleSettings ? JSON.stringify(styleSettings) : "";
+        const oldSettings = prevState.styleSettings ? JSON.stringify(prevState.styleSettings) : "";
+
+        if (displayMode !== prevState.displayMode) {
+            const newDefaults = nextProps.defaultValues ? JSON.stringify(nextProps.defaultValues) : "";
+            const oldDefaults = prevState.defaultValues ? JSON.stringify(prevState.defaultValues) : "";
             const errors = {
                 formError: nextProps.editMode ? "" : "Above Values Are Not Stored in the DB"
             }
             for (let defaultValue in nextProps.defaultValues) {
-                errors[defaultValue] = ''
+                errors[defaultValue] = '';
             }
             if (oldDefaults !== newDefaults) {
+                console.info('New Defaults')
                 return {
-                    hydrated: true,
                     editMode: nextProps.editMode,
                     submitting: false,
                     updated: false,
@@ -61,12 +61,27 @@ export default class ColorSettings extends Component {
                     initialState: {...nextProps.defaultValues},
                     fields: {...nextProps.defaultValues},
                     currentForm: nextProps.currentForm,
-                    errors
+                    styleSettings: nextProps.styleSettings,
+                    displayMode: nextProps.displayMode,
+                    errors, 
                 }
             } else {
+                console.info("No New Defaults, Should never get here")
                 return null
             }
+        } 
+        if (newSettings !== oldSettings) {
+            console.info('New Settings')
+            return {
+                saved: nextProps.styleSettings.saved,
+                updated: nextProps.styleSettings.updated,
+                submitting: nextProps.styleSettings.submitting,
+                fields: {...nextProps.styleSettings.fields},
+                errors: {...nextProps.styleSettings.errors},
+                styleSettings: nextProps.styleSettings,
+            }
         } else {
+            console.info("No New Settings and No New Defaults")
             return null
         }
     }
@@ -91,47 +106,7 @@ export default class ColorSettings extends Component {
     }
 
     handleButtonClick(ctx) {
-        const fields = {...this.state.fields}, errors = {...this.state.errors}
-        if (ctx.name === "externalFonts") {
-            const {count} = getFontInfo(true, "externalFont", fields)
-            fields[`externalFont${count}`] = ''
-            errors[`externalFont${count}`] = ''
-            // console.log({count, fields, errors})
-            this.setState({fields, errors});
-        } else {
-            this.setState({submitting: true}, ()=>{
-                this.props.tabFunctions.toggleBtnEnable( false )
-                const currentState = JSON.stringify(fields);
-                const initialState = JSON.stringify(this.state.initialState);
-                for (let error in errors) {
-                    errors[error] = ''
-                }
-                if (currentState != initialState) {
-                    const config = {...this.props.config, ...this.state.fields};
-                    this.props.tabFunctions.storeConfig(this.state.currentForm.id, ctx.type, config)
-                    .then(success=>{
-                        if (success) {
-                            this.setState({updated: false, saved: true, submitting: false, initialState: fields, errors}, () => {
-                                this.props.tabFunctions.toggleBtnEnable( true )
-                                setTimeout(() => {
-                                    this.setState({saved: false})
-                                }, 300)
-                            })
-                        } else {
-                            errors['formError'] = "Unable to Save"
-                            this.setState({errors})
-                        }
-                    });
-                } else {
-                    this.setState({updated: false, saved: true, errors, submitting: false}, () => {
-                        this.props.tabFunctions.toggleBtnEnable( true )
-                        setTimeout(() => {
-                            this.setState({saved: false})
-                        }, 300)
-                    })
-                }
-            });
-        }
+        this.props.tabFunctions.handleStyleButtonClick(ctx, this.state.fields, this.state.errors, this.state.currentForm.form_status)
     }
 
     handleInputChange(e) {
@@ -139,16 +114,16 @@ export default class ColorSettings extends Component {
         let value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
 
-        const fields = {...this.state.fields},  errors = {...this.state.errors};
+        const fields = {...this.state.fields}
+        const errors = {...this.state.errors};
         const error = '';
         errors[name] = error;     
         fields[name] = value;
         const updated = JSON.stringify(fields) !== JSON.stringify(this.state.initialState)
-        // console.log({updated, value, fields})
-        this.setState({ fields, errors, updated }, ()=> this.props.tabFunctions.toggleBtnEnable( updated ? false : true ));
+        this.props.tabFunctions.handleStyleInputChange(fields, errors, updated)
     }
 
-    renderInputs(fields) {
+    renderInputs(fields, errors) {
         const fieldNames = Object.keys(fields);
         const groups = fieldNames.reduce((acc, name) => {
             const fieldGroup = name.substring(2).split("-")[0];
@@ -174,7 +149,7 @@ export default class ColorSettings extends Component {
                             required={true} 
                             value={fields[field]} 
                             handleInputChange={this.handleInputChange} 
-                            error={this.state.errors[field]} 
+                            error={errors[field]} 
                         />
                         { 
                             this.props.displayMode === "Colors" ? (
@@ -202,7 +177,7 @@ export default class ColorSettings extends Component {
                 <form onSubmit={(e)=>{e.preventDefault(); this.handleButtonClick({name: "store", val: '', type: 'css_setup'})}}>
                     <h3>Configure {title} Setttings</h3>
                     <fieldset styleName="form.fieldset">
-                        {this.renderInputs(fields)}
+                        {this.renderInputs(fields, errors)}
                         {
                             this.props.displayMode === "Fonts" ? (
                                 <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">

@@ -13,14 +13,17 @@ import TextGroup from './TextGroup';
 export default class ProductSettings extends Component {
     constructor(props) {
         super(props);
-        const editMode = props.adminMode == "Edit" && props.currentForm.form_status && props.currentForm.form_status !== "new"
         this.state = {
+            editMode: props.editMode,
             updated: false,
             saved: false,
+            initialState: {
+                ...props.defaultValues
+            },
             fields: {
-                addProducts: editMode ? props.formConfig.numProducts > 0 : false,
-                numProducts: editMode ? props.formConfig.numProducts : 0,
-                products: editMode ? [...props.formConfig.products] : []
+                addProducts: props.editMode ? props.config.numProducts > 0 : false,
+                numProducts: props.editMode ? props.config.numProducts : 0,
+                products: props.editMode ? [...props.config.products] : []
             },
             errors: {
                 showGivingArray: '',
@@ -35,8 +38,8 @@ export default class ProductSettings extends Component {
                 products: []
             }
         }
-        if (editMode) {
-            for (let i = 0; i < props.formConfig.subscriptions.length; i++) {
+        if (props.editMode) {
+            for (let i = 0; i < props.config.subscriptions.length; i++) {
                 this.state.errors.products.push({
                     [`product-${i}-productTitle`]: '',
                     [`product-${i}-productMessage`]: '',
