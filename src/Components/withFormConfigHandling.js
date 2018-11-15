@@ -111,11 +111,12 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
                 const config = {...this.props.config, ...fields};
                 this.props.tabFunctions.storeConfig(this.state.currentForm.id, type, config)
                 .then(success=>{
-                    // console.log({success})
+                    console.log({success})
                     this.props.tabFunctions.toggleBtnEnable( true )
                     this.setState({saved: false, updated: false, submitting: false, errors: {...this.props.defaultValues.errors}})
                 })
                 .catch(err=>{
+                    console.error(err)
                     errors['formError'] = "Unable to Save"
                     this.setState({errors, submitting: false}, () => {
                         this.props.tabFunctions.toggleBtnEnable( true )
