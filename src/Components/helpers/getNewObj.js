@@ -10,8 +10,8 @@ export function getNewObj(type) {
     switch (type.toLowerCase()) {
         case "funds":
             newObj = {
-                Title: '',
-                FundDescription: '',
+                fundTitle: '',
+                fundDescription: '',
                 DetailName: '',
                 DetailCprojMail: '',
                 DetailCprojCredit: '',
@@ -29,10 +29,11 @@ export function getNewObj(type) {
                 DetailDescription: '',
                 PledgeAmt:''
             }
+            break;
         case "subscriptions":
             newObj = {
-                key: '', 
-                value : ''
+                "key": '', 
+                "value": ''
             }
             break;
     }

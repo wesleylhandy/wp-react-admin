@@ -1,4 +1,4 @@
-import Reactfrom 'react'
+import React from 'react'
 
 import form from './styles/form.css'
 import flex from './styles/flex.css'
@@ -14,44 +14,7 @@ const FundSettings = props => {
 
     const { fields, errors } = props;
 
-    handleButtonClick(ctx) {
-        const fields = {...this.state.fields}, errors = {...this.state.errors}
-        this.setState({submitting: true}, ()=>{
-            this.props.tabFunctions.toggleBtnEnable( false )
-            const currentState = JSON.stringify(fields);
-            const initialState = JSON.stringify(this.state.initialState);
-            for (let error in errors) {
-                // data validation???
-                errors[error] = ''
-            }
-            if (currentState != initialState) {
-                const config = {...this.props.config, ...fields};
-                this.props.tabFunctions.storeConfig(this.state.currentForm.id, ctx.type, config)
-                .then(success=>{
-                    if (success) {
-                         this.setState({updated: false, saved: true, submitting: false, initialState: fields, errors}, () => {
-                            this.props.tabFunctions.toggleBtnEnable( true )
-                            setTimeout(() => {
-                                this.setState({saved: false})
-                            }, 300)
-                        })
-                    } else {
-                        errors['formError'] = "Unable to Save"
-                        this.setState({errors})
-                    }
-                });
-            } else {
-                this.setState({updated: false, saved: true, errors, submitting: false}, () => {
-                    this.props.tabFunctions.toggleBtnEnable( true )
-                    setTimeout(() => {
-                        this.setState({saved: false})
-                    }, 300)
-                })
-            }
-        });
-    }
-
-    renderFundInputs = num => {
+    const renderFundInputs = num => {
 
         const arr = Array(num).fill(null);
 
@@ -68,9 +31,9 @@ const FundSettings = props => {
                             maxLength={120}
                             placeholder="i.e. Wherever Needed Most" 
                             required={true} 
-                            value={this.state.fields.funds[ind].Title} 
-                            handleInputChange={this.handleInputChange} 
-                            error={this.state.errors.funds[ind].Title} 
+                            value={props.fields.funds[ind].fundTitle} 
+                            handleInputChange={props.handleInputChange} 
+                            error={props.errors.funds[ind].fundTitle} 
                         />
                         <TextGroup
                             id={`funds-${ind}-FundDescription`} 
@@ -79,10 +42,10 @@ const FundSettings = props => {
                             rows={3}
                             maxLength={512}
                             placeholder="Can include html tags, < 320 visible characters" 
-                            required={true} 
-                            value={this.state.fields.funds[ind].FundDescription} 
-                            handleInputChange={this.handleInputChange} 
-                            error={this.state.errors.funds[ind].FundDescription} 
+                            required={false} 
+                            value={props.fields.funds[ind].fundDescription} 
+                            handleInputChange={props.handleInputChange} 
+                            error={props.errors.funds[ind].fundDescription} 
                         />
                     </div>
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
@@ -94,9 +57,9 @@ const FundSettings = props => {
                             maxLength={32}
                             placeholder="i.e. Superbook, OrphansPromise, 700Club, etc" 
                             required={true} 
-                            value={this.state.fields.funds[ind].DetailName} 
-                            handleInputChange={this.handleInputChange} 
-                            error={this.state.errors.funds[ind].DetailName} 
+                            value={props.fields.funds[ind].DetailName} 
+                            handleInputChange={props.handleInputChange} 
+                            error={props.errors.funds[ind].DetailName} 
                         />
                         <InputGroup
                             type="text"
@@ -106,9 +69,9 @@ const FundSettings = props => {
                             maxLength={6}
                             placeholder="i.e. 043251" 
                             required={true} 
-                            value={this.state.fields.funds[ind].DetailCprojMail} 
-                            handleInputChange={this.handleInputChange} 
-                            error={this.state.errors.funds[ind].DetailCprojMail} 
+                            value={props.fields.funds[ind].DetailCprojMail} 
+                            handleInputChange={props.handleInputChange} 
+                            error={props.errors.funds[ind].DetailCprojMail} 
                         />
                         <InputGroup
                             type="text"
@@ -118,9 +81,9 @@ const FundSettings = props => {
                             maxLength={6}
                             placeholder="i.e. 043250" 
                             required={true} 
-                            value={this.state.fields.funds[ind].DetailCprojCredit} 
-                            handleInputChange={this.handleInputChange} 
-                            error={this.state.errors.funds[ind].DetailCprojCredit} 
+                            value={props.fields.funds[ind].DetailCprojCredit} 
+                            handleInputChange={props.handleInputChange} 
+                            error={props.errors.funds[ind].DetailCprojCredit} 
                         />
                         <InputGroup
                             type="text"
@@ -130,14 +93,14 @@ const FundSettings = props => {
                             maxLength={32}
                             placeholder="i.e. Orphan's Promise Vietname, Superbook Translation, etc" 
                             required={true} 
-                            value={this.state.fields.funds[ind].DetailDescription} 
-                            handleInputChange={this.handleInputChange} 
-                            error={this.state.errors.funds[ind].DetailDescription} 
+                            value={props.fields.funds[ind].DetailDescription} 
+                            handleInputChange={props.handleInputChange} 
+                            error={props.errors.funds[ind].DetailDescription} 
                         />
                     </div>
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
-                        <div style={{maxWidth: "100px"}}>
-                            <FormButton val="Remove" handleClick={props.handleButtonClick} ctx={{name: "funds", val: {ind}, type: 'Remove'}} />
+                        <div>
+                            <FormButton val="Remove" handleClick={props.handleButtonClick} ctx={{name: "funds", val: ind, type: 'Remove'}} />
                         </div>
                     </div>
                 </fieldset>
@@ -147,18 +110,18 @@ const FundSettings = props => {
         
     return (
         <React.Fragment>
-            <form onSubmit={(e)=>{e.preventDefault(); this.handleButtonClick({name: "store", val: '', type: 'form_setup'})}}>
+            <form onSubmit={(e)=>{e.preventDefault(); props.handleButtonClick({name: "store", val: '', type: 'form_setup'})}}>
                 <h3>Configure Fund Setttings</h3>
                 <fieldset styleName="form.fieldset">
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
-                        <Checkbox id="addFunds" checked={fields.addFunds} handleInputChange={this.handleInputChange} label="Users can Select Different Funds?"/>
+                        <Checkbox id="addFunds" checked={fields.addFunds} handleInputChange={props.handleInputChange} label="Users can Select Different Funds?"/>
                     </div>
-                    { this.renderFundInputs(fields.numFunds) }
+                    { renderFundInputs(fields.numFunds) }
                     { 
                         fields.addFunds ? (
                             <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                                 <div style={{maxWidth: "170px"}}>
-                                    <FormButton val="Add Setting" handleClick={this.handleButtonClick} ctx={{name: "funds", val: '', type: 'Add'}} />
+                                    <FormButton val="Add Setting" handleClick={props.handleButtonClick} ctx={{name: "funds", val: '', type: 'Add'}} />
                                 </div>
                             </div>
                         ) : null

@@ -14,7 +14,7 @@ const GivingSettings = props => {
 
     const { fields, errors } = props;
 
-    renderAmtInputs = (type, num) => {
+    const renderAmtInputs = (type, num) => {
 
         const arr = Array(num).fill(null);
 
@@ -31,14 +31,14 @@ const GivingSettings = props => {
                         validation="[1-9]+\d*"
                         value={fields[`${type}Amt-${ind}`]} 
                         handleInputChange={props.handleInputChange} 
-                        error={perrors[`${type}Amt-${ind}`]} 
+                        error={errors[`${type}Amt-${ind}`]} 
                     />
                 </React.Fragment>
             )
         })
     }
 
-    renderDefaultSelect = (option) => {
+    const renderDefaultSelect = (option) => {
 
         const amounts = option === "monthly" ? props.fields.monthlyAmounts : props.fields.singleAmounts;
 
@@ -94,7 +94,7 @@ const GivingSettings = props => {
                                                 />
                                             </div>
                                             <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
-                                                { props.renderAmtInputs("monthly", fields.numMonthlyAmounts) }
+                                                { renderAmtInputs("monthly", fields.numMonthlyAmounts) }
                                             </div>
                                         </React.Fragment>
                                     ) : null

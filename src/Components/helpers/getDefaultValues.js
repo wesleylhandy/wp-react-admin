@@ -189,7 +189,7 @@ export function getDefaultValues(editMode, type, config) {
             defaultValues = {
                 fields: {
                     addProducts: editMode && config.hasOwnProperty("numProducts") ? config.numProducts > 0 : false,
-                    numProducts: editMode && config.hasOwnProperty("numProducts") ? config.numProducts : 0,
+                    numProducts: editMode && config.hasOwnProperty("products") ? config.products.length : 0,
                     products: editMode && config.hasOwnProperty("products") ? [...config.products] : []
                 },
                 errors
@@ -204,8 +204,8 @@ export function getDefaultValues(editMode, type, config) {
             if (editMode) {
                 for (let i = 0; i < config.funds.length; i++) {
                     errors.funds.push({
-                        Title: '',
-                        FundDescription: '',
+                        fundTitle: '',
+                        fundDescription: '',
                         DetailName: '',
                         DetailCprojMail: '',
                         DetailCprojCredit: '',
@@ -216,7 +216,7 @@ export function getDefaultValues(editMode, type, config) {
             defaultValues = {
                 fields: {
                     addFunds: editMode && config.hasOwnProperty("numFunds") ? config.numFunds > 0 : false,
-                    numFunds: editMode && config.hasOwnProperty("numFunds") ? config.numFunds : 0,
+                    numFunds: editMode && config.hasOwnProperty("funds") ? config.funds.length : 0,
                     funds: editMode && config.hasOwnProperty("funds") ? [...config.funds] : []
                 },
                 errors

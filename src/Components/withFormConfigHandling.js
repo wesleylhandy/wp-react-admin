@@ -65,66 +65,65 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
         } else {
             fields.form_status = ids[id]
         }
-        this.setState({fields})
+        const initialState = JSON.stringify(this.state.initialState);
+        const currentState = JSON.stringify(fields);
+        this.setState(() => {
+            return {fields, updated: currentState != initialState}
+        })
     }
 
     handleButtonClick(ctx) {
         let fields = {...this.state.fields}, errors = {...this.state.errors}
-        if (ctx.type === "Add") {
-            const fieldName = `num${ctx.name}`
-            fields[fieldName] = fields[fieldName] + 1;
-            const newObj = getNewObj(ctx.name)
-            fields[ctx.name].push(newObj)
-            errors[ctx.name].push(newObj)
-            this.setState({fields, errors})
-        } else if (ctx.type === "Remove") {
-            const fieldName = `num${ctx.name}`
-            fields[fieldName] = fields[fieldName] - 1;
-            fields[ctx.name] = [...fields[ctx.name].slice(0, ctx.val), ...fields[ctx.name].slice(ctx.val + 1)]
-            errors[ctx.name] = [...errors[ctx.name].slice(0, ctx.val), ...errors[ctx.name].slice(ctx.val + 1)]
-            this.setState({fields, errors})
+        const initialState = JSON.stringify(this.state.initialState);
+        const {name, type, val} = ctx;
+        const numFields = `num${name.substring(0, 1).toUpperCase() + name.substring(1)}`
+        if (type === "Add") {    
+            if (name !== "subscriptions") {
+                fields[numFields] = +fields[numFields] + 1;
+            }
+            const newObj = getNewObj(name)
+            fields[name].push({...newObj})
+            errors[name].push({...newObj})
+            // console.log({fields, errors})
+            let currentState = JSON.stringify(fields);
+            this.setState(() => {
+                return {fields, errors, updated: currentState != initialState}
+            })
+        } else if (type === "Remove") {
+            if (name !== "subscriptions") {
+                fields[numFields] = +fields[numFields] - 1;
+            }
+            fields[name] = [...fields[name].slice(0, val), ...fields[name].slice(val + 1)]
+            errors[name] = [...errors[name].slice(0, val), ...errors[name].slice(val + 1)]
+            // console.log({newList: fields[name], newErrors: errors[name]}) 
+            let currentState = JSON.stringify(fields);
+            this.setState(() => {
+                return {fields, errors, updated: currentState != initialState}
+            })
         } else {
             this.setState({submitting: true}, ()=>{
                 this.props.tabFunctions.toggleBtnEnable( false )
-                const currentState = JSON.stringify(fields);
-                const initialState = JSON.stringify(this.state.initialState);
-                for (let error in errors) {
-                    // data validation???
-                    errors[error] = ''
+                if (this.props.displayMode.toLowerCase() === "giving") {
+                    const {numMonthlyAmounts, numSingleAmounts} = fields;
+                    delete fields.numMonthlyAmounts
+                    delete fields.numSingleAmounts
                 }
-                if (currentState != initialState) {
-                    if (this.props.displayMode.toLowerCase() === "giving") {
-                        const {numMonthlyAmounts, numSingleAmounts} = fields;
-                        delete fields.numMonthlyAmounts
-                        delete fields.numSingleAmounts
-                    }
-                    const config = {...this.props.config, ...fields};
-                    this.props.tabFunctions.storeConfig(this.state.currentForm.id, ctx.type, config)
-                    .then(success=>{
-                        if (success) {
-                            if (this.props.displayMode.toLowerCase() === "giving") {
-                                fields["numMonthlyAmounts"] = numMonthlyAmounts
-                                fields["numSingleAmounts"] = numSingleAmounts
-                            }
-                            this.setState({updated: false, saved: true, submitting: false, initialState: fields, errors}, () => {
-                                this.props.tabFunctions.toggleBtnEnable( true )
-                                setTimeout(() => {
-                                    this.setState({saved: false})
-                                }, 300)
-                            })
-                        } else {
-                            errors['formError'] = "Unable to Save"
-                            this.setState({errors})
-                        }
-                    });
-                } else {
-                    this.setState({updated: false, saved: true, errors, submitting: false}, () => {
+                const config = {...this.props.config, ...fields};
+                this.props.tabFunctions.storeConfig(this.state.currentForm.id, type, config)
+                .then(success=>{
+                    // console.log({success})
+                    this.props.tabFunctions.toggleBtnEnable( true )
+                    this.setState({saved: false, updated: false, submitting: false, errors: {...this.props.defaultValues.errors}})
+                })
+                .catch(err=>{
+                    errors['formError'] = "Unable to Save"
+                    this.setState({errors, submitting: false}, () => {
                         this.props.tabFunctions.toggleBtnEnable( true )
                         setTimeout(() => {
                             this.setState({saved: false})
                         }, 300)
                     })
-                }
+                });
             });
         }
     }
@@ -137,10 +136,14 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
         const error = '';
         if (name.includes("funds-") || name.includes("products-") || name.includes("subscriptions-")) {
             const field = name.split("-")[0]
-            const index = name.split("-")[1]
+            const ind = +name.split("-")[1]
             const setting = name.split("-")[2]
-            fields[field][index][setting] = value;
-            errors[field][index][setting] = '';
+            console.log({field, ind, setting, value})
+
+            fields[field][ind][setting] = value;
+            errors[field][ind][setting] = '';
+            
+            console.log({fields, fieldUpdated: fields[field][ind][setting]})
         } else {
             errors[name] = error;     
             fields[name] = value;

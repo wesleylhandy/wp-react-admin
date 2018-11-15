@@ -184,7 +184,8 @@ input[type="submit"].submit-button,
     transition: background-color 200ms ease-in-out, color 200ms ease-in-out, border-color 200ms ease-in-out;
 }
 
-.form-btn {
+.form-btn,
+button.form-btn {
     cursor: pointer;
     pointer-events: auto;
     margin-top: 16px;
@@ -193,6 +194,7 @@ input[type="submit"].submit-button,
 }
 
 input[type="submit"].submit-button:hover,
+button.form-btn:hover,
 .form-btn:hover {
     background-color: #fff;
     color: #0085ba;
@@ -200,6 +202,7 @@ input[type="submit"].submit-button:hover,
 }
 
 input[type="submit"].submit-button:disabled,
+button.form-btn:disabled,
 .form-btn:disabled {
     cursor: wait;
     background-color: #a0a0a0;

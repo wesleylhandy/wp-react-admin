@@ -14,7 +14,7 @@ const ProductSettings = props => {
 
     const { fields, errors } = props;
 
-    renderProductInputs = num => {
+    const renderProductInputs = num => {
 
         const arr = Array(num).fill(null);
 
@@ -32,7 +32,7 @@ const ProductSettings = props => {
                             placeholder="i.e. To Life DVD" 
                             required={true} 
                             value={fields.products[ind].productTitle} 
-                            handleInputChange={props.handleProductInput} 
+                            handleInputChange={props.handleInputChange} 
                             error={errors.products[ind].productTitle} 
                         />
                         <TextGroup
@@ -42,9 +42,9 @@ const ProductSettings = props => {
                             maxLength={512}
                             rows={3}
                             placeholder="Can include html tags, < 320 visible characters" 
-                            required={true} 
+                            required={false} 
                             value={fields.products[ind].productMessage} 
-                            handleInputChange={props.handleProductInput} 
+                            handleInputChange={props.handleInputChange} 
                             error={errors.products[ind].productMessage} 
                         />
                     </div>
@@ -56,9 +56,9 @@ const ProductSettings = props => {
                             label={`Product ${ind+1}: Product Image URL`}
                             maxLength={256}
                             placeholder="i.e. https://www.cbn.com/giving/special/tolife/assets/images/dvd-img.png" 
-                            required={true} 
+                            required={false} 
                             value={fields.products[ind].productImgUrl} 
-                            handleInputChange={props.handleProductInput} 
+                            handleInputChange={props.handleInputChange} 
                             error={errors.products[ind].productImgUrl} 
                         />
                         <InputGroup
@@ -70,7 +70,7 @@ const ProductSettings = props => {
                             placeholder={15} 
                             required={true} 
                             value={fields.products[ind].PledgeAmount} 
-                            handleInputChange={props.handleProductInput} 
+                            handleInputChange={props.handleInputChange} 
                             error={errors.products[ind].PledgeAmount} 
                         />
                     </div>
@@ -85,7 +85,7 @@ const ProductSettings = props => {
                             placeholder="i.e. CC01" 
                             required={true} 
                             value={fields.products[ind].DetailName} 
-                            handleInputChange={props.handleProductInput} 
+                            handleInputChange={props.handleInputChange} 
                             error={errors.products[ind].DetailName} 
                         />
                         <InputGroup
@@ -97,7 +97,7 @@ const ProductSettings = props => {
                             placeholder="i.e. 043251" 
                             required={true} 
                             value={fields.products[ind].DetailCprojMail} 
-                            handleInputChange={props.handleProductInput} 
+                            handleInputChange={props.handleInputChange} 
                             error={errors.products[ind].DetailCprojMail} 
                         />
                         <InputGroup
@@ -109,7 +109,7 @@ const ProductSettings = props => {
                             placeholder="i.e. 043250" 
                             required={true} 
                             value={fields.products[ind].DetailCprojCredit} 
-                            handleInputChange={props.handleProductInput} 
+                            handleInputChange={props.handleInputChange} 
                             error={errors.products[ind].DetailCprojCredit} 
                         />
                         <InputGroup
@@ -121,13 +121,13 @@ const ProductSettings = props => {
                             placeholder="i.e. Orphan's Promise Vietname, Superbook Translation, etc" 
                             required={true} 
                             value={fields.products[ind].DetailDescription} 
-                            handleInputChange={props.handleProductInput} 
+                            handleInputChange={props.handleInputChange} 
                             error={errors.products[ind].DetailDescription} 
                         />
                     </div>
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
-                        <div style={{maxWidth: "100px"}}>
-                            <FormButton val="Remove" handleClick={props.handleButtonClick} ctx={{name: "products", val: {ind}, type: 'Remove'}} />
+                        <div>
+                            <FormButton val="Remove" handleClick={props.handleButtonClick} ctx={{name: "products", val: ind, type: 'Remove'}} />
                         </div>
                     </div>
                 </fieldset>

@@ -13,7 +13,7 @@ const SubscriptionSettings = props => {
     
     const { fields, errors } = props;
 
-    renderSubInputs = num => {
+    const renderSubInputs = num => {
 
         const arr = Array(num).fill(null);
 
@@ -38,9 +38,9 @@ const SubscriptionSettings = props => {
                             label={`Subscription ${ind + 1}: Type`} 
                             id={`subscriptions-${ind}-key`} 
                             specialStyle=""
-                            required={false}
-                            value={fields.subscriptions[ind].key}
-                            error={errors.subscriptions[ind].key}
+                            required={true}
+                            value={fields.subscriptions[ind]["key"]}
+                            error={errors.subscriptions[ind]["key"]}
                             handleInputChange={props.handleInputChange}
                             options={options}
                         />
@@ -53,14 +53,14 @@ const SubscriptionSettings = props => {
                             label={`Subscription ${ind + 1}: Name`}
                             placeholder="i.e. Welcome, CBN, etc" 
                             required={true} 
-                            value={fields.subscriptions[ind].value} 
+                            value={fields.subscriptions[ind]["value"]} 
                             handleInputChange={props.handleInputChange} 
-                            error={errors.subscriptions[ind].value} 
+                            error={errors.subscriptions[ind]["value"]} 
                         />
                     </div>
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
-                        <div style={{maxWidth: "100px"}}>
-                            <FormButton val="Remove" handleClick={props.handleButtonClick} ctx={{name: "subscriptions", val: {ind}, type: 'Remove'}} />
+                        <div>
+                            <FormButton val="Remove" handleClick={props.handleButtonClick} ctx={{name: "subscriptions", val: ind, type: 'Remove'}} />
                         </div>
                     </div>
                 </fieldset>
@@ -70,7 +70,7 @@ const SubscriptionSettings = props => {
 
     return (
         <React.Fragment>
-            <form onSubmit={(e)=>{e.preventDefault(); props.handleButtonClick({name: "store", val: '', type: 'form_setup'})}}>
+            <form onSubmit={(e)=>{e.preventDefault(); console.log("Surprise, surprise!!!"); props.handleButtonClick({name: "store", val: '', type: 'form_setup'})}}>
                 <h3>Configure Subscription Setttings</h3>
 
                 { renderSubInputs(fields.subscriptions.length) }

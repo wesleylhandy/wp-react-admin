@@ -15,7 +15,7 @@ export default function InputGroup(props) {
                 name={props.id} 
                 placeholder={props.placeholder}
                 required={props.required}
-                value={props.value}
+                value={props.value ? props.value : ""}
                 onChange={props.handleInputChange}
                 aria-invalid={props.error ? true : false} 
                 disabled={props.disabled}
