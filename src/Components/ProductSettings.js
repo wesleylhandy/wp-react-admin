@@ -125,6 +125,11 @@ const ProductSettings = props => {
                             error={errors.products[ind].DetailDescription} 
                         />
                     </div>
+                    <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
+                        <div style={{maxWidth: "100px"}}>
+                            <FormButton val="Remove" handleClick={props.handleButtonClick} ctx={{name: "products", val: {ind}, type: 'Remove'}} />
+                        </div>
+                    </div>
                 </fieldset>
             )
         })

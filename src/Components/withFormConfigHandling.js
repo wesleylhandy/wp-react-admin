@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
 
+import {getNewObj} from './helpers/getNewObj'
+
 const withFormConfigHandling = SettingsComponent => class extends Component {
     constructor(props) {
         super(props);
@@ -16,7 +18,7 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
             errors: {
                 ...props.defaultValues.errors
             },
-            currentForm: props.currentForm,
+            currentForm: props.currentForm
         }
         this.handleRadioClick = this.handleRadioClick.bind(this)
         this.handleButtonClick = this.handleButtonClick.bind(this)
@@ -68,48 +70,63 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
 
     handleButtonClick(ctx) {
         let fields = {...this.state.fields}, errors = {...this.state.errors}
-        this.setState({submitting: true}, ()=>{
-            this.props.tabFunctions.toggleBtnEnable( false )
-            const currentState = JSON.stringify(fields);
-            const initialState = JSON.stringify(this.state.initialState);
-            for (let error in errors) {
-                // data validation???
-                errors[error] = ''
-            }
-            if (currentState != initialState) {
-                if (this.props.displayMode.toLowerCase() === "giving") {
-                    const {numMonthlyAmounts, numSingleAmounts} = fields;
-                    delete fields.numMonthlyAmounts
-                    delete fields.numSingleAmounts
+        if (ctx.type === "Add") {
+            const fieldName = `num${ctx.name}`
+            fields[fieldName] = fields[fieldName] + 1;
+            const newObj = getNewObj(ctx.name)
+            fields[ctx.name].push(newObj)
+            errors[ctx.name].push(newObj)
+            this.setState({fields, errors})
+        } else if (ctx.type === "Remove") {
+            const fieldName = `num${ctx.name}`
+            fields[fieldName] = fields[fieldName] - 1;
+            fields[ctx.name] = [...fields[ctx.name].slice(0, ctx.val), ...fields[ctx.name].slice(ctx.val + 1)]
+            errors[ctx.name] = [...errors[ctx.name].slice(0, ctx.val), ...errors[ctx.name].slice(ctx.val + 1)]
+            this.setState({fields, errors})
+        } else {
+            this.setState({submitting: true}, ()=>{
+                this.props.tabFunctions.toggleBtnEnable( false )
+                const currentState = JSON.stringify(fields);
+                const initialState = JSON.stringify(this.state.initialState);
+                for (let error in errors) {
+                    // data validation???
+                    errors[error] = ''
                 }
-                const config = {...this.props.config, ...fields};
-                this.props.tabFunctions.storeConfig(this.state.currentForm.id, ctx.type, config)
-                .then(success=>{
-                    if (success) {
-                        if (this.props.displayMode.toLowerCase() === "giving") {
-                            fields["numMonthlyAmounts"] = numMonthlyAmounts
-                            fields["numSingleAmounts"] = numSingleAmounts
-                        }
-                         this.setState({updated: false, saved: true, submitting: false, initialState: fields, errors}, () => {
-                            this.props.tabFunctions.toggleBtnEnable( true )
-                            setTimeout(() => {
-                                this.setState({saved: false})
-                            }, 300)
-                        })
-                    } else {
-                        errors['formError'] = "Unable to Save"
-                        this.setState({errors})
+                if (currentState != initialState) {
+                    if (this.props.displayMode.toLowerCase() === "giving") {
+                        const {numMonthlyAmounts, numSingleAmounts} = fields;
+                        delete fields.numMonthlyAmounts
+                        delete fields.numSingleAmounts
                     }
-                });
-            } else {
-                this.setState({updated: false, saved: true, errors, submitting: false}, () => {
-                    this.props.tabFunctions.toggleBtnEnable( true )
-                    setTimeout(() => {
-                        this.setState({saved: false})
-                    }, 300)
-                })
-            }
-        });
+                    const config = {...this.props.config, ...fields};
+                    this.props.tabFunctions.storeConfig(this.state.currentForm.id, ctx.type, config)
+                    .then(success=>{
+                        if (success) {
+                            if (this.props.displayMode.toLowerCase() === "giving") {
+                                fields["numMonthlyAmounts"] = numMonthlyAmounts
+                                fields["numSingleAmounts"] = numSingleAmounts
+                            }
+                            this.setState({updated: false, saved: true, submitting: false, initialState: fields, errors}, () => {
+                                this.props.tabFunctions.toggleBtnEnable( true )
+                                setTimeout(() => {
+                                    this.setState({saved: false})
+                                }, 300)
+                            })
+                        } else {
+                            errors['formError'] = "Unable to Save"
+                            this.setState({errors})
+                        }
+                    });
+                } else {
+                    this.setState({updated: false, saved: true, errors, submitting: false}, () => {
+                        this.props.tabFunctions.toggleBtnEnable( true )
+                        setTimeout(() => {
+                            this.setState({saved: false})
+                        }, 300)
+                    })
+                }
+            });
+        }
     }
 
     handleInputChange(e) {

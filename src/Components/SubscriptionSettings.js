@@ -17,7 +17,7 @@ const SubscriptionSettings = props => {
 
         const arr = Array(num).fill(null);
 
-        return arr.map((el, ind)=>{
+        return arr.map((el, ind) => {
 
             const subTypes = [
                 { val: 'NewsletterSubs', label: 'Newsletter Subscribe'},
@@ -26,7 +26,7 @@ const SubscriptionSettings = props => {
                 { val: 'MarketingUnSubs', label: 'Marketing Unubscribe'},
             ]
 
-            const options = subTypes.map((subType, sTind)=>{
+            const options = subTypes.map((subType, sTind) => {
                 return <option key={`subOption-${ind}-${sTind}`} value={subType.val}>{subType.label}</option>
             });
             
@@ -58,6 +58,11 @@ const SubscriptionSettings = props => {
                             error={errors.subscriptions[ind].value} 
                         />
                     </div>
+                    <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
+                        <div style={{maxWidth: "100px"}}>
+                            <FormButton val="Remove" handleClick={props.handleButtonClick} ctx={{name: "subscriptions", val: {ind}, type: 'Remove'}} />
+                        </div>
+                    </div>
                 </fieldset>
             )
         })
@@ -72,7 +77,7 @@ const SubscriptionSettings = props => {
 
                 <fieldset styleName="form.fieldset">
                     <div style={{maxWidth: "170px"}}>
-                        <FormButton val="Add Setting" handleClick={props.handleButtonClick} ctx={{name: "subscription", val: '', type: 'Add'}} />
+                        <FormButton val="Add Setting" handleClick={props.handleButtonClick} ctx={{name: "subscriptions", val: '', type: 'Add'}} />
                     </div>
                 </fieldset>
                 <fieldset styleName="form.fieldset">
