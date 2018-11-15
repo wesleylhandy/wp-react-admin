@@ -55,7 +55,7 @@ export default class SubscriptionSettings extends Component {
             const emailConfig = JSON.stringify(this.state.fields);
             const initialState = JSON.stringify(this.state.initialState);
             const errors = {...this.state.errors};
-            for (error in errors) {
+            for (let error in errors) {
                 errors[error] = ''
             }
             if (emailConfig != initialState) {
