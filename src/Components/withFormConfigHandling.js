@@ -114,7 +114,7 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
                     //have to update array of amounts as well as add errors and fields
                     const amounts = [...fields[`${val}Amounts`]]
                     amounts.push(1)
-                    amounts.sort();
+                    amounts.sort((a,b)=>a - b);
                     const len = amounts.length;
                     for (let i = 0; i < len; i++) {
                         fields[val + "Amt-" + i] = amounts[i]

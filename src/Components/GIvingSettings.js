@@ -16,7 +16,7 @@ const GivingSettings = props => {
     const { fields, errors } = props;
     const renderAmtInputs = (type, arr) => {
         // console.log({type, arr})
-        return arr.sort().map((el, ind)=>{
+        return arr.sort((a,b)=>a - b).map((el, ind)=>{
             return (
                 <React.Fragment key={`${type}Input-${ind}`}>
                     <InputGroup
