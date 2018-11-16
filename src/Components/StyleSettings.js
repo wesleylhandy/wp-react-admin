@@ -138,7 +138,7 @@ export default class StyleSettings extends Component {
         for ( let group in groups) {
             returnArray.push(groups[group].map((field, ind)=>{
                 return (
-                    <div key={`${group}-${ind}`} styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
+                    <div key={`${group}-${ind}`} styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center flex.flex-wrap">
                         <InputGroup
                             type="text"
                             id={field}
