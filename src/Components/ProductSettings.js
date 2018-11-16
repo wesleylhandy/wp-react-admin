@@ -22,7 +22,7 @@ const ProductSettings = props => {
             return (
                 <fieldset styleName="form.fieldset__bordered" key={`productRow-${ind}`}>
                     <h4>Product {ind + 1}</h4>
-                    <div styleName="form.form-row flex.flex flex.flex-row">
+                    <div styleName="form.form-row flex.flex flex.flex-row flex.flex-wrap">
                         <InputGroup
                             type="text"
                             id={`products-${ind}-productTitle`} 
@@ -48,7 +48,7 @@ const ProductSettings = props => {
                             error={errors.products[ind].productMessage} 
                         />
                     </div>
-                    <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
+                    <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center flex.flex-wrap">
                         <InputGroup
                             type="text"
                             id={`products-${ind}-productImgUrl`} 
@@ -74,7 +74,7 @@ const ProductSettings = props => {
                             error={errors.products[ind].PledgeAmount} 
                         />
                     </div>
-                    <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
+                    <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center flex.flex-wrap">
 
                         <InputGroup
                             type="text"

@@ -4,6 +4,7 @@ import form from './styles/form.css'
 import flex from './styles/flex.css'
 
 import SaveButton from './SaveButton'
+import FormButton from './FormButton'
 import Checkbox from './Checkbox'
 import RadioButton from './RadioButton'
 import InputGroup from './InputGroup'
@@ -13,17 +14,14 @@ import withFormConfigHandling from './withFormConfigHandling'
 const GivingSettings = props => {
 
     const { fields, errors } = props;
-
-    const renderAmtInputs = (type, num) => {
-
-        const arr = Array(num).fill(null);
-
-        return arr.map((el, ind)=>{
+    const renderAmtInputs = (type, arr) => {
+        // console.log({type, arr})
+        return arr.sort().map((el, ind)=>{
             return (
                 <React.Fragment key={`${type}Input-${ind}`}>
                     <InputGroup
                         type="text"
-                        id={`${type}-${ind}`} 
+                        id={`${type}Amt-${ind}`} 
                         specialStyle="" 
                         label={`Amount ${ind+1}`}
                         placeholder="Whole #, no $" 
@@ -78,25 +76,17 @@ const GivingSettings = props => {
 
                                 { 
                                     fields.monthlyOption ? (
-                                        <React.Fragment>
-                                            <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
-                                                <InputGroup
-                                                    type="text"
-                                                    id="numMonthlyAmounts" 
-                                                    specialStyle="" 
-                                                    label="How many monthly gift amount options?" 
-                                                    placeholder="1 or more" 
-                                                    required={true} 
-                                                    validation="[1-9]+\d*"
-                                                    value={fields.numMonthlyAmounts} 
-                                                    handleInputChange={props.handleInputChange} 
-                                                    error={errors.numMonthlyAmounts} 
-                                                />
+                                        <fieldset styleName="form.fieldset__bordered">
+                                            
+                                            <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center flex.flex-wrap">
+                                                { renderAmtInputs("monthly", fields.monthlyAmounts) }
                                             </div>
                                             <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
-                                                { renderAmtInputs("monthly", fields.numMonthlyAmounts) }
+                                                <div style={{maxWidth: "170px"}}>
+                                                    <FormButton val="Add Setting" handleClick={props.handleButtonClick} ctx={{name: "giving", val: 'monthly', type: 'Add'}} />
+                                                </div>
                                             </div>
-                                        </React.Fragment>
+                                        </fieldset>
                                     ) : null
                                 }
 
@@ -106,26 +96,17 @@ const GivingSettings = props => {
 
                                 { 
                                     fields.singleOption ? (
-                                        <React.Fragment>
-                                            <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
-                                                <InputGroup
-                                                    type="number"
-                                                    id="numSingleAmounts" 
-                                                    specialStyle="" 
-                                                    label="How many single gift amount options?" 
-                                                    placeholder="1, 2, 3, etc" 
-                                                    min={1} 
-                                                    required={true} 
-                                                    validation="[1-9]+\d*"
-                                                    value={fields.numSingleAmounts} 
-                                                    handleInputChange={props.handleInputChange} 
-                                                    error={errors.numSingleAmounts} 
-                                                />
+                                        <fieldset styleName="form.fieldset__bordered">
+                                            
+                                            <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center flex.flex-wrap">
+                                                { renderAmtInputs("single", fields.singleAmounts) }
                                             </div>
                                             <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
-                                                { renderAmtInputs("single", fields.numMonthlyAmounts) }
+                                                <div style={{maxWidth: "170px"}}>
+                                                    <FormButton val="Add Setting" handleClick={props.handleButtonClick} ctx={{name: "giving", val: 'single', type: 'Add'}} />
+                                                </div>
                                             </div>
-                                        </React.Fragment>
+                                        </fieldset>
                                     ) : null
                                 }
 

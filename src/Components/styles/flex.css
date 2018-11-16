@@ -45,6 +45,11 @@
 
 .flex.flex-wrap {
     flex-wrap: wrap;
+    margin: -10px;
+}
+
+.flex.flex-wrap>* {
+    margin: 20px 10px 10px;
 }
 
 .flex-grow {

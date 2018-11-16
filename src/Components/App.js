@@ -176,7 +176,7 @@ class App extends Component {
             options.body = JSON.stringify({[type]: data});
             const completed = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/single/${id}?type=${type}`, options);
             if (completed && type !== "form_status") {
-                const config = type === "css_setup" ? "cssConfig" : type === "form_setup" ? "formConfig" : emailConfig;
+                const config = type === "css_setup" ? "cssConfig" : type === "form_setup" ? "formConfig" : "emailConfig";
                 this.setState({[config]: data})
             }
             return true;

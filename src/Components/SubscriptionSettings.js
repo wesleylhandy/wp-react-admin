@@ -70,7 +70,7 @@ const SubscriptionSettings = props => {
 
     return (
         <React.Fragment>
-            <form onSubmit={(e)=>{e.preventDefault(); console.log("Surprise, surprise!!!"); props.handleButtonClick({name: "store", val: '', type: 'form_setup'})}}>
+            <form onSubmit={(e)=>{e.preventDefault(); props.handleButtonClick({name: "store", val: '', type: 'form_setup'})}}>
                 <h3>Configure Subscription Setttings</h3>
 
                 { renderSubInputs(fields.subscriptions.length) }

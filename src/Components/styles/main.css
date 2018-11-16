@@ -3,6 +3,7 @@
     width: 100%;
     min-height: 100vh;
     overflow: auto;
+    max-width: 980px;
 }
 
 h1.not-permissible-heading {

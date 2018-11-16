@@ -104,7 +104,7 @@ h3.form-header,
     box-sizing: border-box;
 }
 
-.form-row>div+div,
+.form-row:not(.flex-wrap)>div+div,
 .form-btn--wrapper+.form-btn--wrapper {
     margin-left: 10px;
 }
@@ -162,6 +162,10 @@ code.code-block {
 
 .form-row.submit-row {
     position: relative;
+}
+
+.form-row+.form-row {
+    margin-top: 20px;
 }
 
 input[type="submit"].submit-button,

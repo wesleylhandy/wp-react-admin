@@ -56,7 +56,7 @@ export default function TabBody(props) {
                 break;
             case "Emails":
                 defaultValues = getDefaultValues(editMode, props.displayMode, props.tabData.emailConfig)
-                return <EmailSettings currentForm={props.currentForm} editMode={editMode} tabFunctions={props.tabFunctions} defaultValues={defaultValues} config={props.tabData.emailConfig}/>;
+                return <EmailSettings currentForm={props.currentForm} displayMode={props.displayMode} tabFunctions={props.tabFunctions} defaultValues={defaultValues} config={props.tabData.emailConfig}/>;
                 break;
             case "Colors":
             case "Fonts":

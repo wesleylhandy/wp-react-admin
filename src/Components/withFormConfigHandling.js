@@ -1,11 +1,28 @@
 import React, {Component} from 'react'
 
 import {getNewObj} from './helpers/getNewObj'
+import swal from 'sweetalert'
+
+async function clickAlert() {
+    const willEdit = await swal({
+        title: "Are you ready for production?",
+        text: 'Setting your form to production means you have tested the fields and submission process of your form, verified entire form submission process, and approved final copy for you thank you email and thank you page. Pages in production will submit to the production database.',
+        icon: "warning",
+        buttons: true,
+        dangerMode: true
+    })
+
+    if (willEdit) {
+        return true
+    } else {
+        return false
+    }
+}
 
 const withFormConfigHandling = SettingsComponent => class extends Component {
     constructor(props) {
         super(props);
-        // console.log({props});
+        // console.log({props: props.defaultValues.fields});
         this.state = {
             updated: false,
             saved: false,
@@ -24,6 +41,7 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
         this.handleButtonClick = this.handleButtonClick.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
         this.handleUnload = this.handleUnload.bind(this)
+        this.handleBlur = this.handleBlur.bind(this)
     }
     
     static get name() {
@@ -63,7 +81,13 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
         if (this.props.displayMode.toLowerCase() === "giving") {
             fields.defaultOption = ids[id]
         } else {
-            fields.form_status = ids[id]
+            if (id === "prod-status") {
+                clickAlert().then(update=>{
+                    fields.form_status = update ? ids[id] : fields.form_status
+                })
+            } else {
+                fields.form_status = ids[id]
+            }
         }
         const initialState = JSON.stringify(this.state.initialState);
         const currentState = JSON.stringify(fields);
@@ -76,14 +100,37 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
         let fields = {...this.state.fields}, errors = {...this.state.errors}
         const initialState = JSON.stringify(this.state.initialState);
         const {name, type, val} = ctx;
-        const numFields = `num${name.substring(0, 1).toUpperCase() + name.substring(1)}`
-        if (type === "Add") {    
-            if (name !== "subscriptions") {
-                fields[numFields] = +fields[numFields] + 1;
-            }
-            const newObj = getNewObj(name)
-            fields[name].push({...newObj})
-            errors[name].push({...newObj})
+       
+        if (type === "Add") {
+            let newObj;
+            switch (name) {
+                case "subscriptions":
+                    // just need a new empty object
+                    newObj = getNewObj(name)
+                    fields[name].push({...newObj})
+                    errors[name].push({...newObj})
+                    break;
+                case "giving":
+                    //have to update array of amounts as well as add errors and fields
+                    const amounts = [...fields[`${val}Amounts`]]
+                    amounts.push(1)
+                    amounts.sort();
+                    const len = amounts.length;
+                    for (let i = 0; i < len; i++) {
+                        fields[val + "Amt-" + i] = amounts[i]
+                        errors[val + "Amt-" + i] = '';
+                    }
+                    fields[`${val}Amounts`] = [...amounts]             
+                    break;
+                default:
+                    //have to increase record of num of fields as well as add empty object
+                    const numFields = `num${name.substring(0, 1).toUpperCase() + name.substring(1)}`
+                    fields[numFields] = +fields[numFields] + 1;
+                    newObj = getNewObj(name)
+                    fields[name].push({...newObj})
+                    errors[name].push({...newObj})
+                    break;
+            }   
             // console.log({fields, errors})
             let currentState = JSON.stringify(fields);
             this.setState(() => {
@@ -104,9 +151,11 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
             this.setState({submitting: true}, ()=>{
                 this.props.tabFunctions.toggleBtnEnable( false )
                 if (this.props.displayMode.toLowerCase() === "giving") {
-                    const {numMonthlyAmounts, numSingleAmounts} = fields;
-                    delete fields.numMonthlyAmounts
-                    delete fields.numSingleAmounts
+                    let fieldKeys = Object.keys(fields);
+                    const monthlyKeys = fieldKeys.filter(el=> el.includes("monthlyAmt"))
+                    const singleKeys = fieldsKeys.filter(el=> el.includes("singleAmt"))
+                    fields.monthlyAmounts = monthlyKeys.map(k=>fields[k])
+                    fields.singleAmounts = singleKeys.map(k=>fields[k])
                 }
                 const config = {...this.props.config, ...fields};
                 this.props.tabFunctions.storeConfig(this.state.currentForm.id, type, config)
@@ -145,6 +194,9 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
             errors[field][ind][setting] = '';
             
             console.log({fields, fieldUpdated: fields[field][ind][setting]})
+        } else if (name === "AddContactYN"){
+            fields[name] = value === true ? "Y" : "N";
+            errors[name] = error; 
         } else {
             errors[name] = error;     
             fields[name] = value;
@@ -152,6 +204,17 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
         const updated = JSON.stringify(fields) !== JSON.stringify(this.state.initialState)
         // console.log({updated, value, initialState: this.state.initialState[name]})
         this.setState({ fields, errors, updated }, ()=> this.props.tabFunctions.toggleBtnEnable( updated ? false : true ));
+    }
+
+    handleBlur(e) {
+        const name = e.target.name;
+        const errors = {...this.state.errors};
+        if (this.state.updated && !this.state.saved) {
+            errors[name] = "Be Sure to Save Your Changes"  
+        } else {
+            errors[name] = ""
+        }
+        this.setState({errors})
     }
 
     render() {
@@ -165,6 +228,7 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
             handleInputChange={this.handleInputChange}
             handleButtonClick={this.handleButtonClick}
             handleRadioClick={this.handleRadioClick}
+            handleBlur={this.handleBlur}
         />
     }
 }

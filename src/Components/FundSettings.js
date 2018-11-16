@@ -22,7 +22,7 @@ const FundSettings = props => {
             return (
                 <fieldset key={`fundRow-${ind}`} styleName='form.fieldset__bordered'>
                     <h4>Fund {ind + 1}</h4>
-                    <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
+                    <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center flex.flex-wrap">
                         <InputGroup
                             type="text"
                             id={`funds-${ind}-Title`} 
@@ -48,7 +48,7 @@ const FundSettings = props => {
                             error={props.errors.funds[ind].fundDescription} 
                         />
                     </div>
-                    <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
+                    <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center flex.flex-wrap">
                         <InputGroup
                             type="text"
                             id={`funds-${ind}-DetailName`} 

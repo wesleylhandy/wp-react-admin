@@ -7,11 +7,12 @@
     flex-direction: row;
     justify-content: left;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .tab-headers__submenu,
 .tab-headers__submenu--tertiary {
-    margin-top: -10px;
+    margin-top: 0;
 }
 
 .tab-headers>.tab-headers__header {
@@ -20,13 +21,16 @@
 
 .tab-headers__submenu>.tab-headers__header {
     background: #cbcbcb;
+    margin-top: -10px;
 }
 
 .tab-headers__submenu--tertiary>.tab-headers__header {
     background: #ededed;
+    margin-top: -10px;
 }
 
 .tab-headers__header {
+    flex: 1;
     position: relative;
     border: 1px solid #919191;
     border-top-left-radius: 10px;
