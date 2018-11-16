@@ -138,7 +138,7 @@ export default class StyleSettings extends Component {
         for ( let group in groups) {
             returnArray.push(groups[group].map((field, ind)=>{
                 return (
-                    <div key={`${group}-${ind}`} styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center flex.flex-wrap">
+                    <React.Fragment key={`${group}-${ind}`}>
                         <InputGroup
                             type="text"
                             id={field}
@@ -153,17 +153,29 @@ export default class StyleSettings extends Component {
                         />
                         { 
                             this.props.displayMode === "Colors" ? (
-                                <div style={{border: "1px solid #ccc", height: "28px", width: "28px", backgroundColor: fields[field]}}></div>
+                                <div style={
+                                    {
+                                        boxSizing: "border-box", 
+                                        border: "1px solid #ccc", 
+                                        height: "30px", 
+                                        width: "30px", 
+                                        marginLeft: "0", 
+                                        marginTop: "24px", 
+                                        backgroundColor: fields[field]
+                                    }
+                                }></div>
                             ) : null
                         }
-                    </div>
+                    </React.Fragment>
                 )
             }));
         }
         return returnArray.map((arr, i)=>{
             return (
-                <fieldset key={`groups-${i}`} styleName='form.fieldset__bordered'>
-                    {arr}
+                <fieldset key={`groups-${i}`} styleName='form.fieldset__bordered' style={{padding: "20px"}}>
+                    <div styleName="form.form-row flex.flex flex.flex-row flex.flex-left flex.flex-axes-center flex.flex-wrap">
+                        {arr}
+                    </div>
                 </fieldset>
             )
         })
