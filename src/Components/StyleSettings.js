@@ -106,7 +106,7 @@ export default class StyleSettings extends Component {
     }
 
     handleButtonClick(ctx) {
-        this.props.tabFunctions.handleStyleButtonClick(ctx, this.state.fields, this.state.errors, this.state.currentForm.form_status)
+        this.props.tabFunctions.handleStyleButtonClick(ctx, this.state.fields, this.state.errors, this.state.initialState, this.state.currentForm.form_status)
     }
 
     handleInputChange(e) {
@@ -164,6 +164,10 @@ export default class StyleSettings extends Component {
                                         backgroundColor: fields[field]
                                     }
                                 }></div>
+                            ) : field.includes('externalFont') ? (
+                                <div>
+                                    <FormButton val="Remove" handleClick={this.handleButtonClick} ctx={{name: "externalFonts", val: field, type: 'Remove'}} />
+                                </div>
                             ) : null
                         }
                     </React.Fragment>

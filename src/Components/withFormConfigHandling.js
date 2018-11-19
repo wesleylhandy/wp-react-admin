@@ -137,11 +137,24 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
                 return {fields, errors, updated: currentState != initialState}
             })
         } else if (type === "Remove") {
-            if (name !== "subscriptions") {
+            if (name !== "subscriptions" && name !== "giving") {
                 fields[numFields] = +fields[numFields] - 1;
             }
-            fields[name] = [...fields[name].slice(0, val), ...fields[name].slice(val + 1)]
-            errors[name] = [...errors[name].slice(0, val), ...errors[name].slice(val + 1)]
+            if (name !== "giving") {
+                fields[name] = [...fields[name].slice(0, val), ...fields[name].slice(val + 1)]
+                errors[name] = [...errors[name].slice(0, val), ...errors[name].slice(val + 1)]
+            } else {
+                const amounts = [...fields[`${val.type}Amounts`]]
+                const newAmts = [...amounts.slice(0, val.ind), ...amounts.slice(val.ind + 1)]
+                newAmts.sort((a,b)=>a - b);
+                delete fields[`${val.type}Amt-${val.ind}`]
+                fields[`${val.type}Amounts`] = newAmts;
+                const len = amounts.length;
+                for (let i = 0; i < len; i++) {
+                    fields[val.type + "Amt-" + i] = newAmts[i]
+                    errors[val.type + "Amt-" + i] = '';
+                }
+            }
             // console.log({newList: fields[name], newErrors: errors[name]}) 
             let currentState = JSON.stringify(fields);
             this.setState(() => {
@@ -186,9 +199,9 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
         const error = '';
         if (name.includes("funds-") || name.includes("products-") || name.includes("subscriptions-")) {
             const field = name.split("-")[0]
-            const ind = +name.split("-")[1]
+            const ind = +(name.split("-")[1])
             const setting = name.split("-")[2]
-            console.log({field, ind, setting, value})
+            // console.log({field, ind, setting, value})
 
             fields[field][ind][setting] = value;
             errors[field][ind][setting] = '';
@@ -197,6 +210,18 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
         } else if (name === "AddContactYN"){
             fields[name] = value === true ? "Y" : "N";
             errors[name] = error; 
+        } else if (name.includes("Amt-")) {
+            const type = name.split("-")[0].substring(0, name.split("-")[0].length - 3);
+            const ind = +(name.split("-")[1])
+            const amounts = [...fields[`${type}Amounts`]]
+            amounts[ind] = value;
+            amounts.sort((a,b)=>a - b);
+            fields[`${type}Amounts`] = amounts;
+            const len = amounts.length;
+            for (let i = 0; i < len; i++) {
+                fields[type + "Amt-" + i] = amounts[i]
+                errors[type + "Amt-" + i] = '';
+            }
         } else {
             errors[name] = error;     
             fields[name] = value;

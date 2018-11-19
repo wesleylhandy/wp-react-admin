@@ -228,18 +228,24 @@ class App extends Component {
      * @param {Object} fields 
      * @param {Object} errors 
      */
-    handleStyleButtonClick(ctx, fields, errors, form_status) {
+    handleStyleButtonClick(ctx, fields, errors, initialState, form_status) {
         const styleSettings = {...this.state.styleSettings}
         if (ctx.name === "externalFonts") {
-            const {count} = getFontInfo(true, "externalFont", fields)
-            //add empty field to setting
-            fields[`externalFont${count}`] = ''
-            errors[`externalFont${count}`] = ''
+            console.log({ctx})
+            if (ctx.type === "Remove") {
+                delete fields[ctx.val]
+                delete errors[ctx.val]
+            } else {
+                const {count} = getFontInfo(true, "externalFont", fields)
+                //add empty field to setting
+                fields[`externalFont${count}`] = ''
+                errors[`externalFont${count}`] = ''
+            }
             //update styleSettings
             styleSettings.fields = fields;
             styleSettings.errors = errors;
-            styleSettings.updated = true;
-
+            styleSettings.updated = JSON.stringify(fields) !== JSON.stringify(initialState);
+            console.log({styleSettings})
             this.setState({styleSettings})
         } else {
             styleSettings.submitting = true;
@@ -248,8 +254,8 @@ class App extends Component {
             this.setState({styleSettings}, ()=>{
                 this.toggleBtnEnable( false )
                 const currentState = JSON.stringify(fields);
-                const initialState = JSON.stringify(this.state.cssConfig);
-                if (currentState !== initialState) {
+                const defaultValues = JSON.stringify(initialState);
+                if (currentState !== defaultValues) {
                     const cssConfig = {...this.state.cssConfig, ...fields};
                     this.storeConfig(this.state.currentForm.id, ctx.type, cssConfig, form_status)
                     .then(success=>{

@@ -11,6 +11,7 @@ import withFormConfigHandling from './withFormConfigHandling'
 
 const FormSettings = props => {
     const {fields, errors} = props;
+    const pageLocation = window.location.origin + '/' + props.currentForm.form_name + '/';
     return (
         <React.Fragment>
             <form onSubmit={(e)=>{e.preventDefault(); props.handleButtonClick({name: "store", val: '', type: 'form_setup'})}}>
@@ -26,7 +27,7 @@ const FormSettings = props => {
                             disabled={true}
                         />
                     </div>
-                    <p styleName="form.form-info">You can now use the Wordpress Shortcode <code styleName="form.form-code">[cbngivingform]</code> on a page at the following url: <a href={window.location.origin + '/' + props.currentForm.form_name + '/'} target="_blank">{props.pageLocation}</a>.</p>
+                    <p styleName="form.form-info">You can now use the Wordpress Shortcode <code styleName="form.form-code">[cbngivingform]</code> on a page at the following url: <a href={pageLocation} target="_blank">{pageLocation}</a></p>
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                         <InputGroup
                             type="text"

@@ -16,9 +16,9 @@ const GivingSettings = props => {
     const { fields, errors } = props;
     const renderAmtInputs = (type, arr) => {
         // console.log({type, arr})
-        return arr.sort((a,b)=>a - b).map((el, ind)=>{
+        return arr.map((el, ind)=>{
             return (
-                <React.Fragment key={`${type}Input-${ind}`}>
+                <div key={`${type}Input-${ind}`} styleName="flex.flex flex.flex-row flex.flex-axes-center flex.flex-grow">
                     <InputGroup
                         type="text"
                         id={`${type}Amt-${ind}`} 
@@ -31,7 +31,10 @@ const GivingSettings = props => {
                         handleInputChange={props.handleInputChange} 
                         error={errors[`${type}Amt-${ind}`]} 
                     />
-                </React.Fragment>
+                    <div>
+                        <FormButton val="Remove" handleClick={props.handleButtonClick} ctx={{name: "giving", val: {type, ind}, type: 'Remove'}} />
+                    </div>
+                </div>
             )
         })
     }
