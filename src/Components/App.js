@@ -177,9 +177,12 @@ class App extends Component {
             const completed = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/single/${id}?type=${type}`, options);
             if (completed && type !== "form_status") {
                 const config = type === "css_setup" ? "cssConfig" : type === "form_setup" ? "formConfig" : "emailConfig";
-                this.setState({[config]: data})
+                if (type !== "css_setup") {
+                    this.setState({[config]: data})
+                    return true;
+                } 
+                return true;
             }
-            return true;
         } catch(err) {
             this.handleAPIErrors(err)
             return false;
@@ -259,6 +262,7 @@ class App extends Component {
                     const cssConfig = {...this.state.cssConfig, ...fields};
                     this.storeConfig(this.state.currentForm.id, ctx.type, cssConfig, form_status)
                     .then(success=>{
+                        console.log({success})
                         if (success) {
                             //update settings
                             styleSettings.submitting = false;
@@ -266,7 +270,6 @@ class App extends Component {
                             styleSettings.saved = true;
                             styleSettings.errors = {};
                             styleSettings.fields = {};
-
                             this.setState({styleSettings, cssConfig}, () => {
                                 this.toggleBtnEnable( true )
                             })

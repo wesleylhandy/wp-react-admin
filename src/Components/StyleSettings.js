@@ -41,16 +41,18 @@ export default class StyleSettings extends Component {
         const {styleSettings, displayMode} = nextProps
         const newSettings = styleSettings ? JSON.stringify(styleSettings) : "";
         const oldSettings = prevState.styleSettings ? JSON.stringify(prevState.styleSettings) : "";
-
+        const {errors, fields} = styleSettings;
+        const errKeys = Object.keys(errors);
+        const fieldKeys = Object.keys(fields);
         if (displayMode !== prevState.displayMode) {
-            const newDefaults = nextProps.defaultValues ? JSON.stringify(nextProps.defaultValues) : "";
-            const oldDefaults = prevState.defaultValues ? JSON.stringify(prevState.defaultValues) : "";
             const errors = {
                 formError: nextProps.editMode ? "" : "Above Values Are Not Stored in the DB"
             }
             for (let defaultValue in nextProps.defaultValues) {
                 errors[defaultValue] = '';
             }
+            const newDefaults = nextProps.defaultValues ? JSON.stringify(nextProps.defaultValues) : "";
+            const oldDefaults = prevState.defaultValues ? JSON.stringify(prevState.defaultValues) : "";
             if (oldDefaults !== newDefaults) {
                 console.info('New Defaults')
                 return {
@@ -63,14 +65,13 @@ export default class StyleSettings extends Component {
                     currentForm: nextProps.currentForm,
                     styleSettings: nextProps.styleSettings,
                     displayMode: nextProps.displayMode,
-                    errors, 
+                    errors
                 }
             } else {
                 console.info("No New Defaults, Should never get here")
                 return null
             }
-        } 
-        if (newSettings !== oldSettings) {
+        } else if (newSettings !== oldSettings) {
             console.info('New Settings')
             return {
                 saved: nextProps.styleSettings.saved,
@@ -78,11 +79,32 @@ export default class StyleSettings extends Component {
                 submitting: nextProps.styleSettings.submitting,
                 fields: {...nextProps.styleSettings.fields},
                 errors: {...nextProps.styleSettings.errors},
+                styleSettings: nextProps.styleSettings
+            }
+        } else if (!errKeys.length && !fieldKeys.length) {
+            console.info('New Defaults, form saved')
+            const errors = {
+                formError: ""
+            }
+            for (let defaultValue in nextProps.defaultValues) {
+                errors[defaultValue] = '';
+            }
+            return {
+                editMode: nextProps.editMode,
+                submitting: false,
+                updated: false,
+                saved: false,
+                initialState: {...nextProps.defaultValues},
+                fields: {...nextProps.defaultValues},
+                currentForm: nextProps.currentForm,
                 styleSettings: nextProps.styleSettings,
+                displayMode: nextProps.displayMode,
+                errors
             }
         } else {
             console.info("No New Settings and No New Defaults")
-            return null
+            // console.log({defaultValues: nextProps.defaultValues})
+            return {submitting: false}
         }
     }
 
