@@ -169,7 +169,7 @@ class App extends Component {
      * @returns {Boolean} true on success
      */
     async storeConfig(id, type, data) {
-        console.log({type})
+        // console.log({type})
         try {
             const options = {...this.state.options}
             options.method = "PUT";
@@ -231,7 +231,7 @@ class App extends Component {
     handleStyleButtonClick(ctx, fields, errors, initialState, form_status) {
         const styleSettings = {...this.state.styleSettings}
         if (ctx.name === "externalFonts") {
-            console.log({ctx})
+            // console.log({ctx})
             if (ctx.type === "Remove") {
                 delete fields[ctx.val]
                 delete errors[ctx.val]
@@ -245,7 +245,7 @@ class App extends Component {
             styleSettings.fields = fields;
             styleSettings.errors = errors;
             styleSettings.updated = JSON.stringify(fields) !== JSON.stringify(initialState);
-            console.log({styleSettings})
+            // console.log({styleSettings})
             this.setState({styleSettings})
         } else {
             styleSettings.submitting = true;

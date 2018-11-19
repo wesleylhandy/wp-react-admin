@@ -82,7 +82,7 @@ export default class ListForms extends Component {
                     buttons: true,
                     dangerMode: true
                 })
-                console.log({willEdit})
+                // console.log({willEdit})
                 if (willEdit) {
                     inputDisabled = false;
                 } 
