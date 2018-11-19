@@ -42,7 +42,7 @@ export default function StyleOptionsTabs(props) {
     return (
         <React.Fragment>
             { 
-                adminMode !== "List" && viewMode === "Style" ? (
+                adminMode !== "List" && adminMode !== "Add" && viewMode === "Style" ? (
                     <React.Fragment>
                         <div styleName="tabs.tab-headers__submenu--tertiary">
                             {tabs}
