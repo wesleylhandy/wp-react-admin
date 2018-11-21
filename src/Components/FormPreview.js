@@ -11,7 +11,7 @@ class FormPreview extends Component {
     }
 
     async componentDidMount() {
-        const {options, currentForm} = this.props
+        const options = {...this.props.options}, {currentForm} = this.props
         options.method = 'POST'
         options.body = JSON.stringify({
             title: "Preview Page",
@@ -22,6 +22,17 @@ class FormPreview extends Component {
             const {id} = await callApi('/wp-json/wp/v2/pages', options)
             // console.log({id})
             this.setState({id})
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
+    async componentWillUnmount(){
+        const options = {...this.props.options}
+        options.method = 'DELETE'
+        const {id} = this.state
+        try {
+            const success = await callApi(`/wp-json/wp/v2/pages/${id}?force=true`, options)
         } catch (err) {
             console.error(err)
         }
