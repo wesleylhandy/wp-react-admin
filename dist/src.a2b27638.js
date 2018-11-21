@@ -36327,17 +36327,14 @@ var FormSettings = function FormSettings(props) {
     type: "text",
     id: "form_name",
     specialStyle: "",
-    label: "Campaign Name/URL Slug",
+    label: "Campaign Name",
     value: props.currentForm.form_name,
     disabled: true
   })), _react.default.createElement("p", {
     className: "form-info__3Welr"
   }, "You can now use the Wordpress Shortcode ", _react.default.createElement("code", {
     className: "form-code__1MNHp"
-  }, "[cbngivingform]"), " on a page at the following url: ", _react.default.createElement("a", {
-    href: pageLocation,
-    target: "_blank"
-  }, pageLocation)), _react.default.createElement("div", {
+  }, "[cbngivingform form_name=\"", props.currentForm.form_name, "\"]"), " on page. Please be sure to test as a draft before putting into production."), _react.default.createElement("div", {
     className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-axes-center__gx3gz"
   }, _react.default.createElement(_InputGroup.default, {
     type: "text",
@@ -38536,7 +38533,160 @@ function MetaTabs(props) {
 })();
 
 ;
-},{"react-hot-loader":"node_modules/react-hot-loader/index.js","react":"node_modules/react/index.js","./TabHead":"src/Components/TabHead.js","./TabBody":"src/Components/TabBody.js","./styles/tabs.css":"src/Components/styles/tabs.css"}],"src/Components/FormOptionsTabs.js":[function(require,module,exports) {
+},{"react-hot-loader":"node_modules/react-hot-loader/index.js","react":"node_modules/react/index.js","./TabHead":"src/Components/TabHead.js","./TabBody":"src/Components/TabBody.js","./styles/tabs.css":"src/Components/styles/tabs.css"}],"src/Components/FormPreview.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _fetchHelpers = require("./helpers/fetch-helpers");
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+(function () {
+  var enterModule = require('react-hot-loader').enterModule;
+
+  enterModule && enterModule(module);
+})();
+
+var FormPreview =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(FormPreview, _Component);
+
+  function FormPreview(props) {
+    var _this;
+
+    _classCallCheck(this, FormPreview);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(FormPreview).call(this, props));
+    _this.state = {
+      id: ''
+    };
+    return _this;
+  }
+
+  _createClass(FormPreview, [{
+    key: "componentDidMount",
+    value: function () {
+      var _componentDidMount = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee() {
+        var _this$props, options, currentForm, _ref, id;
+
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _this$props = this.props, options = _this$props.options, currentForm = _this$props.currentForm;
+                options.method = 'POST';
+                options.body = JSON.stringify({
+                  title: "Preview Page",
+                  content: "[cbngivingform form_name='".concat(currentForm.form_name, "']"),
+                  type: 'page'
+                });
+                _context.prev = 3;
+                _context.next = 6;
+                return (0, _fetchHelpers.callApi)('/wp-json/wp/v2/pages', options);
+
+              case 6:
+                _ref = _context.sent;
+                id = _ref.id;
+                // console.log({id})
+                this.setState({
+                  id: id
+                });
+                _context.next = 14;
+                break;
+
+              case 11:
+                _context.prev = 11;
+                _context.t0 = _context["catch"](3);
+                console.error(_context.t0);
+
+              case 14:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this, [[3, 11]]);
+      }));
+
+      return function componentDidMount() {
+        return _componentDidMount.apply(this, arguments);
+      };
+    }()
+  }, {
+    key: "render",
+    value: function render() {
+      var id = this.state.id;
+      return _react.default.createElement("iframe", {
+        src: "/?page_id=".concat(id, "&preview=true"),
+        style: {
+          width: "100%",
+          height: "100vh"
+        }
+      });
+    }
+  }, {
+    key: "__reactstandin__regenerateByEval",
+    // @ts-ignore
+    value: function __reactstandin__regenerateByEval(key, code) {
+      // @ts-ignore
+      this[key] = eval(code);
+    }
+  }]);
+
+  return FormPreview;
+}(_react.Component);
+
+var _default = FormPreview;
+var _default2 = _default;
+exports.default = _default2;
+;
+
+(function () {
+  var reactHotLoader = require('react-hot-loader').default;
+
+  var leaveModule = require('react-hot-loader').leaveModule;
+
+  if (!reactHotLoader) {
+    return;
+  }
+
+  reactHotLoader.register(FormPreview, "FormPreview", "/Users/wehand/Code/cbngiving-wp-admin-react/src/Components/FormPreview.js");
+  reactHotLoader.register(_default, "default", "/Users/wehand/Code/cbngiving-wp-admin-react/src/Components/FormPreview.js");
+  leaveModule(module);
+})();
+
+;
+},{"react-hot-loader":"node_modules/react-hot-loader/index.js","react":"node_modules/react/index.js","./helpers/fetch-helpers":"src/Components/helpers/fetch-helpers.js"}],"src/Components/FormOptionsTabs.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -38549,6 +38699,8 @@ var _react = _interopRequireDefault(require("react"));
 var _TabHead = _interopRequireDefault(require("./TabHead"));
 
 var _TabBody = _interopRequireDefault(require("./TabBody"));
+
+var _FormPreview = _interopRequireDefault(require("./FormPreview"));
 
 var _tabs = _interopRequireDefault(require("./styles/tabs.css"));
 
@@ -38575,8 +38727,14 @@ function FormOptionsTabs(props) {
       emailConfig = props.emailConfig,
       currentForm = props.currentForm,
       enabled = props.enabled,
-      toggleBtnEnable = props.toggleBtnEnable;
+      toggleBtnEnable = props.toggleBtnEnable,
+      options = props.options;
   var subHeads = ["Settings", "Name/Address", "Gifts", "Products", "Funds", "Subscriptions", "Emails", "Style"];
+
+  if (currentForm.form_status !== "new") {
+    subHeads.push("Preview");
+  }
+
   var tabs = subHeads.map(function (th, ind) {
     return _react.default.createElement(_TabHead.default, {
       enabled: enabled,
@@ -38589,7 +38747,7 @@ function FormOptionsTabs(props) {
   });
   return _react.default.createElement(_react.default.Fragment, null, adminMode !== "List" && adminMode !== "Add" ? _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
     className: "tab-headers__submenu__171P4"
-  }, tabs), viewMode !== "Style" ? _react.default.createElement(_TabBody.default, {
+  }, tabs), viewMode !== "Style" && viewMode !== "Preview" ? _react.default.createElement(_TabBody.default, {
     currentForm: currentForm,
     adminMode: adminMode,
     displayMode: viewMode,
@@ -38601,6 +38759,9 @@ function FormOptionsTabs(props) {
       formConfig: formConfig,
       emailConfig: emailConfig
     }
+  }) : null, viewMode === "Preview" && currentForm.form_status !== "new" ? _react.default.createElement(_FormPreview.default, {
+    currentForm: currentForm,
+    options: options
   }) : null) : null);
 }
 
@@ -38620,7 +38781,7 @@ function FormOptionsTabs(props) {
 })();
 
 ;
-},{"react-hot-loader":"node_modules/react-hot-loader/index.js","react":"node_modules/react/index.js","./TabHead":"src/Components/TabHead.js","./TabBody":"src/Components/TabBody.js","./styles/tabs.css":"src/Components/styles/tabs.css"}],"src/Components/styles/spinner.css":[function(require,module,exports) {
+},{"react-hot-loader":"node_modules/react-hot-loader/index.js","react":"node_modules/react/index.js","./TabHead":"src/Components/TabHead.js","./TabBody":"src/Components/TabBody.js","./FormPreview":"src/Components/FormPreview.js","./styles/tabs.css":"src/Components/styles/tabs.css"}],"src/Components/styles/spinner.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -39582,6 +39743,7 @@ function (_Component) {
         toggleBtnEnable: this.toggleBtnEnable,
         user: state.user
       }), _react.default.createElement(_FormOptionsTabs.default, {
+        options: state.options,
         adminMode: state.adminMode,
         viewMode: state.viewMode,
         formConfig: state.formConfig,
@@ -39730,7 +39892,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59485" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64062" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

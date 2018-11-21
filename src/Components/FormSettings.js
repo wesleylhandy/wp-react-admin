@@ -22,12 +22,12 @@ const FormSettings = props => {
                             type="text"
                             id="form_name" 
                             specialStyle="" 
-                            label="Campaign Name/URL Slug" 
+                            label="Campaign Name" 
                             value={props.currentForm.form_name} 
                             disabled={true}
                         />
                     </div>
-                    <p styleName="form.form-info">You can now use the Wordpress Shortcode <code styleName="form.form-code">[cbngivingform]</code> on a page at the following url: <a href={pageLocation} target="_blank">{pageLocation}</a></p>
+                    <p styleName="form.form-info">You can now use the Wordpress Shortcode <code styleName="form.form-code">[cbngivingform form_name="{props.currentForm.form_name}"]</code> on page. Please be sure to test as a draft before putting into production.</p>
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                         <InputGroup
                             type="text"

@@ -316,6 +316,7 @@ class App extends Component {
                                 user={state.user}
                             />
                             <FormOptionsTabs 
+                                options={state.options}
                                 adminMode={state.adminMode} 
                                 viewMode={state.viewMode} 
                                 formConfig={state.formConfig}
@@ -340,6 +341,7 @@ class App extends Component {
                                 handleStyleButtonClick={this.handleStyleButtonClick}
                                 styleSettings={state.styleSettings}
                             />
+                            
                         </React.Fragment>
                     ) : configured && !permissible ? (
                         <h1 styleName="main.not-permissible-heading">You are not Authorized to View These Settings</h1>
