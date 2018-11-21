@@ -68,6 +68,7 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
     }
 
     handleRadioClick(e) {
+        console.log("click");
         const {id} = e.target;
         const fields = {...this.state.fields}
         const ids = {
@@ -76,9 +77,9 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
             "prod-status": "prod",
             "monthlygift": "monthly",
             "singlegift": "single",
-            "nullgift": "null"
+            "nullgift": ""
         }
-        if (this.props.displayMode.toLowerCase() === "giving") {
+        if (id.includes('gift')) {
             fields.defaultOption = ids[id]
         } else {
             if (id === "prod-status") {
@@ -138,6 +139,7 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
             })
         } else if (type === "Remove") {
             if (name !== "subscriptions" && name !== "giving") {
+                const numFields = `num${name.substring(0, 1).toUpperCase() + name.substring(1)}`
                 fields[numFields] = +fields[numFields] - 1;
             }
             if (name !== "giving") {
