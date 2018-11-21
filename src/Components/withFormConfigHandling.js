@@ -207,7 +207,7 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
             errors[field][ind][setting] = '';
             
             // console.log({fields, fieldUpdated: fields[field][ind][setting]})
-        } else if (name === "AddContactYN"){
+        } else if (name === "AddContactYN") {
             fields[name] = value === true ? "Y" : "N";
             errors[name] = error; 
         } else if (name.includes("Amt-")) {

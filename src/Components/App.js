@@ -65,7 +65,7 @@ class App extends Component {
 
     async componentDidMount(){
         try {
-            const profile = await callApi(`${this.state.base}/wp-json/wp/v2/users/me?context=edit`)
+            const profile = await callApi(`${this.state.base}/wp-json/wp/v2/users/me?context=edit`, this.state.options)
             const primaryRole = profile.roles && profile.roles.length ? profile.roles[0] : '';
             const isAdmin = primaryRole.toLowerCase() === "administrator"
             const user = {id: profile.id, username: profile.username, email: profile.email}

@@ -136,7 +136,7 @@ const GivingSettings = props => {
                                             <h3>Select Default Amount</h3>
                                             <p styleName="form.form-info">No default Amount is required. However, if the default amount is not found within the default Giving Options, no default will be set.</p>
                                             <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
-                                                { renderDefaultSelect( fields.defaultOptions ) }
+                                                { renderDefaultSelect( fields.defaultOption ) }
                                             </div>
                                         </React.Fragment>
                                     ) : null

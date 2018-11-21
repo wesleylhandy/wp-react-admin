@@ -12,7 +12,6 @@ export function getDefaultValues(editMode, type, config) {
     switch (type.toLowerCase()) {
         case "fonts":
             defaultValues = {
-                "--base-font-size": editMode && config.hasOwnProperty("--base-font-size") ? config["--base-font-size"] : '20px',
                 "--base-font-family": editMode && config.hasOwnProperty("--base-font-family") ? config["--base-font-family"] : "proxima-nova, Arial, sans-serif",
                 "--base-font-style": editMode && config.hasOwnProperty("--base-font-style") ? config["--base-font-style"]: "normal",
                 "--base-font-weight": editMode && config.hasOwnProperty("--base-font-weight") ? config["--base-font-weight"] : "400",
