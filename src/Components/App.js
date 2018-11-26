@@ -328,6 +328,7 @@ class App extends Component {
                                 toggleBtnEnable={this.toggleBtnEnable}
                             />
                             <StyleOptionsTabs
+                                options={state.options}
                                 adminMode={state.adminMode} 
                                 viewMode={state.viewMode} 
                                 styleMode={state.styleMode}

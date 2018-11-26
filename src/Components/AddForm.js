@@ -7,7 +7,6 @@ import form from './styles/form.css'
 
 import FormButton from './FormButton'
 import InputGroup from './InputGroup'
-import swal from 'sweetalert'
 
 export default class AddForm extends Component {
     constructor(props) {

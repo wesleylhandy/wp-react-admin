@@ -35283,8 +35283,6 @@ var _FormButton = _interopRequireDefault(require("./FormButton"));
 
 var _InputGroup = _interopRequireDefault(require("./InputGroup"));
 
-var _sweetalert = _interopRequireDefault(require("sweetalert"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
@@ -35480,7 +35478,7 @@ exports.default = AddForm;
 })();
 
 ;
-},{"react-hot-loader":"node_modules/react-hot-loader/index.js","react":"node_modules/react/index.js","./styles/flex.css":"src/Components/styles/flex.css","./styles/input.css":"src/Components/styles/input.css","./styles/error.css":"src/Components/styles/error.css","./styles/form.css":"src/Components/styles/form.css","./FormButton":"src/Components/FormButton.js","./InputGroup":"src/Components/InputGroup.js","sweetalert":"node_modules/sweetalert/dist/sweetalert.min.js"}],"src/Components/SaveButton.js":[function(require,module,exports) {
+},{"react-hot-loader":"node_modules/react-hot-loader/index.js","react":"node_modules/react/index.js","./styles/flex.css":"src/Components/styles/flex.css","./styles/input.css":"src/Components/styles/input.css","./styles/error.css":"src/Components/styles/error.css","./styles/form.css":"src/Components/styles/form.css","./FormButton":"src/Components/FormButton.js","./InputGroup":"src/Components/InputGroup.js"}],"src/Components/SaveButton.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -38545,6 +38543,8 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _fetchHelpers = require("./helpers/fetch-helpers");
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -38598,13 +38598,13 @@ function (_Component) {
       var _componentDidMount = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee() {
-        var _this$props, options, currentForm, _ref, id;
+        var options, currentForm, _ref, id;
 
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _this$props = this.props, options = _this$props.options, currentForm = _this$props.currentForm;
+                options = _extends({}, this.props.options), currentForm = this.props.currentForm;
                 options.method = 'POST';
                 options.body = JSON.stringify({
                   title: "Preview Page",
@@ -38640,6 +38640,46 @@ function (_Component) {
 
       return function componentDidMount() {
         return _componentDidMount.apply(this, arguments);
+      };
+    }()
+  }, {
+    key: "componentWillUnmount",
+    value: function () {
+      var _componentWillUnmount = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee2() {
+        var options, id, success;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                options = _extends({}, this.props.options);
+                options.method = 'DELETE';
+                id = this.state.id;
+                _context2.prev = 3;
+                _context2.next = 6;
+                return (0, _fetchHelpers.callApi)("/wp-json/wp/v2/pages/".concat(id, "?force=true"), options);
+
+              case 6:
+                success = _context2.sent;
+                _context2.next = 12;
+                break;
+
+              case 9:
+                _context2.prev = 9;
+                _context2.t0 = _context2["catch"](3);
+                console.error(_context2.t0);
+
+              case 12:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this, [[3, 9]]);
+      }));
+
+      return function componentWillUnmount() {
+        return _componentWillUnmount.apply(this, arguments);
       };
     }()
   }, {
@@ -38731,7 +38771,7 @@ function FormOptionsTabs(props) {
       options = props.options;
   var subHeads = ["Settings", "Name/Address", "Gifts", "Products", "Funds", "Subscriptions", "Emails", "Style"];
 
-  if (currentForm.form_status !== "new") {
+  if (currentForm.form_status !== "new" && viewMode !== "Style") {
     subHeads.push("Preview");
   }
 
@@ -38870,6 +38910,8 @@ var _TabHead = _interopRequireDefault(require("./TabHead"));
 
 var _TabBody = _interopRequireDefault(require("./TabBody"));
 
+var _FormPreview = _interopRequireDefault(require("./FormPreview"));
+
 var _tabs = _interopRequireDefault(require("./styles/tabs.css"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -38886,12 +38928,9 @@ if (module.hot) {
   });
 }
 
-// Colors
-// Fonts
-// Spacing
-// Borders
 function StyleOptionsTabs(props) {
-  var adminMode = props.adminMode,
+  var options = props.options,
+      adminMode = props.adminMode,
       viewMode = props.viewMode,
       styleMode = props.styleMode,
       setStyleMode = props.setStyleMode,
@@ -38904,6 +38943,11 @@ function StyleOptionsTabs(props) {
       handleStyleInputChange = props.handleStyleInputChange,
       styleSettings = props.styleSettings;
   var subHeads = ["Colors", "Fonts", "Spacing"];
+
+  if (currentForm.form_status !== "new") {
+    subHeads.push("Preview");
+  }
+
   var tabs = subHeads.map(function (th, ind) {
     return _react.default.createElement(_TabHead.default, {
       enabled: enabled,
@@ -38916,7 +38960,7 @@ function StyleOptionsTabs(props) {
   });
   return _react.default.createElement(_react.default.Fragment, null, adminMode !== "List" && adminMode !== "Add" && viewMode === "Style" ? _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
     className: "tab-headers__submenu--tertiary__akazl"
-  }, tabs), _react.default.createElement(_TabBody.default, {
+  }, tabs), styleMode !== "Preview" ? _react.default.createElement(_TabBody.default, {
     currentForm: currentForm,
     adminMode: adminMode,
     displayMode: styleMode,
@@ -38930,7 +38974,10 @@ function StyleOptionsTabs(props) {
       cssConfig: cssConfig
     },
     styleSettings: styleSettings
-  })) : null);
+  }) : currentForm.form_status !== "new" ? _react.default.createElement(_FormPreview.default, {
+    currentForm: currentForm,
+    options: options
+  }) : null) : null);
 }
 
 ;
@@ -38949,7 +38996,7 @@ function StyleOptionsTabs(props) {
 })();
 
 ;
-},{"react-hot-loader":"node_modules/react-hot-loader/index.js","react":"node_modules/react/index.js","./TabHead":"src/Components/TabHead.js","./TabBody":"src/Components/TabBody.js","./styles/tabs.css":"src/Components/styles/tabs.css"}],"src/Components/helpers/getFontInfo.js":[function(require,module,exports) {
+},{"react-hot-loader":"node_modules/react-hot-loader/index.js","react":"node_modules/react/index.js","./TabHead":"src/Components/TabHead.js","./TabBody":"src/Components/TabBody.js","./FormPreview":"src/Components/FormPreview.js","./styles/tabs.css":"src/Components/styles/tabs.css"}],"src/Components/helpers/getFontInfo.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -39754,6 +39801,7 @@ function (_Component) {
         storeConfig: this.storeConfig,
         toggleBtnEnable: this.toggleBtnEnable
       }), _react.default.createElement(_StyleOptionsTabs.default, {
+        options: state.options,
         adminMode: state.adminMode,
         viewMode: state.viewMode,
         styleMode: state.styleMode,
@@ -39892,7 +39940,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64062" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54785" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

@@ -2,16 +2,13 @@ import React from 'react'
 
 import TabHead from './TabHead'
 import TabBody from './TabBody'
+import FormPreview from './FormPreview'
 
 import tabs from './styles/tabs.css'
 
-    // Colors
-    // Fonts
-    // Spacing
-    // Borders
-
 export default function StyleOptionsTabs(props) {
     const { 
+        options,
         adminMode, 
         viewMode, 
         styleMode, 
@@ -26,6 +23,9 @@ export default function StyleOptionsTabs(props) {
         styleSettings
     } = props
     const subHeads = ["Colors", "Fonts", "Spacing"]
+    if (currentForm.form_status !== "new") {
+        subHeads.push("Preview")
+    }
     const tabs = subHeads.map((th, ind)=>{
         return (
             <TabHead
@@ -47,14 +47,20 @@ export default function StyleOptionsTabs(props) {
                         <div styleName="tabs.tab-headers__submenu--tertiary">
                             {tabs}
                         </div>
-                        <TabBody 
-                            currentForm={currentForm} 
-                            adminMode={adminMode} 
-                            displayMode={styleMode} 
-                            tabFunctions={{storeConfig, toggleBtnEnable, handleStyleButtonClick, handleStyleInputChange}} 
-                            tabData={{cssConfig}}
-                            styleSettings={styleSettings}
-                        />
+                        {
+                            styleMode !== "Preview" ? (
+                                <TabBody 
+                                    currentForm={currentForm} 
+                                    adminMode={adminMode} 
+                                    displayMode={styleMode} 
+                                    tabFunctions={{storeConfig, toggleBtnEnable, handleStyleButtonClick, handleStyleInputChange}} 
+                                    tabData={{cssConfig}}
+                                    styleSettings={styleSettings}
+                                />
+                            ) : currentForm.form_status !== "new" ? (
+                                <FormPreview currentForm={currentForm} options={options}/>
+                            ) : null
+                        }
                     </React.Fragment>
                 ) : (
                     null
