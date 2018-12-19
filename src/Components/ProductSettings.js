@@ -117,7 +117,7 @@ const ProductSettings = props => {
                             id={`products-${ind}-DetailDescription`} 
                             specialStyle="" 
                             label={`Product ${ind+1}: SOL Description`}
-                            maxLength={6}
+                            maxLength={20}
                             placeholder="i.e. Orphan's Promise Vietname, Superbook Translation, etc" 
                             required={true} 
                             value={fields.products[ind].DetailDescription} 
