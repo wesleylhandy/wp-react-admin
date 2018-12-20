@@ -226,7 +226,7 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
             }
         } else if (name.includes("addGift-")) {
             const field = name.split("-")[1]
-            console.log({field, additionalGift:fields.additionalGift})
+            // console.log({field, additionalGift:fields.additionalGift})
             fields.additionalGift[field] = value
             errors.additionalGift[field] = error
         } else {
