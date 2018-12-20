@@ -34186,6 +34186,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getDefaultValues = getDefaultValues;
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -34375,7 +34377,14 @@ function getDefaultValues(editMode, type, config) {
       errors = {
         addProducts: '',
         numProducts: '',
-        products: []
+        products: [],
+        additionalGift: {
+          "display": '',
+          "additionalGiftMessage": '',
+          "DetailDescription": '',
+          "DetailCprojMail": '',
+          "DetailName": ''
+        }
       };
 
       if (editMode) {
@@ -34397,7 +34406,15 @@ function getDefaultValues(editMode, type, config) {
         fields: {
           addProducts: editMode && config.hasOwnProperty("numProducts") ? config.numProducts > 0 : false,
           numProducts: editMode && config.hasOwnProperty("products") ? config.products.length : 0,
-          products: editMode && config.hasOwnProperty("products") ? _toConsumableArray(config.products) : []
+          products: editMode && config.hasOwnProperty("products") ? _toConsumableArray(config.products) : [],
+          "additionalGift": editMode && config.hasOwnProperty("additionalGift") ? _extends({}, config.additionalGift) : {
+            "display": false,
+            "additionalGiftMessage": "",
+            "DetailDescription": "",
+            "DetailCprojCredit": "",
+            "DetailCprojMail": "",
+            "DetailName": ""
+          }
         },
         errors: errors
       };
@@ -36173,6 +36190,14 @@ var withFormConfigHandling = function withFormConfigHandling(SettingsComponent) 
               fields[type + "Amt-" + i] = amounts[i];
               errors[type + "Amt-" + i] = '';
             }
+          } else if (name.includes("addGift-")) {
+            var _field = name.split("-")[1];
+            console.log({
+              field: _field,
+              additionalGift: fields.additionalGift
+            });
+            fields.additionalGift[_field] = value;
+            errors.additionalGift[_field] = error;
           } else {
             errors[name] = error;
             fields[name] = value;
@@ -37247,8 +37272,8 @@ var ProductSettings = function ProductSettings(props) {
         id: "products-".concat(ind, "-DetailDescription"),
         specialStyle: "",
         label: "Product ".concat(ind + 1, ": SOL Description"),
-        maxLength: 6,
-        placeholder: "i.e. Orphan's Promise Vietname, Superbook Translation, etc",
+        maxLength: 32,
+        placeholder: "i.e. Orphan's Promise Vietnam, Superbook Translation, etc",
         required: true,
         value: fields.products[ind].DetailDescription,
         handleInputChange: props.handleInputChange,
@@ -37285,7 +37310,7 @@ var ProductSettings = function ProductSettings(props) {
     checked: fields.addProducts,
     handleInputChange: props.handleInputChange,
     label: "Users can Select Product(s)?"
-  })), renderProductInputs(fields.numProducts), fields.addProducts ? _react.default.createElement("div", {
+  })), renderProductInputs(fields.numProducts), fields.addProducts && _react.default.createElement("div", {
     className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-axes-center__gx3gz"
   }, _react.default.createElement("div", {
     style: {
@@ -37299,7 +37324,76 @@ var ProductSettings = function ProductSettings(props) {
       val: '',
       type: 'Add'
     }
-  }))) : null), _react.default.createElement("fieldset", {
+  }))), _react.default.createElement("div", {
+    className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-axes-center__gx3gz"
+  }, _react.default.createElement(_Checkbox.default, {
+    id: "addGift-display",
+    checked: fields.additionalGift.display,
+    handleInputChange: props.handleInputChange,
+    label: "Prompt Donors for a special additional gift?"
+  })), fields.additionalGift.display && _react.default.createElement("fieldset", {
+    className: "fieldset__bordered__3MgwP"
+  }, _react.default.createElement("h4", null, "Additional Gift"), _react.default.createElement("div", {
+    className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-wrap__3nXfa"
+  }, _react.default.createElement(_InputGroup.default, {
+    type: "text",
+    id: "addGift-DetailName",
+    specialStyle: "",
+    label: "Additional Gift: Detail Name",
+    maxLength: 20,
+    placeholder: "i.e. SGOrphansPromise",
+    required: true,
+    value: fields.additionalGift.DetailName,
+    handleInputChange: props.handleInputChange,
+    error: errors.additionalGift.DetailName
+  }), _react.default.createElement(_TextGroup.default, {
+    type: "text",
+    id: "addGift-additionalGiftMessage",
+    specialStyle: "",
+    label: "Message/Appeal for additional gift",
+    maxLength: 512,
+    rows: 3,
+    placeholder: "Please consider a special gift to CBN Ministries",
+    required: true,
+    value: fields.additionalGift.additionalGiftMessage,
+    handleInputChange: props.handleInputChange,
+    error: errors.additionalGift.additionalGiftMessage
+  })), _react.default.createElement("div", {
+    className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-wrap__3nXfa"
+  }, _react.default.createElement(_InputGroup.default, {
+    type: "text",
+    id: "addGift-DetailCprojMail",
+    specialStyle: "",
+    label: "Additional Gift: WhiteMail SOL",
+    maxLength: 6,
+    placeholder: "i.e. 043251",
+    required: true,
+    value: fields.additionalGift.DetailCprojMail,
+    handleInputChange: props.handleInputChange,
+    error: errors.additionalGift.DetailCprojMail
+  }), _react.default.createElement(_InputGroup.default, {
+    type: "text",
+    id: "addGift-DetailCprojCredit",
+    specialStyle: "",
+    label: "Additional Gift: Credit SOL",
+    maxLength: 6,
+    placeholder: "i.e. 043250",
+    required: true,
+    value: fields.additionalGift.DetailCprojCredit,
+    handleInputChange: props.handleInputChange,
+    error: errors.additionalGift.DetailCprojCredit
+  }), _react.default.createElement(_InputGroup.default, {
+    type: "text",
+    id: "addGift-DetailDescription",
+    specialStyle: "",
+    label: "Additional Gift: SOL Description",
+    maxLength: 32,
+    placeholder: "i.e. Orphan's Promise Vietnam, Superbook Translation, etc",
+    required: true,
+    value: fields.additionalGift.DetailDescription,
+    handleInputChange: props.handleInputChange,
+    error: errors.additionalGift.DetailDescription
+  })))), _react.default.createElement("fieldset", {
     className: "fieldset__3xxg-"
   }, _react.default.createElement("div", {
     style: {
@@ -39940,7 +40034,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54785" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56094" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

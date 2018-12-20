@@ -224,6 +224,11 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
                 fields[type + "Amt-" + i] = amounts[i]
                 errors[type + "Amt-" + i] = '';
             }
+        } else if (name.includes("addGift-")) {
+            const field = name.split("-")[1]
+            console.log({field, additionalGift:fields.additionalGift})
+            fields.additionalGift[field] = value
+            errors.additionalGift[field] = error
         } else {
             errors[name] = error;     
             fields[name] = value;

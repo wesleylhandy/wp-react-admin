@@ -160,7 +160,14 @@ export function getDefaultValues(editMode, type, config) {
             errors = {
                 addProducts: '',
                 numProducts: '',
-                products: []
+                products: [],
+                additionalGift: {
+                    "display": '',
+                    "additionalGiftMessage": '',
+                    "DetailDescription": '',
+                    "DetailCprojMail": '',
+                    "DetailName":''
+                }
             }
             if (editMode) {
                 for (let i = 0; i < config.products.length; i++) {
@@ -180,7 +187,15 @@ export function getDefaultValues(editMode, type, config) {
                 fields: {
                     addProducts: editMode && config.hasOwnProperty("numProducts") ? config.numProducts > 0 : false,
                     numProducts: editMode && config.hasOwnProperty("products") ? config.products.length : 0,
-                    products: editMode && config.hasOwnProperty("products") ? [...config.products] : []
+                    products: editMode && config.hasOwnProperty("products") ? [...config.products] : [],
+                    "additionalGift": editMode && config.hasOwnProperty("additionalGift") ? {...config.additionalGift} : {
+                        "display": false,
+                        "additionalGiftMessage": "",
+                        "DetailDescription": "",
+                        "DetailCprojCredit": "",
+                        "DetailCprojMail": "",
+                        "DetailName": ""
+                    },
                 },
                 errors
             }

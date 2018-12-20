@@ -117,8 +117,8 @@ const ProductSettings = props => {
                             id={`products-${ind}-DetailDescription`} 
                             specialStyle="" 
                             label={`Product ${ind+1}: SOL Description`}
-                            maxLength={20}
-                            placeholder="i.e. Orphan's Promise Vietname, Superbook Translation, etc" 
+                            maxLength={32}
+                            placeholder="i.e. Orphan's Promise Vietnam, Superbook Translation, etc" 
                             required={true} 
                             value={fields.products[ind].DetailDescription} 
                             handleInputChange={props.handleInputChange} 
@@ -147,13 +147,88 @@ const ProductSettings = props => {
                     { renderProductInputs(fields.numProducts) }
 
                     { 
-                        fields.addProducts ? (
+                        fields.addProducts &&
                             <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                                 <div style={{maxWidth: "170px"}}>
                                     <FormButton val="Add Setting" handleClick={props.handleButtonClick} ctx={{name: "products", val: '', type: 'Add'}} />
                                 </div>
                             </div>
-                        ) : null
+                    }
+
+                    <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
+                        <Checkbox id="addGift-display" checked={fields.additionalGift.display} handleInputChange={props.handleInputChange} label="Prompt Donors for a special additional gift?"/>
+                    </div>
+
+                    {
+                        fields.additionalGift.display &&
+                            <fieldset styleName="form.fieldset__bordered">
+                                <h4>Additional Gift</h4>
+                                <div styleName="form.form-row flex.flex flex.flex-row flex.flex-wrap">         
+                                    <InputGroup
+                                        type="text"
+                                        id={`addGift-DetailName`} 
+                                        specialStyle="" 
+                                        label={`Additional Gift: Detail Name`}
+                                        maxLength={20}
+                                        placeholder="i.e. SGOrphansPromise" 
+                                        required={true} 
+                                        value={fields.additionalGift.DetailName} 
+                                        handleInputChange={props.handleInputChange} 
+                                        error={errors.additionalGift.DetailName} 
+                                    />
+                                    <TextGroup
+                                        type="text"
+                                        id={`addGift-additionalGiftMessage`} 
+                                        specialStyle="" 
+                                        label={`Message/Appeal for additional gift`}
+                                        maxLength={512}
+                                        rows={3}
+                                        placeholder="Please consider a special gift to CBN Ministries" 
+                                        required={true} 
+                                        value={fields.additionalGift.additionalGiftMessage} 
+                                        handleInputChange={props.handleInputChange} 
+                                        error={errors.additionalGift.additionalGiftMessage} 
+                                    />  
+                                </div>
+                                <div styleName="form.form-row flex.flex flex.flex-row flex.flex-wrap">
+                                    <InputGroup
+                                        type="text"
+                                        id={`addGift-DetailCprojMail`} 
+                                        specialStyle="" 
+                                        label={`Additional Gift: WhiteMail SOL`}
+                                        maxLength={6}
+                                        placeholder="i.e. 043251" 
+                                        required={true} 
+                                        value={fields.additionalGift.DetailCprojMail} 
+                                        handleInputChange={props.handleInputChange} 
+                                        error={errors.additionalGift.DetailCprojMail} 
+                                    />
+                                    <InputGroup
+                                        type="text"
+                                        id={`addGift-DetailCprojCredit`} 
+                                        specialStyle="" 
+                                        label={`Additional Gift: Credit SOL`}
+                                        maxLength={6}
+                                        placeholder="i.e. 043250" 
+                                        required={true} 
+                                        value={fields.additionalGift.DetailCprojCredit} 
+                                        handleInputChange={props.handleInputChange} 
+                                        error={errors.additionalGift.DetailCprojCredit} 
+                                    />
+                                    <InputGroup
+                                        type="text"
+                                        id={`addGift-DetailDescription`} 
+                                        specialStyle="" 
+                                        label={`Additional Gift: SOL Description`}
+                                        maxLength={32}
+                                        placeholder="i.e. Orphan's Promise Vietnam, Superbook Translation, etc" 
+                                        required={true} 
+                                        value={fields.additionalGift.DetailDescription} 
+                                        handleInputChange={props.handleInputChange} 
+                                        error={errors.additionalGift.DetailDescription} 
+                                    />
+                                </div>
+                            </fieldset>
                     }
                     
                 </fieldset>
