@@ -3,8 +3,6 @@ import React from 'react'
 import form from './styles/form.css'
 import flex from './styles/flex.css'
 
-
-
 export default function FormButton(props) {
     const handleClick = e => {
         e.preventDefault();

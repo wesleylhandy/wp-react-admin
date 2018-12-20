@@ -7,7 +7,7 @@ import FormOptionsTabs from './FormOptionsTabs'
 import Spinner from './Spinner'
 
 import main from './styles/main.css'
-import StyleOptionsTabs from './StyleOptionsTabs';
+import StyleOptionsTabs from './StyleOptionsTabs'
 
 import {getFontInfo} from './helpers/getFontInfo'
 
@@ -342,7 +342,6 @@ class App extends Component {
                                 handleStyleButtonClick={this.handleStyleButtonClick}
                                 styleSettings={state.styleSettings}
                             />
-                            
                         </React.Fragment>
                     ) : configured && !permissible ? (
                         <h1 styleName="main.not-permissible-heading">You are not Authorized to View These Settings</h1>

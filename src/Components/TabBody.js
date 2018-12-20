@@ -2,7 +2,7 @@ import React from 'react'
 
 import tabs from './styles/tabs.css'
 
-import {getDefaultValues} from './helpers/getDefaultValues'
+import { getDefaultValues } from './helpers/getDefaultValues'
 
 import ListForms from './ListForms'
 import AddForm from './AddForm'
