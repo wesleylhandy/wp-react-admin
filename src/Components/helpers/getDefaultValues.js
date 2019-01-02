@@ -187,20 +187,6 @@ export function getDefaultValues(editMode, type, config) {
                     "DetailName":''
                 }
             }
-            if (editMode) {
-                for (let i = 0; i < config.products.length; i++) {
-                    errors.products.push({
-                        productTitle: '',
-                        productMessage: '',
-                        productImgUrl: '',
-                        DetailName: '',
-                        DetailCprojMail: '',
-                        DetailCprojCredit: '',
-                        DetailDescription: '',
-                        PledgeAmt:''
-                    });
-                }
-            }
             defaultValues = {
                 fields: {
                     addProducts: editMode && config.hasOwnProperty("numProducts") ? config.numProducts > 0 : false,
@@ -217,24 +203,24 @@ export function getDefaultValues(editMode, type, config) {
                 },
                 errors
             }
+            for (let i = 0; i < defaultValues.products.length; i++) {
+                defaultValues.errors.products.push({
+                    productTitle: '',
+                    productMessage: '',
+                    productImgUrl: '',
+                    DetailName: '',
+                    DetailCprojMail: '',
+                    DetailCprojCredit: '',
+                    DetailDescription: '',
+                    PledgeAmt:''
+                });
+            }
             break;
         case "funds":
             errors = {
                 addFunds: '',
                 numFunds: '',
                 funds: []
-            }
-            if (editMode) {
-                for (let i = 0; i < config.funds.length; i++) {
-                    errors.funds.push({
-                        fundTitle: '',
-                        fundDescription: '',
-                        DetailName: '',
-                        DetailCprojMail: '',
-                        DetailCprojCredit: '',
-                        DetailDescription: ''
-                    });
-                }
             }
             defaultValues = {
                 fields: {
@@ -244,15 +230,20 @@ export function getDefaultValues(editMode, type, config) {
                 },
                 errors
             }
+            for (let i = 0; i < defaultValues.funds.length; i++) {
+                defaultValues.errors.funds.push({
+                    fundTitle: '',
+                    fundDescription: '',
+                    DetailName: '',
+                    DetailCprojMail: '',
+                    DetailCprojCredit: '',
+                    DetailDescription: ''
+                });
+            }
             break;
         case "subscriptions":
             errors = {
                 subscriptions: []
-            }
-            if (editMode) {
-                for (let i = 0; i < config.subscriptions.length; i++) {
-                    errors.subscriptions.push({key: '', value : ''});
-                }
             }
             defaultValues = {
                 fields: {
@@ -260,9 +251,10 @@ export function getDefaultValues(editMode, type, config) {
                 }, 
                 errors
             }
+            for (let i = 0; i < defaultValues.subscriptions.length; i++) {
+                defaultValues.errors.subscriptions.push({key: '', value : ''});
+            }
             break;
     }
-
     return defaultValues;
-
 }
