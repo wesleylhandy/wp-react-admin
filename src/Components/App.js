@@ -59,6 +59,7 @@ class App extends Component {
         this.setApiKey = this.setApiKey.bind(this)
         this.toggleBtnEnable = this.toggleBtnEnable.bind(this)
         this.createForm = this.createForm.bind(this)
+        this.deleteForm = this.deleteForm.bind(this)
         this.handleStyleButtonClick = this.handleStyleButtonClick.bind(this)
         this.handleStyleInputChange = this.handleStyleInputChange.bind(this)
     }
@@ -136,6 +137,18 @@ class App extends Component {
                 this.handleAPIErrors(err)
                 this.setState({btnsEnabled: true})
             }
+        }
+    }
+
+    async deleteForm(id) {
+        try {
+            const options = {...this.state.options}
+            options.method = "DELETE";
+            const {deleted, message} = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/single/${id}`, options);
+            return message;
+        } catch(err) {
+            this.handleAPIErrors(err)
+            return false;
         }
     }
 
@@ -312,6 +325,7 @@ class App extends Component {
                                 getExistingFormInfo={this.getExistingFormInfo} 
                                 setApiKey={this.setApiKey}
                                 createForm={this.createForm}
+                                deleteForm={this.deleteForm}
                                 toggleBtnEnable={this.toggleBtnEnable}
                                 user={state.user}
                             />

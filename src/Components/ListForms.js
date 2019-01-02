@@ -47,32 +47,55 @@ export default class ListForms extends Component {
         }
     }
 
-    handleButtonClick(ctx) {
-        this.setState({submitting: true}, ()=>{
-            this.props.tabFunctions.toggleBtnEnable( false )
-            if (ctx.type == "Edit" && ctx.name == "apiKey") {
+    handleButtonClick({type, name, val}) {
+        const { toggleBtnEnable, setApiKey, deleteForm, setAdminMode} = this.props.tabFunctions
+        this.setState({submitting: true}, async ()=>{
+            toggleBtnEnable( false )
+            if (type == "Edit" && name == "apiKey") {
                 this.handleEditApiKey();
-                this.setState({submitting: false}, ()=> this.props.tabFunctions.toggleBtnEnable( true ))
-            } else if (ctx.type == "Save" && ctx.name == "apiKey") {
-                const method = this.state.saveMethod
-                this.props.tabFunctions.setApiKey(e, this.state.inputValue, method).then(success=>{
+                this.setState({submitting: false}, ()=> toggleBtnEnable( true ))
+            } else if (type == "Save" && name == "apiKey") {
+                const {saveMethod, inputValue} = this.state
+                setApiKey(e, inputValue, saveMethod).then(success=>{
                     if (success) {
                         this.setState({stored: true, inputDisabled: true, allowEdit: false, submitting: false})
                     } else {
                         this.setState({error: "Unable to Save", submitting: false})
                     }
-                    this.props.tabFunctions.toggleBtnEnable( true )
+                    toggleBtnEnable( true )
                 });
                 
+            } else if (type == "Delete") {
+                try {
+                    const willDelete = await swal({
+                        title: "Are you sure?",
+                        text: 'This will remove all references to this form in the Database, are you certain you want to delete?',
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true
+                    })
+                    if (willDelete) {
+                        try {
+                            const message = await deleteForm( val )
+                            swal("Note", message, "info")
+                        } catch(err) {
+                            console.error({err})
+                        }
+                    }
+                } catch(err) {
+                    console.error({err})
+                }
+                toggleBtnEnable( true )
             } else {
-                this.props.tabFunctions.toggleBtnEnable( true )
-                this.props.tabFunctions.setAdminMode(ctx.type, ctx.val)
+                toggleBtnEnable( true )
+                setAdminMode(type, val)
             }
         })
     }
 
     async handleEditApiKey() {
-        if (this.state.inputValue && !this.state.allowEdit) {
+        const {inputValue, allowEdit} = this.state
+        if (inputValue && !allowEdit) {
             try {
                 let inputDisabled = true;
                 const willEdit = await swal({

@@ -50,6 +50,19 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
 
     // don't let users leave page without warning
     componentDidMount() {
+        const fields = {...this.state.fields}
+        let {monthlyAmounts, singleAmounts} = fields
+        if (monthlyAmounts || singleAmounts) {
+            if (monthlyAmounts.length){
+                monthlyAmounts = monthlyAmounts.sort((a, b)=> a - b)
+                fields[monthlyAmounts] = monthlyAmounts
+            } 
+            if (singleAmounts.length) {
+                singleAmounts = singleAmounts.sort((a, b)=> a - b)
+                fields[singleAmounts] = singleAmounts
+            }
+            this.setState({fields})
+        }
         window.addEventListener('beforeunload', this.handleUnload)
     }
     // remove event listeners on unmount
@@ -115,12 +128,8 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
                     //have to update array of amounts as well as add errors and fields
                     const amounts = [...fields[`${val}Amounts`]]
                     amounts.push(1)
-                    amounts.sort((a,b)=>a - b);
                     const len = amounts.length;
-                    for (let i = 0; i < len; i++) {
-                        fields[val + "Amt-" + i] = amounts[i]
-                        errors[val + "Amt-" + i] = '';
-                    }
+                    errors[val + "Amt-" + len] = '';
                     fields[`${val}Amounts`] = [...amounts]             
                     break;
                 default:
@@ -148,14 +157,8 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
             } else {
                 const amounts = [...fields[`${val.type}Amounts`]]
                 const newAmts = [...amounts.slice(0, val.ind), ...amounts.slice(val.ind + 1)]
-                newAmts.sort((a,b)=>a - b);
-                delete fields[`${val.type}Amt-${val.ind}`]
                 fields[`${val.type}Amounts`] = newAmts;
-                const len = amounts.length;
-                for (let i = 0; i < len; i++) {
-                    fields[val.type + "Amt-" + i] = newAmts[i]
-                    errors[val.type + "Amt-" + i] = '';
-                }
+                errors[`${val.type}Amt-${val.ind}`] = ''
             }
             // console.log({newList: fields[name], newErrors: errors[name]}) 
             let currentState = JSON.stringify(fields);
@@ -217,18 +220,18 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
             const ind = +(name.split("-")[1])
             const amounts = [...fields[`${type}Amounts`]]
             amounts[ind] = value;
-            amounts.sort((a,b)=>a - b);
             fields[`${type}Amounts`] = amounts;
-            const len = amounts.length;
-            for (let i = 0; i < len; i++) {
-                fields[type + "Amt-" + i] = amounts[i]
-                errors[type + "Amt-" + i] = '';
-            }
+            errors[type + "Amt-" + ind] = '';
         } else if (name.includes("addGift-")) {
             const field = name.split("-")[1]
             // console.log({field, additionalGift:fields.additionalGift})
             fields.additionalGift[field] = value
             errors.additionalGift[field] = error
+        } else if (name.includes("PledgeData")) {
+            const type = name.split("-")[0]
+            const field = name.split("-")[1]
+            fields[type][field] = value
+            errors[type][field] = ''
         } else {
             errors[name] = error;     
             fields[name] = value;

@@ -125,8 +125,18 @@ export function getDefaultValues(editMode, type, config) {
             }
             break;
         case "gifts":
+            const monthlyPledgeData = {
+               DetailCprojCredit: editMode && config.hasOwnProperty('monthlyPledgeData') ? config.monthlyPledgeData.DetailCprojCredit: '',
+               DetailCprojMail: editMode && config.hasOwnProperty('monthlyPledgeData') ? config.monthlyPledgeData.DetailCprojMail: '', 
+            }
+            const singlePledgeData = {
+                DetailCprojCredit: editMode && config.hasOwnProperty('singlePledgeData') ? config.monthlyPledgeData.DetailCprojCredit: '',
+                DetailCprojMail: editMode && config.hasOwnProperty('singlePledgeData') ? config.monthlyPledgeData.DetailCprojMail: '', 
+             }
             defaultValues = {
                 fields: {
+                    monthlyPledgeData,
+                    singlePledgeData,
                     showGivingArray: editMode && config.hasOwnProperty("showGivingArray") ? config.showGivingArray : true,
                     monthlyOption: editMode && config.hasOwnProperty("monthlyOption") ? config.monthlyOption : true,
                     singleOption: editMode && config.hasOwnProperty("singleOption") ? config.singleOption : true,
@@ -136,6 +146,14 @@ export function getDefaultValues(editMode, type, config) {
                     defaultAmount: editMode && config.hasOwnProperty("defaultAmount") ? config.defaultAmount : -1
                 }, 
                 errors: {
+                    monthlyPledgeData : {
+                        DetailCprojCredit: '',
+                        DetailCprojMail: ''
+                    },
+                    singlePledgeData : {
+                        DetailCprojCredit: '',
+                        DetailCprojMail: ''
+                    },
                     showGivingArray: '',
                     monthlyOption: '',
                     singleOption: '',
@@ -146,11 +164,11 @@ export function getDefaultValues(editMode, type, config) {
                 }
             }
             if (editMode) {
-                for (let i = 0; i < config.monthlyAmounts.length; i++) {
+                for (let i = 0; i < defaultValues.fields.monthlyAmounts.length; i++) {
                     defaultValues.fields["monthlyAmt-" + i] = config.monthlyAmounts[i]
                     defaultValues.errors["monthlyAmt-" + i] = '';
                 }
-                for (let j = 0; j < config.singleAmounts.length; j++) {
+                for (let j = 0; j < defaultValues.fields.singleAmounts.length; j++) {
                     defaultValues.fields["singleAmt-" + j] = config.singleAmounts[j]
                     defaultValues.errors["singleAmt-" + j] = '';
                 }

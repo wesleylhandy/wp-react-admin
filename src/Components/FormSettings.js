@@ -11,7 +11,6 @@ import withFormConfigHandling from './withFormConfigHandling'
 
 const FormSettings = props => {
     const {fields, errors} = props;
-    const pageLocation = window.location.origin + '/' + props.currentForm.form_name + '/';
     return (
         <React.Fragment>
             <form onSubmit={(e)=>{e.preventDefault(); props.handleButtonClick({name: "store", val: '', type: 'form_setup'})}}>
@@ -49,20 +48,23 @@ const FormSettings = props => {
                         <Checkbox id="AddContactYN" checked={fields.AddContactYN === "Y"} handleInputChange={props.handleInputChange} label="Add Contact with Transaction?"/>
                     </div>
                     {
-                        fields.AddContactYN === "Y" ? (
-                            <InputGroup
-                                type="text"
-                                id="ContactSource" 
-                                specialStyle="" 
-                                label="Contact Source" 
-                                placeholder="i.e. 700Club Donor" 
-                                maxLength="20" 
-                                required={true} 
-                                value={fields.ContactSource} 
-                                handleInputChange={props.handleInputChange} 
-                                error={errors.ContactSource} 
-                            />
-                        ) : null
+                        fields.AddContactYN === "Y" && (
+                            <React.Fragment>
+                                <InputGroup
+                                    type="text"
+                                    id="ContactSource" 
+                                    specialStyle="" 
+                                    label="Contact Source" 
+                                    placeholder={`i.e. ${ props.currentForm.form_name }`}
+                                    maxLength="20" 
+                                    required={true} 
+                                    value={fields.ContactSource} 
+                                    handleInputChange={props.handleInputChange} 
+                                    error={errors.ContactSource} 
+                                />
+                                <p styleName="form.form-info">This is generally the same as the campaign name, or <code styleName="form.form-code">{props.currentForm.form_name}</code>.</p>
+                            </React.Fragment>
+                        ) 
                     }
                     </fieldset>
                     <fieldset styleName="form.fieldset">
@@ -72,7 +74,7 @@ const FormSettings = props => {
                             id="SectionName" 
                             specialStyle="" 
                             label="Section Name" 
-                            placeholder="i.e. 700Club" 
+                            placeholder="i.e. 700Club, General, Special, etc" 
                             maxLength="20" 
                             required={true} 
                             value={fields.SectionName} 
@@ -86,7 +88,7 @@ const FormSettings = props => {
                             id="ActivityName" 
                             specialStyle="" 
                             label="Activity Name" 
-                            placeholder="i.e. 700Club_Donation_Activity" 
+                            placeholder={`i.e. ${ props.currentForm.form_name }-donation-activity`} 
                             maxLength="50" 
                             required={true} 
                             value={fields.ActivityName} 
@@ -94,6 +96,7 @@ const FormSettings = props => {
                             error={errors.ActivityName} 
                         />
                     </div>
+                    <p styleName="form.form-info">This is generally connected to the campaign name, or <code styleName="form.form-code">{props.currentForm.form_name}-donation-activity</code>.</p>
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                         <InputGroup
                             type="text"

@@ -28,25 +28,23 @@ export default function FormOptionsTabs(props) {
     return (
         <React.Fragment>
             { 
-                adminMode !== "List"  && adminMode !== "Add" ? (
+                adminMode !== "List"  && adminMode !== "Add" && (
                     <React.Fragment>
                         <div styleName="tabs.tab-headers__submenu">
                             {tabs}
                         </div>
                         { 
-                            viewMode !== "Style" && viewMode !== "Preview" ? (
+                            viewMode !== "Style" && viewMode !== "Preview" && (
                                 <TabBody currentForm={currentForm} adminMode={adminMode} displayMode={viewMode} tabFunctions={{storeConfig, toggleBtnEnable}} tabData={{formConfig, emailConfig}}/>
-                            ) : null
+                            ) 
                         }
                         {
-                            viewMode === "Preview" && currentForm.form_status !== "new" ? (
+                            viewMode === "Preview" && currentForm.form_status !== "new" && (
                                 <FormPreview currentForm={currentForm} options={options}/>
-                            ) : null
+                            ) 
                         }
                     </React.Fragment>
-                ) : (
-                    null
-                )
+                ) 
             }
         </React.Fragment>
     )
