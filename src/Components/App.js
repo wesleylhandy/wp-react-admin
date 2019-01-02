@@ -91,7 +91,7 @@ class App extends Component {
                 try {
                     const result = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/single/${id}`, this.state.options)
                     let {formConfig, cssConfig, emailConfig, form_name, form_status}  = result;
-                    formConfig = JSON.parse(formConfig), cssConfig = JSON.parse(cssConfig), emailConfig = JSON.parse(emailConfig)
+                    formConfig = JSON.parse(formConfig), cssConfig = JSON.parse(cssConfig) || {}, emailConfig = JSON.parse(emailConfig) || {}
                     // console.log({formConfig, cssConfig, emailConfig})
                     this.setState({formConfig, cssConfig, emailConfig, currentForm: {id, form_name, form_status}, adminMode, btnsEnabled: true})
                 } catch(err) {

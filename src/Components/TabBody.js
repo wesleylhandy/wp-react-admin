@@ -55,7 +55,9 @@ export default function TabBody(props) {
                 return <SubscriptionSettings currentForm={currentForm} displayMode={displayMode} tabFunctions={tabFunctions} defaultValues={defaultValues} config={tabData.formConfig}/>;
                 break;
             case "Emails":
+                // console.log({tabData})
                 defaultValues = getDefaultValues(editMode, displayMode, tabData.emailConfig)
+                // console.log({defaultValues})
                 return <EmailSettings currentForm={currentForm} displayMode={displayMode} tabFunctions={tabFunctions} defaultValues={defaultValues} config={tabData.emailConfig}/>;
                 break;
             case "Colors":

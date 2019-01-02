@@ -203,7 +203,7 @@ export function getDefaultValues(editMode, type, config) {
                 },
                 errors
             }
-            for (let i = 0; i < defaultValues.products.length; i++) {
+            for (let i = 0; i < defaultValues.fields.products.length; i++) {
                 defaultValues.errors.products.push({
                     productTitle: '',
                     productMessage: '',
@@ -230,7 +230,7 @@ export function getDefaultValues(editMode, type, config) {
                 },
                 errors
             }
-            for (let i = 0; i < defaultValues.funds.length; i++) {
+            for (let i = 0; i < defaultValues.fields.funds.length; i++) {
                 defaultValues.errors.funds.push({
                     fundTitle: '',
                     fundDescription: '',
@@ -251,7 +251,7 @@ export function getDefaultValues(editMode, type, config) {
                 }, 
                 errors
             }
-            for (let i = 0; i < defaultValues.subscriptions.length; i++) {
+            for (let i = 0; i < defaultValues.fields.subscriptions.length; i++) {
                 defaultValues.errors.subscriptions.push({key: '', value : ''});
             }
             break;

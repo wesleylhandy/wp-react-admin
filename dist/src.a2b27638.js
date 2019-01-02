@@ -36777,22 +36777,6 @@ function getDefaultValues(editMode, type, config) {
           "DetailName": ''
         }
       };
-
-      if (editMode) {
-        for (var _i = 0; _i < config.products.length; _i++) {
-          errors.products.push({
-            productTitle: '',
-            productMessage: '',
-            productImgUrl: '',
-            DetailName: '',
-            DetailCprojMail: '',
-            DetailCprojCredit: '',
-            DetailDescription: '',
-            PledgeAmt: ''
-          });
-        }
-      }
-
       defaultValues = {
         fields: {
           addProducts: editMode && config.hasOwnProperty("numProducts") ? config.numProducts > 0 : false,
@@ -36809,6 +36793,20 @@ function getDefaultValues(editMode, type, config) {
         },
         errors: errors
       };
+
+      for (var _i = 0; _i < defaultValues.fields.products.length; _i++) {
+        defaultValues.errors.products.push({
+          productTitle: '',
+          productMessage: '',
+          productImgUrl: '',
+          DetailName: '',
+          DetailCprojMail: '',
+          DetailCprojCredit: '',
+          DetailDescription: '',
+          PledgeAmt: ''
+        });
+      }
+
       break;
 
     case "funds":
@@ -36817,20 +36815,6 @@ function getDefaultValues(editMode, type, config) {
         numFunds: '',
         funds: []
       };
-
-      if (editMode) {
-        for (var _i2 = 0; _i2 < config.funds.length; _i2++) {
-          errors.funds.push({
-            fundTitle: '',
-            fundDescription: '',
-            DetailName: '',
-            DetailCprojMail: '',
-            DetailCprojCredit: '',
-            DetailDescription: ''
-          });
-        }
-      }
-
       defaultValues = {
         fields: {
           addFunds: editMode && config.hasOwnProperty("numFunds") ? config.numFunds > 0 : false,
@@ -36839,28 +36823,38 @@ function getDefaultValues(editMode, type, config) {
         },
         errors: errors
       };
+
+      for (var _i2 = 0; _i2 < defaultValues.fields.funds.length; _i2++) {
+        defaultValues.errors.funds.push({
+          fundTitle: '',
+          fundDescription: '',
+          DetailName: '',
+          DetailCprojMail: '',
+          DetailCprojCredit: '',
+          DetailDescription: ''
+        });
+      }
+
       break;
 
     case "subscriptions":
       errors = {
         subscriptions: []
       };
-
-      if (editMode) {
-        for (var _i3 = 0; _i3 < config.subscriptions.length; _i3++) {
-          errors.subscriptions.push({
-            key: '',
-            value: ''
-          });
-        }
-      }
-
       defaultValues = {
         fields: {
           subscriptions: editMode && config.hasOwnProperty("subscriptions") ? _toConsumableArray(config.subscriptions) : []
         },
         errors: errors
       };
+
+      for (var _i3 = 0; _i3 < defaultValues.fields.subscriptions.length; _i3++) {
+        defaultValues.errors.subscriptions.push({
+          key: '',
+          value: ''
+        });
+      }
+
       break;
   }
 
@@ -41047,7 +41041,9 @@ function TabBody(props) {
         break;
 
       case "Emails":
-        defaultValues = (0, _getDefaultValues.getDefaultValues)(editMode, displayMode, tabData.emailConfig);
+        // console.log({tabData})
+        defaultValues = (0, _getDefaultValues.getDefaultValues)(editMode, displayMode, tabData.emailConfig); // console.log({defaultValues})
+
         return _react.default.createElement(_EmailSettings.default, {
           currentForm: currentForm,
           displayMode: displayMode,
@@ -41956,7 +41952,7 @@ function (_Component) {
                 case 3:
                   result = _context2.sent;
                   formConfig = result.formConfig, cssConfig = result.cssConfig, emailConfig = result.emailConfig, form_name = result.form_name, form_status = result.form_status;
-                  formConfig = JSON.parse(formConfig), cssConfig = JSON.parse(cssConfig), emailConfig = JSON.parse(emailConfig); // console.log({formConfig, cssConfig, emailConfig})
+                  formConfig = JSON.parse(formConfig), cssConfig = JSON.parse(cssConfig) || {}, emailConfig = JSON.parse(emailConfig) || {}; // console.log({formConfig, cssConfig, emailConfig})
 
                   _this2.setState({
                     formConfig: formConfig,
@@ -42642,7 +42638,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59354" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52234" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
