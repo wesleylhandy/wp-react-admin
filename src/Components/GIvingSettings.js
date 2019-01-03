@@ -79,7 +79,7 @@ const GivingSettings = ({ fields, errors, handleButtonClick, handleInputChange, 
                 />
                 <InputGroup
                     type="text"
-                    id={`type-DetailDescription`} 
+                    id={`${type}-DetailDescription`} 
                     specialStyle="" 
                     label={`SOL Description`}
                     maxLength={32}
@@ -92,7 +92,7 @@ const GivingSettings = ({ fields, errors, handleButtonClick, handleInputChange, 
                 />
                 <InputGroup
                     type="text"
-                    id={`type-DetailCprojMail`} 
+                    id={`${type}-DetailCprojMail`} 
                     specialStyle="" 
                     label={`WhiteMail SOL`}
                     maxLength={6}
@@ -104,7 +104,7 @@ const GivingSettings = ({ fields, errors, handleButtonClick, handleInputChange, 
                 />
                 <InputGroup
                     type="text"
-                    id={`type-DetailCprojCredit`} 
+                    id={`${type}-DetailCprojCredit`} 
                     specialStyle="" 
                     label={`Credit SOL`}
                     maxLength={6}

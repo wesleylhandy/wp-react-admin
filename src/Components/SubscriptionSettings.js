@@ -22,7 +22,6 @@ const SubscriptionSettings = props => {
             const subTypes = [
                 { val: 'NewsletterSubs', label: 'Newsletter Subscribe'},
                 { val: 'NewsletterUnSubs', label: 'Newsletter Unsubscribe'},
-                { val: 'MarketingSubs', label: 'Marketing Subscribe'},
                 { val: 'MarketingUnSubs', label: 'Marketing Unubscribe'},
             ]
 

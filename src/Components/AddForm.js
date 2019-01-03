@@ -36,10 +36,16 @@ export default class AddForm extends Component {
                         this.props.tabFunctions.setAdminMode("Edit", id);
                     })
                 } else {
-                    this.setState({error: "Unable to Save"})
+                    this.setState({saved: false, submitting: false, error: "Make sure this is a unique form name"}, () => {
+                        this.props.tabFunctions.toggleBtnEnable( true )
+                    })
                 }
             })
-            .catch(err=>console.error(err));
+            .catch(err=>{
+                this.setState({submitting: false}, ()=> {
+                    console.error(err)
+                });
+            });
         });
     }
 
@@ -48,6 +54,7 @@ export default class AddForm extends Component {
         const target = e.target;
         let inputValue = target.type === 'checkbox' ? target.checked : target.value.trim();
         let {error} = this.state;
+        error = ''
         const updated = inputValue ? true : false
         this.setState({form_name: inputValue, error, updated})
     }

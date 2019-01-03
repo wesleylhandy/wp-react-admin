@@ -117,12 +117,12 @@ p.form-info {
 
 code.form-code {
     font-size: 14px;
-    background-color: #eee;
+    background-color: #ddd;
     padding: 1px 2px;
 }
 
 code.code-block {
-    background-color: #eee;
+    background-color: #ddd;
     border: 1px solid #999;
     display: block;
     padding: 20px;

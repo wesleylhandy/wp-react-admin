@@ -166,27 +166,27 @@ class App extends Component {
             const {completed, id} = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/single/create`, options);
             if (completed) {
                 this.setState({currentFormId: id})
+                return id
             }
-            return id;
-        } catch(err) {
-            this.handleAPIErrors(err)
+        } catch(err) {    
+            // this.handleAPIErrors(err)
             return false;
         }
     }
     /**
      * Stores form config into DB and returns true oif complete
      * @param {Number} id - DB id of form
-     * @param {String} type - form_setup, css_setup, or email_setup
+     * @param {String} type - form_setup, css_setup,email_setup, form_status
      * @param {Object} data - entire config object to be updated
-     * @param {String} form_status - status of current form
+     * @param {String} form_status - if type - form_status, set new status here
      * @returns {Boolean} true on success
      */
-    async storeConfig(id, type, data) {
+    async storeConfig(id, type, data = {}, form_status = '') {
         // console.log({type})
         try {
             const options = {...this.state.options}
             options.method = "PUT";
-            options.body = JSON.stringify({[type]: data});
+            options.body = type !== "form_status" ? JSON.stringify({[type]: data}) : JSON.stringify({form_status});
             const completed = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/single/${id}?type=${type}`, options);
             if (completed && type !== "form_status") {
                 const config = type === "css_setup" ? "cssConfig" : type === "form_setup" ? "formConfig" : "emailConfig";
@@ -194,6 +194,11 @@ class App extends Component {
                     this.setState({[config]: data})
                     return true;
                 } 
+                return true;
+            } else {
+                const currentForm = {...this.state.currentForm}
+                currentForm.form_status = form_status
+                this.setState({currentForm})
                 return true;
             }
         } catch(err) {
@@ -269,37 +274,28 @@ class App extends Component {
             styleSettings.errors = errors;
             this.setState({styleSettings}, ()=>{
                 this.toggleBtnEnable( false )
-                const currentState = JSON.stringify(fields);
-                const defaultValues = JSON.stringify(initialState);
-                if (currentState !== defaultValues) {
-                    const cssConfig = {...this.state.cssConfig, ...fields};
-                    this.storeConfig(this.state.currentForm.id, ctx.type, cssConfig, form_status)
-                    .then(success=>{
-                        console.log({success})
-                        if (success) {
-                            //update settings
-                            styleSettings.submitting = false;
-                            styleSettings.updated = false;
-                            styleSettings.saved = true;
-                            styleSettings.errors = {};
-                            styleSettings.fields = {};
-                            this.setState({styleSettings, cssConfig}, () => {
-                                this.toggleBtnEnable( true )
-                            })
-                        } else {
-                            errors['formError'] = "Unable to Save"
-                            styleSettings.submitting = false;
-                            styleSettings.saved = false;
-                            styleSettings.errors = errors;
-                            this.setState({styleSettings})
-                        }
-                    });
-                } else {
-                    styleSettings.submitting = false;
-                    this.setState({styleSettings}, () => {
-                        this.toggleBtnEnable( true )
-                    })
-                }
+                const cssConfig = {...this.state.cssConfig, ...fields};
+                this.storeConfig(this.state.currentForm.id, ctx.type, cssConfig, form_status)
+                .then(success=>{
+                    console.log({success})
+                    if (success) {
+                        //update settings
+                        styleSettings.submitting = false;
+                        styleSettings.updated = false;
+                        styleSettings.saved = true;
+                        styleSettings.errors = {};
+                        styleSettings.fields = {};
+                        this.setState({styleSettings, cssConfig}, () => {
+                            this.toggleBtnEnable( true )
+                        })
+                    } else {
+                        errors['formError'] = "Unable to Save"
+                        styleSettings.submitting = false;
+                        styleSettings.saved = false;
+                        styleSettings.errors = errors;
+                        this.setState({styleSettings})
+                    }
+                });
             });
         }
     }

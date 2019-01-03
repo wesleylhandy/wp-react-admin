@@ -37881,11 +37881,19 @@ function (_Component) {
             });
           } else {
             _this2.setState({
-              error: "Unable to Save"
+              saved: false,
+              submitting: false,
+              error: "Make sure this is a unique form name"
+            }, function () {
+              _this2.props.tabFunctions.toggleBtnEnable(true);
             });
           }
         }).catch(function (err) {
-          return console.error(err);
+          _this2.setState({
+            submitting: false
+          }, function () {
+            console.error(err);
+          });
         });
       });
     }
@@ -37895,6 +37903,7 @@ function (_Component) {
       var target = e.target;
       var inputValue = target.type === 'checkbox' ? target.checked : target.value.trim();
       var error = this.state.error;
+      error = '';
       var updated = inputValue ? true : false;
       this.setState({
         form_name: inputValue,
@@ -38609,7 +38618,14 @@ var withFormConfigHandling = function withFormConfigHandling(SettingsComponent) 
 
               var config = _extends({}, _this2.props.config, fields);
 
-              _this2.props.tabFunctions.storeConfig(_this2.state.currentForm.id, type, config).then(function (success) {
+              fields.mode = fields.form_status == "prod" ? "production" : "development";
+              var promises = [_this2.props.tabFunctions.storeConfig(_this2.state.currentForm.id, type, config, null)];
+
+              if (fields.form_status && fields.form_status != _this2.state.currentForm.form_status) {
+                promises.push(_this2.props.tabFunctions.storeConfig(_this2.state.currentForm.id, "form_status", null, fields.form_status));
+              }
+
+              Promise.all(promises).then(function (success) {
                 // console.log({success})
                 _this2.props.tabFunctions.toggleBtnEnable(true);
 
@@ -40253,9 +40269,6 @@ var SubscriptionSettings = function SubscriptionSettings(props) {
       }, {
         val: 'NewsletterUnSubs',
         label: 'Newsletter Unsubscribe'
-      }, {
-        val: 'MarketingSubs',
-        label: 'Marketing Subscribe'
       }, {
         val: 'MarketingUnSubs',
         label: 'Marketing Unubscribe'
@@ -42181,18 +42194,23 @@ function (_Component) {
                 completed = _ref7.completed;
                 id = _ref7.id;
 
-                if (completed) {
-                  this.setState({
-                    currentFormId: id
-                  });
+                if (!completed) {
+                  _context6.next = 12;
+                  break;
                 }
 
+                this.setState({
+                  currentFormId: id
+                });
                 return _context6.abrupt("return", id);
 
-              case 13:
-                _context6.prev = 13;
+              case 12:
+                _context6.next = 17;
+                break;
+
+              case 14:
+                _context6.prev = 14;
                 _context6.t0 = _context6["catch"](0);
-                this.handleAPIErrors(_context6.t0);
                 return _context6.abrupt("return", false);
 
               case 17:
@@ -42200,7 +42218,7 @@ function (_Component) {
                 return _context6.stop();
             }
           }
-        }, _callee6, this, [[0, 13]]);
+        }, _callee6, this, [[0, 14]]);
       }));
 
       return function createForm(_x2, _x3) {
@@ -42210,9 +42228,9 @@ function (_Component) {
     /**
      * Stores form config into DB and returns true oif complete
      * @param {Number} id - DB id of form
-     * @param {String} type - form_setup, css_setup, or email_setup
+     * @param {String} type - form_setup, css_setup,email_setup, form_status
      * @param {Object} data - entire config object to be updated
-     * @param {String} form_status - status of current form
+     * @param {String} form_status - if type - form_status, set new status here
      * @returns {Boolean} true on success
      */
 
@@ -42221,59 +42239,77 @@ function (_Component) {
     value: function () {
       var _storeConfig = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee7(id, type, data) {
-        var options, completed, config;
+      regeneratorRuntime.mark(function _callee7(id, type) {
+        var data,
+            form_status,
+            options,
+            completed,
+            config,
+            currentForm,
+            _args7 = arguments;
         return regeneratorRuntime.wrap(function _callee7$(_context7) {
           while (1) {
             switch (_context7.prev = _context7.next) {
               case 0:
-                _context7.prev = 0;
+                data = _args7.length > 2 && _args7[2] !== undefined ? _args7[2] : {};
+                form_status = _args7.length > 3 && _args7[3] !== undefined ? _args7[3] : '';
+                _context7.prev = 2;
                 options = _extends({}, this.state.options);
                 options.method = "PUT";
-                options.body = JSON.stringify(_defineProperty({}, type, data));
-                _context7.next = 6;
+                options.body = type !== "form_status" ? JSON.stringify(_defineProperty({}, type, data)) : JSON.stringify({
+                  form_status: form_status
+                });
+                _context7.next = 8;
                 return (0, _fetchHelpers.callApi)("".concat(this.state.base, "/wp-json/cbngiving/v1/admin/forms/single/").concat(id, "?type=").concat(type), options);
 
-              case 6:
+              case 8:
                 completed = _context7.sent;
 
                 if (!(completed && type !== "form_status")) {
-                  _context7.next = 13;
+                  _context7.next = 17;
                   break;
                 }
 
                 config = type === "css_setup" ? "cssConfig" : type === "form_setup" ? "formConfig" : "emailConfig";
 
                 if (!(type !== "css_setup")) {
-                  _context7.next = 12;
+                  _context7.next = 14;
                   break;
                 }
 
                 this.setState(_defineProperty({}, config, data));
                 return _context7.abrupt("return", true);
 
-              case 12:
+              case 14:
                 return _context7.abrupt("return", true);
 
-              case 13:
-                _context7.next = 19;
+              case 17:
+                currentForm = _extends({}, this.state.currentForm);
+                currentForm.form_status = form_status;
+                this.setState({
+                  currentForm: currentForm
+                });
+                return _context7.abrupt("return", true);
+
+              case 21:
+                _context7.next = 27;
                 break;
 
-              case 15:
-                _context7.prev = 15;
-                _context7.t0 = _context7["catch"](0);
+              case 23:
+                _context7.prev = 23;
+                _context7.t0 = _context7["catch"](2);
                 this.handleAPIErrors(_context7.t0);
                 return _context7.abrupt("return", false);
 
-              case 19:
+              case 27:
               case "end":
                 return _context7.stop();
             }
           }
-        }, _callee7, this, [[0, 15]]);
+        }, _callee7, this, [[2, 23]]);
       }));
 
-      return function storeConfig(_x4, _x5, _x6) {
+      return function storeConfig(_x4, _x5) {
         return _storeConfig.apply(this, arguments);
       };
     }()
@@ -42334,7 +42370,7 @@ function (_Component) {
         }, _callee8, this, [[0, 11]]);
       }));
 
-      return function setApiKey(_x7, _x8) {
+      return function setApiKey(_x6, _x7) {
         return _setApiKey.apply(this, arguments);
       };
     }()
@@ -42638,7 +42674,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52234" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64719" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
