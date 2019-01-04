@@ -36678,7 +36678,6 @@ function getDefaultValues(editMode, type, config) {
           ContactSource: editMode && config.hasOwnProperty("ContactSource") ? config.ContactSource : '',
           SectionName: editMode && config.hasOwnProperty("SectionName") ? config.SectionName : '',
           ActivityName: editMode && config.hasOwnProperty("ActivityName") ? config.ActivityName : '',
-          MotivationText: editMode && config.hasOwnProperty("MotivationText") ? config.MotivationText : '',
           form_status: config.form_status
         },
         errors: {
@@ -36687,7 +36686,6 @@ function getDefaultValues(editMode, type, config) {
           ContactSource: '',
           SectionName: '',
           ActivityName: '',
-          MotivationText: '',
           formError: '',
           form_status: ''
         }
@@ -38938,20 +38936,7 @@ var FormSettings = function FormSettings(props) {
     className: "form-info__3Welr"
   }, "This is generally connected to the campaign name, or ", _react.default.createElement("code", {
     className: "form-code__1MNHp"
-  }, props.currentForm.form_name, "-donation-activity"), "."), _react.default.createElement("div", {
-    className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-axes-center__gx3gz"
-  }, _react.default.createElement(_InputGroup.default, {
-    type: "text",
-    id: "MotivationText",
-    specialStyle: "",
-    label: "Motivation Code",
-    placeholder: "i.e. 002345",
-    maxLength: "25",
-    required: false,
-    value: fields.MotivationText,
-    handleInputChange: props.handleInputChange,
-    error: errors.MotivationText
-  }))), _react.default.createElement("fieldset", {
+  }, props.currentForm.form_name, "-donation-activity"), ".")), _react.default.createElement("fieldset", {
     className: "fieldset__bordered__3MgwP"
   }, _react.default.createElement("h3", null, "Toggle Form Status"), _react.default.createElement("p", {
     className: "form-info__3Welr"
@@ -42701,7 +42686,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57469" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56421" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

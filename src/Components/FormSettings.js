@@ -98,20 +98,6 @@ const FormSettings = props => {
                         />
                     </div>
                     <p styleName="form.form-info">This is generally connected to the campaign name, or <code styleName="form.form-code">{props.currentForm.form_name}-donation-activity</code>.</p>
-                    <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
-                        <InputGroup
-                            type="text"
-                            id="MotivationText" 
-                            specialStyle="" 
-                            label="Motivation Code" 
-                            placeholder="i.e. 002345" 
-                            maxLength="25" 
-                            required={false} 
-                            value={fields.MotivationText} 
-                            handleInputChange={props.handleInputChange} 
-                            error={errors.MotivationText} 
-                        />
-                    </div>
                 </fieldset>
                 <fieldset styleName="form.fieldset__bordered">
                     <h3>Toggle Form Status</h3>

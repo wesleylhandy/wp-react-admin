@@ -94,7 +94,6 @@ export function getDefaultValues(editMode, type, config) {
                     ContactSource: editMode && config.hasOwnProperty("ContactSource") ? config.ContactSource : '',
                     SectionName: editMode && config.hasOwnProperty("SectionName") ? config.SectionName : '',
                     ActivityName : editMode && config.hasOwnProperty("ActivityName") ? config.ActivityName : '',
-                    MotivationText: editMode && config.hasOwnProperty("MotivationText") ? config.MotivationText : '',
                     form_status: config.form_status
                 },
                 errors : {
@@ -103,7 +102,6 @@ export function getDefaultValues(editMode, type, config) {
                     ContactSource: '',
                     SectionName: '',
                     ActivityName: '',
-                    MotivationText: '',
                     formError: '',
                     form_status: ''
                 }
