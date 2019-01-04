@@ -54,7 +54,7 @@ const FundSettings = props => {
                             id={`funds-${ind}-DetailName`} 
                             specialStyle="" 
                             label={`Fund ${ind+1}: Detail Name`}
-                            maxLength={32}
+                            maxLength={15}
                             placeholder="i.e. Superbook, OrphansPromise, 700Club, etc" 
                             required={true} 
                             value={props.fields.funds[ind].DetailName} 
@@ -90,7 +90,7 @@ const FundSettings = props => {
                             id={`funds-${ind}-DetailDescription`} 
                             specialStyle="" 
                             label={`Fund ${ind+1}: SOL Description`}
-                            maxLength={32}
+                            maxLength={40}
                             placeholder="i.e. Orphan's Promise Vietname, Superbook Translation, etc" 
                             required={true} 
                             value={props.fields.funds[ind].DetailDescription} 
@@ -113,6 +113,7 @@ const FundSettings = props => {
             <form onSubmit={(e)=>{e.preventDefault(); props.handleButtonClick({name: "store", val: '', type: 'form_setup'})}}>
                 <h3>Configure Fund Setttings</h3>
                 <fieldset styleName="form.fieldset">
+                    <p styleName="form.form-info">Please optimise your form so that the first fund that can be selected matches the fund settings for the single or monthly giving. Also, it is best practice that the first fund be allocated to "General Giving" or to "Wherever Help Is Needed Most".</p>
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                         <Checkbox id="addFunds" checked={fields.addFunds} handleInputChange={props.handleInputChange} label="Users can Select Different Funds?"/>
                     </div>

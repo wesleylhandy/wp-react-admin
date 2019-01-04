@@ -15,6 +15,7 @@ const FormSettings = props => {
         <React.Fragment>
             <form onSubmit={(e)=>{e.preventDefault(); props.handleButtonClick({name: "store", val: '', type: 'form_setup'})}}>
                 <h3>Configure Main Setttings</h3>
+                <p styleName="form.form-info">Note: Each of these tabs load default settings on this page, but you must click SAVE on each tab to store your configuration in the database. If you do not save on each tab, your form will not function properly. Also, please configure all your settings, at least saving the default values, before changing the Form Status from New to Development/Testing.</p>
                 <fieldset styleName="form.fieldset">
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                         <InputGroup
@@ -73,7 +74,7 @@ const FormSettings = props => {
                             type="text"
                             id="SectionName" 
                             specialStyle="" 
-                            label="Section Name" 
+                            label="Giving Classification (Section Name)" 
                             placeholder="i.e. 700Club, General, Special, etc" 
                             maxLength="20" 
                             required={true} 
@@ -104,9 +105,8 @@ const FormSettings = props => {
                             specialStyle="" 
                             label="Motivation Code" 
                             placeholder="i.e. 002345" 
-                            maxLength="6" 
-                            required={true} 
-                            validation="\d{6}"
+                            maxLength="25" 
+                            required={false} 
                             value={fields.MotivationText} 
                             handleInputChange={props.handleInputChange} 
                             error={errors.MotivationText} 
@@ -115,11 +115,11 @@ const FormSettings = props => {
                 </fieldset>
                 <fieldset styleName="form.fieldset__bordered">
                     <h3>Toggle Form Status</h3>
-                    <p styleName="form.form-info">Forms in Testing Status should already have some Form, Email and Style Settings saved, so that a version of the form will render on the draft page. Please use this setting to test donations to the development version of giving services. Do not put a page in Testing status into production since no transactions will be officially recorded. Forms in Production can be edited, but it is recommended that extreme care be taken before updating a form within production. We recommend reverting the giving page to draft status while changes are made on production forms.</p>
+                    <p styleName="form.form-info">Forms in Development/Testing Status should already have at least default Form, Email and Style Settings saved, so that a version of the form will render on the draft page. Once you put into Development/Testing, you will see a new tab in the menu to "Preview" the form. This will allow you to view the form, with the options you selected plus the styles you stored. However, to test the form, create a Draft page, add the correct shortcode on that page, and test from that page. Forms in Development/Testing submit donations to the development version of giving services, meaning no transactions will be officially recorded. Forms in Production can be edited, but it is recommended that extreme care be taken before updating a form within production. We recommend reverting the giving page to draft status while changes are made on production forms.</p>
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">                  
                         <div styleName="flex.flex flex.flex-row flex.flex-between form.form-status-radio">
                             <RadioButton id="new-status" name="status-toggle" label="New" checked={fields.form_status === "new"} handleRadioClick={props.handleRadioClick} disabled={fields.form_status !== "new"}/>
-                            <RadioButton id="dev-status" name="status-toggle" label="Testing" checked={fields.form_status === "dev"} handleRadioClick={props.handleRadioClick}/>
+                            <RadioButton id="dev-status" name="status-toggle" label="Development/Testing" checked={fields.form_status === "dev"} handleRadioClick={props.handleRadioClick}/>
                             <RadioButton id="prod-status" name="status-toggle" label="Production" checked={fields.form_status === "prod"} handleRadioClick={props.handleRadioClick}/>
                         </div>
                     </div>

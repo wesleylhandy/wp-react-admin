@@ -39,6 +39,7 @@ export default function TabBody(props) {
                 return <NameSettings currentForm={currentForm} displayMode={displayMode} tabFunctions={tabFunctions} defaultValues={defaultValues} config={tabData.formConfig}/>;
                 break;
             case "Gifts":
+            console.log({tabData})
                 defaultValues = getDefaultValues(editMode, displayMode, tabData.formConfig)
                 return <GivingSettings currentForm={currentForm} displayMode={displayMode} tabFunctions={tabFunctions} defaultValues={defaultValues} config={tabData.formConfig}/>;
                 break;

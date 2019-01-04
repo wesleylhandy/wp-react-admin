@@ -91,7 +91,9 @@ class App extends Component {
                 try {
                     const result = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/single/${id}`, this.state.options)
                     let {formConfig, cssConfig, emailConfig, form_name, form_status}  = result;
-                    formConfig = JSON.parse(formConfig), cssConfig = JSON.parse(cssConfig) || {}, emailConfig = JSON.parse(emailConfig) || {}
+                    formConfig = JSON.parse(formConfig) || {}
+                    cssConfig = JSON.parse(cssConfig) || {}
+                    emailConfig = JSON.parse(emailConfig) || {}
                     // console.log({formConfig, cssConfig, emailConfig})
                     this.setState({formConfig, cssConfig, emailConfig, currentForm: {id, form_name, form_status}, adminMode, btnsEnabled: true})
                 } catch(err) {
@@ -144,8 +146,14 @@ class App extends Component {
         try {
             const options = {...this.state.options}
             options.method = "DELETE";
-            const {deleted, message} = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/single/${id}`, options);
-            return message;
+            const { deleted } = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/single/${id}`, options);
+            if (deleted) {
+                const list = [...this.state.formList]
+                const index = list.findIndex(form=> form.id == id)
+                const formList = [...list.slice(0, index), ...list.slice(index + 1)]
+                this.setState({formList}, ()=> this.toggleBtnEnable( true ))
+            }
+            return deleted
         } catch(err) {
             this.handleAPIErrors(err)
             return false;
@@ -166,8 +174,8 @@ class App extends Component {
             const {completed, id} = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/single/create`, options);
             if (completed) {
                 this.setState({currentFormId: id})
-                return id
             }
+            return id
         } catch(err) {    
             // this.handleAPIErrors(err)
             return false;

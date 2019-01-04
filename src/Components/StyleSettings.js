@@ -208,12 +208,15 @@ export default class StyleSettings extends Component {
     }
    
     render() {
-        const { fields, errors } = this.state;
+        const { fields, errors, currentForm: {form_status} } = this.state;
         let title = this.props.displayMode == "Spacing" ? "Spacing" : this.props.displayMode.slice(0, -1);
         return (
             <React.Fragment>
                 <form onSubmit={(e)=>{e.preventDefault(); this.handleButtonClick({name: "store", val: '', type: 'css_setup'})}}>
                     <h3>Configure {title} Setttings</h3>
+                    {
+                        form_status == "new" && <p styleName="form.form-info">Be sure to change and/or save these settings before changing Form Status to Development/Testing</p>
+                    }
                     <fieldset styleName="form.fieldset">
                         {this.renderInputs(fields, errors)}
                         {

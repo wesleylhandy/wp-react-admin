@@ -41,7 +41,7 @@ export default class ListForms extends Component {
         } else if (updateK) {
             return { k: props.k, inputValue: k, inputDisabled: true, allowEdit: false, saveMethod: 'PUT'}
         } else if (updateFormList) {
-            return { list: props.formList }
+            return { list: props.formList, submitting: false }
         } else {
             return {}
         }
@@ -76,8 +76,7 @@ export default class ListForms extends Component {
                     })
                     if (willDelete) {
                         try {
-                            const message = await deleteForm( val )
-                            swal("Note", message, "info")
+                            const deleted = await deleteForm( val )
                         } catch(err) {
                             console.error({err})
                         }

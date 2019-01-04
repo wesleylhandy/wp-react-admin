@@ -36678,7 +36678,7 @@ function getDefaultValues(editMode, type, config) {
           ContactSource: editMode && config.hasOwnProperty("ContactSource") ? config.ContactSource : '',
           SectionName: editMode && config.hasOwnProperty("SectionName") ? config.SectionName : '',
           ActivityName: editMode && config.hasOwnProperty("ActivityName") ? config.ActivityName : '',
-          MotivationText: editMode && config.hasOwnProperty("MotivationText") ? config.MotivationText : '042712',
+          MotivationText: editMode && config.hasOwnProperty("MotivationText") ? config.MotivationText : '',
           form_status: config.form_status
         },
         errors: {
@@ -36712,10 +36712,14 @@ function getDefaultValues(editMode, type, config) {
 
     case "gifts":
       var monthlyPledgeData = {
+        DetailName: editMode && config.hasOwnProperty('monthlyPledgeData') ? config.monthlyPledgeData.DetailName : '',
+        DetailDescription: editMode && config.hasOwnProperty('monthlyPledgeData') ? config.monthlyPledgeData.DetailDescription : '',
         DetailCprojCredit: editMode && config.hasOwnProperty('monthlyPledgeData') ? config.monthlyPledgeData.DetailCprojCredit : '',
         DetailCprojMail: editMode && config.hasOwnProperty('monthlyPledgeData') ? config.monthlyPledgeData.DetailCprojMail : ''
       };
       var singlePledgeData = {
+        DetailName: editMode && config.hasOwnProperty('singlePledgeData') ? config.monthlyPledgeData.DetailName : '',
+        DetailDescription: editMode && config.hasOwnProperty('singlePledgeData') ? config.monthlyPledgeData.DetailDescription : '',
         DetailCprojCredit: editMode && config.hasOwnProperty('singlePledgeData') ? config.monthlyPledgeData.DetailCprojCredit : '',
         DetailCprojMail: editMode && config.hasOwnProperty('singlePledgeData') ? config.monthlyPledgeData.DetailCprojMail : ''
       };
@@ -36733,10 +36737,14 @@ function getDefaultValues(editMode, type, config) {
         },
         errors: {
           monthlyPledgeData: {
+            DetailName: '',
+            DetailDescription: '',
             DetailCprojCredit: '',
             DetailCprojMail: ''
           },
           singlePledgeData: {
+            DetailName: '',
+            DetailDescription: '',
             DetailCprojCredit: '',
             DetailCprojMail: ''
           },
@@ -37251,7 +37259,7 @@ function (_Component) {
       _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee() {
-        var _this2$state, saveMethod, inputValue, willDelete, message;
+        var _this2$state, saveMethod, inputValue, willDelete, deleted;
 
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
@@ -37272,7 +37280,7 @@ function (_Component) {
                   return toggleBtnEnable(true);
                 });
 
-                _context.next = 37;
+                _context.next = 36;
                 break;
 
               case 6:
@@ -37299,12 +37307,12 @@ function (_Component) {
 
                   toggleBtnEnable(true);
                 });
-                _context.next = 37;
+                _context.next = 36;
                 break;
 
               case 11:
                 if (!(type == "Delete")) {
-                  _context.next = 35;
+                  _context.next = 34;
                   break;
                 }
 
@@ -37322,7 +37330,7 @@ function (_Component) {
                 willDelete = _context.sent;
 
                 if (!willDelete) {
-                  _context.next = 27;
+                  _context.next = 26;
                   break;
                 }
 
@@ -37331,44 +37339,43 @@ function (_Component) {
                 return deleteForm(val);
 
               case 20:
-                message = _context.sent;
-                (0, _sweetalert.default)("Note", message, "info");
-                _context.next = 27;
+                deleted = _context.sent;
+                _context.next = 26;
                 break;
 
-              case 24:
-                _context.prev = 24;
+              case 23:
+                _context.prev = 23;
                 _context.t0 = _context["catch"](17);
                 console.error({
                   err: _context.t0
                 });
 
-              case 27:
-                _context.next = 32;
+              case 26:
+                _context.next = 31;
                 break;
 
-              case 29:
-                _context.prev = 29;
+              case 28:
+                _context.prev = 28;
                 _context.t1 = _context["catch"](12);
                 console.error({
                   err: _context.t1
                 });
 
-              case 32:
+              case 31:
                 toggleBtnEnable(true);
-                _context.next = 37;
+                _context.next = 36;
                 break;
 
-              case 35:
+              case 34:
                 toggleBtnEnable(true);
                 setAdminMode(type, val);
 
-              case 37:
+              case 36:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[12, 29], [17, 24]]);
+        }, _callee, this, [[12, 28], [17, 23]]);
       })));
     }
   }, {
@@ -37605,7 +37612,8 @@ function (_Component) {
         };
       } else if (updateFormList) {
         return {
-          list: props.formList
+          list: props.formList,
+          submitting: false
         };
       } else {
         return {};
@@ -38842,7 +38850,9 @@ var FormSettings = function FormSettings(props) {
         type: 'form_setup'
       });
     }
-  }, _react.default.createElement("h3", null, "Configure Main Setttings"), _react.default.createElement("fieldset", {
+  }, _react.default.createElement("h3", null, "Configure Main Setttings"), _react.default.createElement("p", {
+    className: "form-info__3Welr"
+  }, "Note: Each of these tabs load default settings on this page, but you must click SAVE on each tab to store your configuration in the database. If you do not save on each tab, your form will not function properly. Also, please configure all your settings, at least saving the default values, before changing the Form Status from New to Development/Testing."), _react.default.createElement("fieldset", {
     className: "fieldset__3xxg-"
   }, _react.default.createElement("div", {
     className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-axes-center__gx3gz"
@@ -38904,7 +38914,7 @@ var FormSettings = function FormSettings(props) {
     type: "text",
     id: "SectionName",
     specialStyle: "",
-    label: "Section Name",
+    label: "Giving Classification (Section Name)",
     placeholder: "i.e. 700Club, General, Special, etc",
     maxLength: "20",
     required: true,
@@ -38936,9 +38946,8 @@ var FormSettings = function FormSettings(props) {
     specialStyle: "",
     label: "Motivation Code",
     placeholder: "i.e. 002345",
-    maxLength: "6",
-    required: true,
-    validation: "\\d{6}",
+    maxLength: "25",
+    required: false,
     value: fields.MotivationText,
     handleInputChange: props.handleInputChange,
     error: errors.MotivationText
@@ -38946,7 +38955,7 @@ var FormSettings = function FormSettings(props) {
     className: "fieldset__bordered__3MgwP"
   }, _react.default.createElement("h3", null, "Toggle Form Status"), _react.default.createElement("p", {
     className: "form-info__3Welr"
-  }, "Forms in Testing Status should already have some Form, Email and Style Settings saved, so that a version of the form will render on the draft page. Please use this setting to test donations to the development version of giving services. Do not put a page in Testing status into production since no transactions will be officially recorded. Forms in Production can be edited, but it is recommended that extreme care be taken before updating a form within production. We recommend reverting the giving page to draft status while changes are made on production forms."), _react.default.createElement("div", {
+  }, "Forms in Development/Testing Status should already have at least default Form, Email and Style Settings saved, so that a version of the form will render on the draft page. Once you put into Development/Testing, you will see a new tab in the menu to \"Preview\" the form. This will allow you to view the form, with the options you selected plus the styles you stored. However, to test the form, create a Draft page, add the correct shortcode on that page, and test from that page. Forms in Development/Testing submit donations to the development version of giving services, meaning no transactions will be officially recorded. Forms in Production can be edited, but it is recommended that extreme care be taken before updating a form within production. We recommend reverting the giving page to draft status while changes are made on production forms."), _react.default.createElement("div", {
     className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-axes-center__gx3gz"
   }, _react.default.createElement("div", {
     className: "flex__2SHge flex-row__M7mg4 flex-between__2MQaD form-status-radio__2wgQK"
@@ -38960,7 +38969,7 @@ var FormSettings = function FormSettings(props) {
   }), _react.default.createElement(_RadioButton.default, {
     id: "dev-status",
     name: "status-toggle",
-    label: "Testing",
+    label: "Development/Testing",
     checked: fields.form_status === "dev",
     handleRadioClick: props.handleRadioClick
   }), _react.default.createElement(_RadioButton.default, {
@@ -39389,28 +39398,26 @@ var GivingSettings = function GivingSettings(_ref) {
       id: "".concat(type, "-DetailName"),
       specialStyle: "",
       label: "Detail Name",
-      maxLength: 32,
-      placeholder: "i.e. Superbook, OrphansPromise, 700Club, etc",
+      maxLength: 15,
+      placeholder: "i.e. MP, SPGF",
       required: true,
-      value: type == "monthlyPledgeData" ? "MP" : "SPGF",
-      handleInputChange: function handleInputChange() {},
-      error: "",
-      disabled: true
+      value: fields[type].DetailName,
+      handleInputChange: handleInputChange,
+      error: errors[type].DetailName
     }), _react.default.createElement(_InputGroup.default, {
       type: "text",
-      id: "type-DetailDescription",
+      id: "".concat(type, "-DetailDescription"),
       specialStyle: "",
       label: "SOL Description",
-      maxLength: 32,
-      placeholder: "i.e. Orphan's Promise Vietname, Superbook Translation, etc",
+      maxLength: 40,
+      placeholder: "i.e. Orphan's Promise Monthly, Superbook Translation Pledge, etc",
       required: true,
-      value: type == "monthlyPledgeData" ? "Monthly Pledge" : "Single Pledge",
-      handleInputChange: function handleInputChange() {},
-      error: "",
-      disabled: true
+      value: fields[type].DetailDescription,
+      handleInputChange: handleInputChange,
+      error: errors[type].DetailDescription
     }), _react.default.createElement(_InputGroup.default, {
       type: "text",
-      id: "type-DetailCprojMail",
+      id: "".concat(type, "-DetailCprojMail"),
       specialStyle: "",
       label: "WhiteMail SOL",
       maxLength: 6,
@@ -39421,7 +39428,7 @@ var GivingSettings = function GivingSettings(_ref) {
       error: errors[type].DetailCprojMail
     }), _react.default.createElement(_InputGroup.default, {
       type: "text",
-      id: "type-DetailCprojCredit",
+      id: "".concat(type, "-DetailCprojCredit"),
       specialStyle: "",
       label: "Credit SOL",
       maxLength: 6,
@@ -39806,7 +39813,7 @@ var ProductSettings = function ProductSettings(props) {
         id: "products-".concat(ind, "-DetailName"),
         specialStyle: "",
         label: "Product ".concat(ind + 1, ": Detail Name"),
-        maxLength: 4,
+        maxLength: 15,
         placeholder: "i.e. CC01",
         required: true,
         value: fields.products[ind].DetailName,
@@ -39839,7 +39846,7 @@ var ProductSettings = function ProductSettings(props) {
         id: "products-".concat(ind, "-DetailDescription"),
         specialStyle: "",
         label: "Product ".concat(ind + 1, ": SOL Description"),
-        maxLength: 32,
+        maxLength: 40,
         placeholder: "i.e. Orphan's Promise Vietnam, Superbook Translation, etc",
         required: true,
         value: fields.products[ind].DetailDescription,
@@ -39868,7 +39875,9 @@ var ProductSettings = function ProductSettings(props) {
         type: 'form_setup'
       });
     }
-  }, _react.default.createElement("h3", null, "Configure Product Setttings"), _react.default.createElement("fieldset", {
+  }, _react.default.createElement("h3", null, "Configure Product Setttings"), _react.default.createElement("p", {
+    className: "form-info__3Welr"
+  }, "Note: Currently, monthly gifts cannot be processed together with product orders. You may need two different giving pages to handle these individual needs."), _react.default.createElement("fieldset", {
     className: "fieldset__3xxg-"
   }, _react.default.createElement("div", {
     className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-axes-center__gx3gz"
@@ -39907,7 +39916,7 @@ var ProductSettings = function ProductSettings(props) {
     id: "addGift-DetailName",
     specialStyle: "",
     label: "Additional Gift: Detail Name",
-    maxLength: 20,
+    maxLength: 15,
     placeholder: "i.e. SGOrphansPromise",
     required: true,
     value: fields.additionalGift.DetailName,
@@ -39954,7 +39963,7 @@ var ProductSettings = function ProductSettings(props) {
     id: "addGift-DetailDescription",
     specialStyle: "",
     label: "Additional Gift: SOL Description",
-    maxLength: 32,
+    maxLength: 40,
     placeholder: "i.e. Orphan's Promise Vietnam, Superbook Translation, etc",
     required: true,
     value: fields.additionalGift.DetailDescription,
@@ -40087,7 +40096,7 @@ var FundSettings = function FundSettings(props) {
         id: "funds-".concat(ind, "-DetailName"),
         specialStyle: "",
         label: "Fund ".concat(ind + 1, ": Detail Name"),
-        maxLength: 32,
+        maxLength: 15,
         placeholder: "i.e. Superbook, OrphansPromise, 700Club, etc",
         required: true,
         value: props.fields.funds[ind].DetailName,
@@ -40120,7 +40129,7 @@ var FundSettings = function FundSettings(props) {
         id: "funds-".concat(ind, "-DetailDescription"),
         specialStyle: "",
         label: "Fund ".concat(ind + 1, ": SOL Description"),
-        maxLength: 32,
+        maxLength: 40,
         placeholder: "i.e. Orphan's Promise Vietname, Superbook Translation, etc",
         required: true,
         value: props.fields.funds[ind].DetailDescription,
@@ -40151,7 +40160,9 @@ var FundSettings = function FundSettings(props) {
     }
   }, _react.default.createElement("h3", null, "Configure Fund Setttings"), _react.default.createElement("fieldset", {
     className: "fieldset__3xxg-"
-  }, _react.default.createElement("div", {
+  }, _react.default.createElement("p", {
+    className: "form-info__3Welr"
+  }, "Please optimise your form so that the first fund that can be selected matches the fund settings for the single or monthly giving. Also, it is best practice that the first fund be allocated to \"General Giving\" or to \"Wherever Help Is Needed Most\"."), _react.default.createElement("div", {
     className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-axes-center__gx3gz"
   }, _react.default.createElement(_Checkbox.default, {
     id: "addFunds",
@@ -40434,7 +40445,11 @@ var EmailSettings = function EmailSettings(props) {
         type: 'email_setup'
       });
     }
-  }, _react.default.createElement("h3", null, "Configure Email Setttings"), _react.default.createElement("fieldset", {
+  }, _react.default.createElement("h3", null, "Configure Email Setttings"), _react.default.createElement("p", {
+    className: "form-info__3Welr"
+  }, "The Server generates confirmation emails by looking at the type of donations that the user makes. Depending on the form, donors can give monthly, make single gifts or order products, or some combination thereof. Monthly gifts are prioritized over Products over Single Gifts. The server will take the values within the header and concatenate with the appropriate values afterward. This means, you can send the same email to all types by only configuring the email header. Or, you can have a single, consistent header and you can send unique emails to the various donation types. In the fields below, you can enter any valid HTML/CSS appropriate for an Email, starting with an opening ", _react.default.createElement("code", {
+    className: "form-code__1MNHp"
+  }, "<body>"), " tag."), _react.default.createElement("fieldset", {
     className: "fieldset__3xxg-"
   }, _react.default.createElement("div", {
     className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-axes-center__gx3gz"
@@ -40750,7 +40765,8 @@ function (_Component) {
 
       var _this$state = this.state,
           fields = _this$state.fields,
-          errors = _this$state.errors;
+          errors = _this$state.errors,
+          form_status = _this$state.currentForm.form_status;
       var title = this.props.displayMode == "Spacing" ? "Spacing" : this.props.displayMode.slice(0, -1);
       return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("form", {
         onSubmit: function onSubmit(e) {
@@ -40762,7 +40778,9 @@ function (_Component) {
             type: 'css_setup'
           });
         }
-      }, _react.default.createElement("h3", null, "Configure ", title, " Setttings"), _react.default.createElement("fieldset", {
+      }, _react.default.createElement("h3", null, "Configure ", title, " Setttings"), form_status == "new" && _react.default.createElement("p", {
+        className: "form-info__3Welr"
+      }, "Be sure to change and/or save these settings before changing Form Status to Development/Testing"), _react.default.createElement("fieldset", {
         className: "fieldset__3xxg-"
       }, this.renderInputs(fields, errors), this.props.displayMode === "Fonts" ? _react.default.createElement("div", {
         className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-axes-center__gx3gz"
@@ -41010,6 +41028,9 @@ function TabBody(props) {
         break;
 
       case "Gifts":
+        console.log({
+          tabData: tabData
+        });
         defaultValues = (0, _getDefaultValues.getDefaultValues)(editMode, displayMode, tabData.formConfig);
         return _react.default.createElement(_GivingSettings.default, {
           currentForm: currentForm,
@@ -41765,6 +41786,14 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
@@ -41965,7 +41994,9 @@ function (_Component) {
                 case 3:
                   result = _context2.sent;
                   formConfig = result.formConfig, cssConfig = result.cssConfig, emailConfig = result.emailConfig, form_name = result.form_name, form_status = result.form_status;
-                  formConfig = JSON.parse(formConfig), cssConfig = JSON.parse(cssConfig) || {}, emailConfig = JSON.parse(emailConfig) || {}; // console.log({formConfig, cssConfig, emailConfig})
+                  formConfig = JSON.parse(formConfig) || {};
+                  cssConfig = JSON.parse(cssConfig) || {};
+                  emailConfig = JSON.parse(emailConfig) || {}; // console.log({formConfig, cssConfig, emailConfig})
 
                   _this2.setState({
                     formConfig: formConfig,
@@ -41980,21 +42011,21 @@ function (_Component) {
                     btnsEnabled: true
                   });
 
-                  _context2.next = 12;
+                  _context2.next = 14;
                   break;
 
-                case 9:
-                  _context2.prev = 9;
+                case 11:
+                  _context2.prev = 11;
                   _context2.t0 = _context2["catch"](0);
 
                   _this2.handleAPIErrors(_context2.t0);
 
-                case 12:
+                case 14:
                 case "end":
                   return _context2.stop();
               }
             }
-          }, _callee2, this, [[0, 9]]);
+          }, _callee2, this, [[0, 11]]);
         })));
       } else {
         this.setState({
@@ -42124,7 +42155,9 @@ function (_Component) {
       var _deleteForm = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee5(id) {
-        var options, _ref6, deleted, message;
+        var _this3 = this;
+
+        var options, _ref6, deleted, list, index, formList;
 
         return regeneratorRuntime.wrap(function _callee5$(_context5) {
           while (1) {
@@ -42139,8 +42172,21 @@ function (_Component) {
               case 5:
                 _ref6 = _context5.sent;
                 deleted = _ref6.deleted;
-                message = _ref6.message;
-                return _context5.abrupt("return", message);
+
+                if (deleted) {
+                  list = _toConsumableArray(this.state.formList);
+                  index = list.findIndex(function (form) {
+                    return form.id == id;
+                  });
+                  formList = _toConsumableArray(list.slice(0, index)).concat(_toConsumableArray(list.slice(index + 1)));
+                  this.setState({
+                    formList: formList
+                  }, function () {
+                    return _this3.toggleBtnEnable(true);
+                  });
+                }
+
+                return _context5.abrupt("return", deleted);
 
               case 11:
                 _context5.prev = 11;
@@ -42194,31 +42240,25 @@ function (_Component) {
                 completed = _ref7.completed;
                 id = _ref7.id;
 
-                if (!completed) {
-                  _context6.next = 12;
-                  break;
+                if (completed) {
+                  this.setState({
+                    currentFormId: id
+                  });
                 }
 
-                this.setState({
-                  currentFormId: id
-                });
                 return _context6.abrupt("return", id);
 
-              case 12:
-                _context6.next = 17;
-                break;
-
-              case 14:
-                _context6.prev = 14;
+              case 13:
+                _context6.prev = 13;
                 _context6.t0 = _context6["catch"](0);
                 return _context6.abrupt("return", false);
 
-              case 17:
+              case 16:
               case "end":
                 return _context6.stop();
             }
           }
-        }, _callee6, this, [[0, 14]]);
+        }, _callee6, this, [[0, 13]]);
       }));
 
       return function createForm(_x2, _x3) {
@@ -42384,7 +42424,7 @@ function (_Component) {
   }, {
     key: "handleStyleInputChange",
     value: function handleStyleInputChange(fields, errors, updated) {
-      var _this3 = this;
+      var _this4 = this;
 
       var styleSettings = _extends({}, this.state.styleSettings);
 
@@ -42394,7 +42434,7 @@ function (_Component) {
       this.setState({
         styleSettings: styleSettings
       }, function () {
-        return _this3.toggleBtnEnable(updated ? false : true);
+        return _this4.toggleBtnEnable(updated ? false : true);
       });
     }
     /**
@@ -42408,7 +42448,7 @@ function (_Component) {
   }, {
     key: "handleStyleButtonClick",
     value: function handleStyleButtonClick(ctx, fields, errors, initialState, form_status) {
-      var _this4 = this;
+      var _this5 = this;
 
       var styleSettings = _extends({}, this.state.styleSettings);
 
@@ -42441,53 +42481,40 @@ function (_Component) {
         this.setState({
           styleSettings: styleSettings
         }, function () {
-          _this4.toggleBtnEnable(false);
+          _this5.toggleBtnEnable(false);
 
-          var currentState = JSON.stringify(fields);
-          var defaultValues = JSON.stringify(initialState);
+          var cssConfig = _extends({}, _this5.state.cssConfig, fields);
 
-          if (currentState !== defaultValues) {
-            var cssConfig = _extends({}, _this4.state.cssConfig, fields);
+          _this5.storeConfig(_this5.state.currentForm.id, ctx.type, cssConfig, form_status).then(function (success) {
+            console.log({
+              success: success
+            });
 
-            _this4.storeConfig(_this4.state.currentForm.id, ctx.type, cssConfig, form_status).then(function (success) {
-              console.log({
-                success: success
+            if (success) {
+              //update settings
+              styleSettings.submitting = false;
+              styleSettings.updated = false;
+              styleSettings.saved = true;
+              styleSettings.errors = {};
+              styleSettings.fields = {};
+
+              _this5.setState({
+                styleSettings: styleSettings,
+                cssConfig: cssConfig
+              }, function () {
+                _this5.toggleBtnEnable(true);
               });
+            } else {
+              errors['formError'] = "Unable to Save";
+              styleSettings.submitting = false;
+              styleSettings.saved = false;
+              styleSettings.errors = errors;
 
-              if (success) {
-                //update settings
-                styleSettings.submitting = false;
-                styleSettings.updated = false;
-                styleSettings.saved = true;
-                styleSettings.errors = {};
-                styleSettings.fields = {};
-
-                _this4.setState({
-                  styleSettings: styleSettings,
-                  cssConfig: cssConfig
-                }, function () {
-                  _this4.toggleBtnEnable(true);
-                });
-              } else {
-                errors['formError'] = "Unable to Save";
-                styleSettings.submitting = false;
-                styleSettings.saved = false;
-                styleSettings.errors = errors;
-
-                _this4.setState({
-                  styleSettings: styleSettings
-                });
-              }
-            });
-          } else {
-            styleSettings.submitting = false;
-
-            _this4.setState({
-              styleSettings: styleSettings
-            }, function () {
-              _this4.toggleBtnEnable(true);
-            });
-          }
+              _this5.setState({
+                styleSettings: styleSettings
+              });
+            }
+          });
         });
       }
     }
@@ -42674,7 +42701,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64719" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57469" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

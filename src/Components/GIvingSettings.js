@@ -69,26 +69,24 @@ const GivingSettings = ({ fields, errors, handleButtonClick, handleInputChange, 
                     id={`${type}-DetailName`} 
                     specialStyle="" 
                     label={`Detail Name`}
-                    maxLength={32}
-                    placeholder="i.e. Superbook, OrphansPromise, 700Club, etc" 
+                    maxLength={15}
+                    placeholder="i.e. MP, SPGF" 
                     required={true} 
-                    value={type == "monthlyPledgeData" ? "MP" : "SPGF"}
-                    handleInputChange={()=>{}} 
-                    error=""
-                    disabled={true}
+                    value={fields[type].DetailName}
+                    handleInputChange={handleInputChange} 
+                    error={errors[type].DetailName}
                 />
                 <InputGroup
                     type="text"
                     id={`${type}-DetailDescription`} 
                     specialStyle="" 
                     label={`SOL Description`}
-                    maxLength={32}
-                    placeholder="i.e. Orphan's Promise Vietname, Superbook Translation, etc" 
+                    maxLength={40}
+                    placeholder="i.e. Orphan's Promise Monthly, Superbook Translation Pledge, etc" 
                     required={true} 
-                    value={type == "monthlyPledgeData" ? "Monthly Pledge" : "Single Pledge"}
-                    handleInputChange={()=>{}} 
-                    error=""
-                    disabled={true}
+                    value={fields[type].DetailDescription}
+                    handleInputChange={handleInputChange}
+                    error={errors[type].DetailDescription}
                 />
                 <InputGroup
                     type="text"

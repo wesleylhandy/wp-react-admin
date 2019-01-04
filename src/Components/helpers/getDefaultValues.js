@@ -94,7 +94,7 @@ export function getDefaultValues(editMode, type, config) {
                     ContactSource: editMode && config.hasOwnProperty("ContactSource") ? config.ContactSource : '',
                     SectionName: editMode && config.hasOwnProperty("SectionName") ? config.SectionName : '',
                     ActivityName : editMode && config.hasOwnProperty("ActivityName") ? config.ActivityName : '',
-                    MotivationText: editMode && config.hasOwnProperty("MotivationText") ? config.MotivationText : '042712',
+                    MotivationText: editMode && config.hasOwnProperty("MotivationText") ? config.MotivationText : '',
                     form_status: config.form_status
                 },
                 errors : {
@@ -126,10 +126,14 @@ export function getDefaultValues(editMode, type, config) {
             break;
         case "gifts":
             const monthlyPledgeData = {
-               DetailCprojCredit: editMode && config.hasOwnProperty('monthlyPledgeData') ? config.monthlyPledgeData.DetailCprojCredit: '',
-               DetailCprojMail: editMode && config.hasOwnProperty('monthlyPledgeData') ? config.monthlyPledgeData.DetailCprojMail: '', 
+                DetailName: editMode && config.hasOwnProperty('monthlyPledgeData') ? config.monthlyPledgeData.DetailName: '',
+                DetailDescription: editMode && config.hasOwnProperty('monthlyPledgeData') ? config.monthlyPledgeData.DetailDescription: '',
+                DetailCprojCredit: editMode && config.hasOwnProperty('monthlyPledgeData') ? config.monthlyPledgeData.DetailCprojCredit: '',
+                DetailCprojMail: editMode && config.hasOwnProperty('monthlyPledgeData') ? config.monthlyPledgeData.DetailCprojMail: '', 
             }
             const singlePledgeData = {
+                DetailName: editMode && config.hasOwnProperty('singlePledgeData') ? config.monthlyPledgeData.DetailName: '',
+                DetailDescription:editMode && config.hasOwnProperty('singlePledgeData') ? config.monthlyPledgeData.DetailDescription: '',
                 DetailCprojCredit: editMode && config.hasOwnProperty('singlePledgeData') ? config.monthlyPledgeData.DetailCprojCredit: '',
                 DetailCprojMail: editMode && config.hasOwnProperty('singlePledgeData') ? config.monthlyPledgeData.DetailCprojMail: '', 
              }
@@ -147,10 +151,14 @@ export function getDefaultValues(editMode, type, config) {
                 }, 
                 errors: {
                     monthlyPledgeData : {
+                        DetailName: '',
+                        DetailDescription: '',
                         DetailCprojCredit: '',
                         DetailCprojMail: ''
                     },
                     singlePledgeData : {
+                        DetailName: '',
+                        DetailDescription: '',
                         DetailCprojCredit: '',
                         DetailCprojMail: ''
                     },

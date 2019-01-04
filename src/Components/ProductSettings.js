@@ -81,7 +81,7 @@ const ProductSettings = props => {
                             id={`products-${ind}-DetailName`} 
                             specialStyle="" 
                             label={`Product ${ind+1}: Detail Name`}
-                            maxLength={4}
+                            maxLength={15}
                             placeholder="i.e. CC01" 
                             required={true} 
                             value={fields.products[ind].DetailName} 
@@ -117,7 +117,7 @@ const ProductSettings = props => {
                             id={`products-${ind}-DetailDescription`} 
                             specialStyle="" 
                             label={`Product ${ind+1}: SOL Description`}
-                            maxLength={32}
+                            maxLength={40}
                             placeholder="i.e. Orphan's Promise Vietnam, Superbook Translation, etc" 
                             required={true} 
                             value={fields.products[ind].DetailDescription} 
@@ -139,6 +139,7 @@ const ProductSettings = props => {
         <React.Fragment>
             <form onSubmit={(e)=>{e.preventDefault(); props.handleButtonClick({name: "store", val: '', type: 'form_setup'})}}>
                 <h3>Configure Product Setttings</h3>
+                <p styleName="form.form-info">Note: Currently, monthly gifts cannot be processed together with product orders. You may need two different giving pages to handle these individual needs.</p>
                 <fieldset styleName="form.fieldset">
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                         <Checkbox id="addProducts" checked={fields.addProducts} handleInputChange={props.handleInputChange} label="Users can Select Product(s)?"/>
@@ -169,7 +170,7 @@ const ProductSettings = props => {
                                         id={`addGift-DetailName`} 
                                         specialStyle="" 
                                         label={`Additional Gift: Detail Name`}
-                                        maxLength={20}
+                                        maxLength={15}
                                         placeholder="i.e. SGOrphansPromise" 
                                         required={true} 
                                         value={fields.additionalGift.DetailName} 
@@ -220,7 +221,7 @@ const ProductSettings = props => {
                                         id={`addGift-DetailDescription`} 
                                         specialStyle="" 
                                         label={`Additional Gift: SOL Description`}
-                                        maxLength={32}
+                                        maxLength={40}
                                         placeholder="i.e. Orphan's Promise Vietnam, Superbook Translation, etc" 
                                         required={true} 
                                         value={fields.additionalGift.DetailDescription} 
