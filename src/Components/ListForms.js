@@ -14,13 +14,13 @@ export default class ListForms extends Component {
         this.keyField = React.createRef();
         this.state = {
             submitting: false,
-            k: props.k,
+            k: props.k || '',
             base: props.base,
             list: [...props.formList],
-            inputValue: props.k,
-            inputDisabled: props.k != '' ? false : true,
+            inputValue: props.k || '',
+            inputDisabled: props.k ? true : false,
             error: '',
-            allowEdit: props.k != '' ? false : true,
+            allowEdit: props.k ? false : true,
             saveMethod: 'POST',
             stored: false
         }
@@ -34,12 +34,14 @@ export default class ListForms extends Component {
     }
 
     static getDerivedStateFromProps(props, state) {
-        const updateK = state.k !== props.k
+        let {k} = props;
+        k = k ? k : '';
+        const updateK = state.k !== k
         const updateFormList = JSON.stringify(props.formList) !== JSON.stringify(state.list)
         if (updateK && updateFormList) {
-            return { k: props.k, inputValue: props.k , list: [...props.formList], inputDisabled: true, allowEdit: false, saveMethod: 'PUT' }
+            return { k , inputValue: k , list: [...props.formList], inputDisabled: true, allowEdit: false, saveMethod: 'PUT' }
         } else if (updateK) {
-            return { k: props.k, inputValue: k, inputDisabled: true, allowEdit: false, saveMethod: 'PUT'}
+            return { k, inputValue: k, inputDisabled: true, allowEdit: false, saveMethod: 'PUT'}
         } else if (updateFormList) {
             return { list: props.formList, submitting: false }
         } else {
@@ -56,7 +58,7 @@ export default class ListForms extends Component {
                 this.setState({submitting: false}, ()=> toggleBtnEnable( true ))
             } else if (type == "Save" && name == "apiKey") {
                 const {saveMethod, inputValue} = this.state
-                setApiKey(e, inputValue, saveMethod).then(success=>{
+                setApiKey(inputValue, saveMethod).then(success=>{
                     if (success) {
                         this.setState({stored: true, inputDisabled: true, allowEdit: false, submitting: false})
                     } else {

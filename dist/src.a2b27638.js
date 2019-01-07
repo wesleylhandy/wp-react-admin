@@ -37216,13 +37216,13 @@ function (_Component) {
     _this.keyField = _react.default.createRef();
     _this.state = {
       submitting: false,
-      k: props.k,
+      k: props.k || '',
       base: props.base,
       list: _toConsumableArray(props.formList),
-      inputValue: props.k,
-      inputDisabled: props.k != '' ? false : true,
+      inputValue: props.k || '',
+      inputDisabled: props.k ? true : false,
       error: '',
-      allowEdit: props.k != '' ? false : true,
+      allowEdit: props.k ? false : true,
       saveMethod: 'POST',
       stored: false
     };
@@ -37288,7 +37288,7 @@ function (_Component) {
                 }
 
                 _this2$state = _this2.state, saveMethod = _this2$state.saveMethod, inputValue = _this2$state.inputValue;
-                setApiKey(e, inputValue, saveMethod).then(function (success) {
+                setApiKey(inputValue, saveMethod).then(function (success) {
                   if (success) {
                     _this2.setState({
                       stored: true,
@@ -37588,13 +37588,15 @@ function (_Component) {
   }], [{
     key: "getDerivedStateFromProps",
     value: function getDerivedStateFromProps(props, state) {
-      var updateK = state.k !== props.k;
+      var k = props.k;
+      k = k ? k : '';
+      var updateK = state.k !== k;
       var updateFormList = JSON.stringify(props.formList) !== JSON.stringify(state.list);
 
       if (updateK && updateFormList) {
         return {
-          k: props.k,
-          inputValue: props.k,
+          k: k,
+          inputValue: k,
           list: _toConsumableArray(props.formList),
           inputDisabled: true,
           allowEdit: false,
@@ -37602,7 +37604,7 @@ function (_Component) {
         };
       } else if (updateK) {
         return {
-          k: props.k,
+          k: k,
           inputValue: k,
           inputDisabled: true,
           allowEdit: false,
@@ -42679,7 +42681,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57597" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49331" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
