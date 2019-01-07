@@ -132,8 +132,8 @@ class App extends Component {
         
         async function callback () {
             try {
-                const [k, list] = await Promise.all([callApi(`${this.props.base}cbngiving/v1/admin/forms/api`, this.state.options), callApi(`${this.props.base}cbngiving/v1/admin/forms/list/all`, this.state.options)])
-                this.setState({k: k.key, formList: list, btnsEnabled: true})
+                const [{key}, list] = await Promise.all([callApi(`${this.props.base}cbngiving/v1/admin/forms/api`, this.state.options), callApi(`${this.props.base}cbngiving/v1/admin/forms/list/all`, this.state.options)])
+                this.setState({k: key, formList: list, btnsEnabled: true})
             } catch (err) {
                 this.handleAPIErrors(err)
                 this.setState({btnsEnabled: true})
