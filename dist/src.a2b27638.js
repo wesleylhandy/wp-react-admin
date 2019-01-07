@@ -41833,7 +41833,6 @@ function (_Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(App).call(this, props));
     _this.state = {
-      base: props.mode == 'local' ? 'http://givingwp.dmgdev.cbn.local' : '',
       btnsEnabled: false,
       configured: false,
       permissible: false,
@@ -41895,7 +41894,7 @@ function (_Component) {
               case 0:
                 _context.prev = 0;
                 _context.next = 3;
-                return (0, _fetchHelpers.callApi)("".concat(this.state.base, "/wp-json/wp/v2/users/me?context=edit"), this.state.options);
+                return (0, _fetchHelpers.callApi)("".concat(this.props.base, "wp/v2/users/me?context=edit"), this.state.options);
 
               case 3:
                 profile = _context.sent;
@@ -41974,7 +41973,7 @@ function (_Component) {
                 case 0:
                   _context2.prev = 0;
                   _context2.next = 3;
-                  return (0, _fetchHelpers.callApi)("".concat(_this2.state.base, "/wp-json/cbngiving/v1/admin/forms/single/").concat(id), _this2.state.options);
+                  return (0, _fetchHelpers.callApi)("".concat(_this2.props.base, "cbngiving/v1/admin/forms/single/").concat(id), _this2.state.options);
 
                 case 3:
                   result = _context2.sent;
@@ -42081,7 +42080,7 @@ function (_Component) {
                           case 0:
                             _context3.prev = 0;
                             _context3.next = 3;
-                            return Promise.all([(0, _fetchHelpers.callApi)("".concat(this.state.base, "/wp-json/cbngiving/v1/admin/forms/api"), this.state.options), (0, _fetchHelpers.callApi)("".concat(this.state.base, "/wp-json/cbngiving/v1/admin/forms/list/all"), this.state.options)]);
+                            return Promise.all([(0, _fetchHelpers.callApi)("".concat(this.props.base, "cbngiving/v1/admin/forms/api"), this.state.options), (0, _fetchHelpers.callApi)("".concat(this.props.base, "cbngiving/v1/admin/forms/list/all"), this.state.options)]);
 
                           case 3:
                             _ref2 = _context3.sent;
@@ -42152,7 +42151,7 @@ function (_Component) {
                 options = _extends({}, this.state.options);
                 options.method = "DELETE";
                 _context5.next = 5;
-                return (0, _fetchHelpers.callApi)("".concat(this.state.base, "/wp-json/cbngiving/v1/admin/forms/single/").concat(id), options);
+                return (0, _fetchHelpers.callApi)("".concat(this.props.base, "cbngiving/v1/admin/forms/single/").concat(id), options);
 
               case 5:
                 _ref6 = _context5.sent;
@@ -42218,7 +42217,7 @@ function (_Component) {
                   created_by: created_by
                 });
                 _context6.next = 6;
-                return (0, _fetchHelpers.callApi)("".concat(this.state.base, "/wp-json/cbngiving/v1/admin/forms/single/create"), options);
+                return (0, _fetchHelpers.callApi)("".concat(this.props.base, "cbngiving/v1/admin/forms/single/create"), options);
 
               case 6:
                 _ref7 = _context6.sent;
@@ -42285,7 +42284,7 @@ function (_Component) {
                   form_status: form_status
                 });
                 _context7.next = 8;
-                return (0, _fetchHelpers.callApi)("".concat(this.state.base, "/wp-json/cbngiving/v1/admin/forms/single/").concat(id, "?type=").concat(type), options);
+                return (0, _fetchHelpers.callApi)("".concat(this.props.base, "cbngiving/v1/admin/forms/single/").concat(id, "?type=").concat(type), options);
 
               case 8:
                 completed = _context7.sent;
@@ -42356,7 +42355,7 @@ function (_Component) {
                   api_key: key
                 });
                 _context8.next = 6;
-                return (0, _fetchHelpers.callApi)("".concat(this.state.base, "/wp-json/cbngiving/v1/admin/forms/api"), options);
+                return (0, _fetchHelpers.callApi)("".concat(this.props.base, "cbngiving/v1/admin/forms/api"), options);
 
               case 6:
                 completed = _context8.sent;
@@ -42598,7 +42597,6 @@ exports.default = _default2;
 
 ;
 },{"react-hot-loader":"node_modules/react-hot-loader/index.js","react":"node_modules/react/index.js","./helpers/fetch-helpers":"src/Components/helpers/fetch-helpers.js","./Metatabs.js":"src/Components/Metatabs.js","./FormOptionsTabs":"src/Components/FormOptionsTabs.js","./Spinner":"src/Components/Spinner.js","./styles/main.css":"src/Components/styles/main.css","./StyleOptionsTabs":"src/Components/StyleOptionsTabs.js","./helpers/getFontInfo":"src/Components/helpers/getFontInfo.js"}],"src/index.js":[function(require,module,exports) {
-var process = require("process");
 "use strict";
 
 require("babel-polyfill");
@@ -42629,17 +42627,12 @@ if (!window.Promise) {
   window.Promise = _promisePolyfill.default;
 }
 
-var mode;
-
-if (process) {
-  mode = 'local';
-}
-
 var rootEntry = document.getElementById('admin-root');
 var wpnonce = rootEntry.dataset.nonce;
+var base = rootEntry.dataset.rest;
 ReactDOM.render(_react.default.createElement(_App.default, {
   wpnonce: wpnonce,
-  mode: mode
+  base: base
 }), rootEntry);
 ;
 
@@ -42652,14 +42645,14 @@ ReactDOM.render(_react.default.createElement(_App.default, {
     return;
   }
 
-  reactHotLoader.register(mode, "mode", "/Users/wehand/Code/cbngiving-wp-admin-react/src/index.js");
   reactHotLoader.register(rootEntry, "rootEntry", "/Users/wehand/Code/cbngiving-wp-admin-react/src/index.js");
   reactHotLoader.register(wpnonce, "wpnonce", "/Users/wehand/Code/cbngiving-wp-admin-react/src/index.js");
+  reactHotLoader.register(base, "base", "/Users/wehand/Code/cbngiving-wp-admin-react/src/index.js");
   leaveModule(module);
 })();
 
 ;
-},{"react-hot-loader":"node_modules/react-hot-loader/index.js","babel-polyfill":"node_modules/babel-polyfill/lib/index.js","promise-polyfill":"node_modules/promise-polyfill/src/index.js","raf/polyfill":"node_modules/raf/polyfill.js","whatwg-fetch":"node_modules/whatwg-fetch/fetch.js","react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js","./Components/App":"src/Components/App.js","process":"../../../../usr/local/lib/node_modules/parcel-bundler/node_modules/process/browser.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"react-hot-loader":"node_modules/react-hot-loader/index.js","babel-polyfill":"node_modules/babel-polyfill/lib/index.js","promise-polyfill":"node_modules/promise-polyfill/src/index.js","raf/polyfill":"node_modules/raf/polyfill.js","whatwg-fetch":"node_modules/whatwg-fetch/fetch.js","react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js","./Components/App":"src/Components/App.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -42686,7 +42679,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56421" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58879" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

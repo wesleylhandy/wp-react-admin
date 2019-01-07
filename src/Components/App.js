@@ -16,7 +16,6 @@ class App extends Component {
         super(props)
 
         this.state = {
-            base: (props.mode == 'local' ? 'http://givingwp.dmgdev.cbn.local' : ''),
             btnsEnabled: false,
             configured: false,
             permissible: false,
@@ -66,7 +65,7 @@ class App extends Component {
 
     async componentDidMount(){
         try {
-            const profile = await callApi(`${this.state.base}/wp-json/wp/v2/users/me?context=edit`, this.state.options)
+            const profile = await callApi(`${this.props.base}wp/v2/users/me?context=edit`, this.state.options)
             const primaryRole = profile.roles && profile.roles.length ? profile.roles[0] : '';
             const isAdmin = primaryRole.toLowerCase() === "administrator"
             const user = {id: profile.id, username: profile.username, email: profile.email}
@@ -89,7 +88,7 @@ class App extends Component {
         if (adminMode === "Edit") {
             this.setState({btnsEnabled: false}, async ()=> {
                 try {
-                    const result = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/single/${id}`, this.state.options)
+                    const result = await callApi(`${this.props.base}cbngiving/v1/admin/forms/single/${id}`, this.state.options)
                     let {formConfig, cssConfig, emailConfig, form_name, form_status}  = result;
                     formConfig = JSON.parse(formConfig) || {}
                     cssConfig = JSON.parse(cssConfig) || {}
@@ -133,7 +132,7 @@ class App extends Component {
         
         async function callback () {
             try {
-                const [k, list] = await Promise.all([callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/api`, this.state.options), callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/list/all`, this.state.options)])
+                const [k, list] = await Promise.all([callApi(`${this.props.base}cbngiving/v1/admin/forms/api`, this.state.options), callApi(`${this.props.base}cbngiving/v1/admin/forms/list/all`, this.state.options)])
                 this.setState({k: k.key, formList: list, btnsEnabled: true})
             } catch (err) {
                 this.handleAPIErrors(err)
@@ -146,7 +145,7 @@ class App extends Component {
         try {
             const options = {...this.state.options}
             options.method = "DELETE";
-            const { deleted } = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/single/${id}`, options);
+            const { deleted } = await callApi(`${this.props.base}cbngiving/v1/admin/forms/single/${id}`, options);
             if (deleted) {
                 const list = [...this.state.formList]
                 const index = list.findIndex(form=> form.id == id)
@@ -171,7 +170,7 @@ class App extends Component {
             const options = {...this.state.options}
             options.method = "POST";
             options.body = JSON.stringify({form_name, created_by});
-            const {completed, id} = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/single/create`, options);
+            const {completed, id} = await callApi(`${this.props.base}cbngiving/v1/admin/forms/single/create`, options);
             if (completed) {
                 this.setState({currentFormId: id})
             }
@@ -195,7 +194,7 @@ class App extends Component {
             const options = {...this.state.options}
             options.method = "PUT";
             options.body = type !== "form_status" ? JSON.stringify({[type]: data}) : JSON.stringify({form_status});
-            const completed = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/single/${id}?type=${type}`, options);
+            const completed = await callApi(`${this.props.base}cbngiving/v1/admin/forms/single/${id}?type=${type}`, options);
             if (completed && type !== "form_status") {
                 const config = type === "css_setup" ? "cssConfig" : type === "form_setup" ? "formConfig" : "emailConfig";
                 if (type !== "css_setup") {
@@ -220,7 +219,7 @@ class App extends Component {
             const options = {...this.state}
             options.method = method;
             options.body = JSON.stringify({api_key: key})
-            const completed = await callApi(`${this.state.base}/wp-json/cbngiving/v1/admin/forms/api`, options);
+            const completed = await callApi(`${this.props.base}cbngiving/v1/admin/forms/api`, options);
             if (completed) {
                 this.setState({k: key})
             }

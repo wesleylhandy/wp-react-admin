@@ -12,12 +12,8 @@ if (!window.Promise) {
     window.Promise = Promise;
 }
 
-let mode;
-if (process) {
-    mode = 'local';
-}
-
 const rootEntry = document.getElementById('admin-root')
 const wpnonce = rootEntry.dataset.nonce;
+const base = rootEntry.dataset.rest
 
-ReactDOM.render( <App wpnonce={wpnonce} mode={mode}/>, rootEntry);
+ReactDOM.render( <App wpnonce={wpnonce} base={base}/>, rootEntry);
