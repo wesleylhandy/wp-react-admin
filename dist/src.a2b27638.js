@@ -42350,18 +42350,24 @@ function (_Component) {
           while (1) {
             switch (_context8.prev = _context8.next) {
               case 0:
-                _context8.prev = 0;
-                options = _extends({}, this.state);
+                console.log({
+                  key: key,
+                  method: method
+                });
+                _context8.prev = 1;
+                options = _extends({}, this.state.options);
                 options.method = method;
                 options.body = JSON.stringify({
                   api_key: key
-                });
-                _context8.next = 6;
+                }); // console.log({options: JSON.stringify(options, null, 5)})
+
+                _context8.next = 7;
                 return (0, _fetchHelpers.callApi)("".concat(this.props.base, "cbngiving/v1/admin/forms/api"), options);
 
-              case 6:
+              case 7:
                 completed = _context8.sent;
 
+                // console.log({completed})
                 if (completed) {
                   this.setState({
                     k: key
@@ -42370,12 +42376,12 @@ function (_Component) {
 
                 return _context8.abrupt("return", true);
 
-              case 11:
-                _context8.prev = 11;
-                _context8.t0 = _context8["catch"](0);
+              case 12:
+                _context8.prev = 12;
+                _context8.t0 = _context8["catch"](1);
 
                 if (!_context8.t0.message.includes("Duplicate value.")) {
-                  _context8.next = 18;
+                  _context8.next = 19;
                   break;
                 }
 
@@ -42384,16 +42390,16 @@ function (_Component) {
                 });
                 return _context8.abrupt("return", true);
 
-              case 18:
+              case 19:
                 this.handleAPIErrors(_context8.t0);
                 return _context8.abrupt("return", false);
 
-              case 20:
+              case 21:
               case "end":
                 return _context8.stop();
             }
           }
-        }, _callee8, this, [[0, 11]]);
+        }, _callee8, this, [[1, 12]]);
       }));
 
       return function setApiKey(_x6, _x7) {
@@ -42681,7 +42687,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49331" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54211" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

@@ -215,11 +215,14 @@ class App extends Component {
     }
 
     async setApiKey(key, method) {
+        console.log({key, method})
         try {
-            const options = {...this.state}
+            const options = {...this.state.options}
             options.method = method;
             options.body = JSON.stringify({api_key: key})
+            // console.log({options: JSON.stringify(options, null, 5)})
             const completed = await callApi(`${this.props.base}cbngiving/v1/admin/forms/api`, options);
+            // console.log({completed})
             if (completed) {
                 this.setState({k: key})
             }
