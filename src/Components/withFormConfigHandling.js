@@ -176,7 +176,9 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
                     fields.singleAmounts = singleKeys.map(k=>fields[k])
                 }
                 const config = {...this.props.config, ...fields};
-                fields.mode = fields.form_status == "prod" ? "production" : "development"
+                if (this.props.displayMode.toLowerCase() == "settings") {
+                    config.mode = fields.form_status == "prod" ? "production" : "development"
+                }
                 const promises = [this.props.tabFunctions.storeConfig(this.state.currentForm.id, type, config, null)]
                 if (fields.form_status && (fields.form_status != this.state.currentForm.form_status)) {
                     promises.push(this.props.tabFunctions.storeConfig(this.state.currentForm.id, "form_status", null, fields.form_status))
