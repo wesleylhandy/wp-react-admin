@@ -60,7 +60,7 @@ export function getDefaultValues(editMode, type, config) {
             break;
         case "spacing":
             defaultValues = {
-                "--button-border-radius": editMode && config.hasOwnProperty("--button-border-radius") ? config["--button-border-radius"]: "0",
+                "--btn-border-radius": editMode && config.hasOwnProperty("--btn-border-radius") ? config["--btn-border-radius"]: "0",
                 "--input-border-radius": editMode && config.hasOwnProperty("--input-border-radius") ? config["--input-border-radius"]: "0",
                 "--form-border-radius": editMode && config.hasOwnProperty("--form-border-radius") ? config["--form-border-radius"]: "20px",
                 "--form-border-width": editMode && config.hasOwnProperty("--form-border-width") ? config["--form-border-width"]: '2px',
