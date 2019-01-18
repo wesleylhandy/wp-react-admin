@@ -38,7 +38,7 @@ const SubscriptionSettings = props => {
                             id={`subscriptions-${ind}-key`} 
                             specialStyle=""
                             required={true}
-                            value={fields.subscriptions[ind]["key"]}
+                            value={fields.subscriptions[ind]["key"] || subTypes[0].val}
                             error={errors.subscriptions[ind]["key"]}
                             handleInputChange={props.handleInputChange}
                             options={options}

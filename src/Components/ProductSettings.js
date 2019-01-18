@@ -10,9 +10,7 @@ import InputGroup from './InputGroup'
 import TextGroup from './TextGroup'
 import withFormConfigHandling from './withFormConfigHandling'
 
-const ProductSettings = props => {
-
-    const { fields, errors } = props;
+const ProductSettings = ({fields, errors, handleInputChange, handleButtonClick, saved, updated, submitting}) => {
 
     const renderProductInputs = num => {
 
@@ -32,7 +30,7 @@ const ProductSettings = props => {
                             placeholder="i.e. To Life DVD" 
                             required={true} 
                             value={fields.products[ind].productTitle} 
-                            handleInputChange={props.handleInputChange} 
+                            handleInputChange={handleInputChange} 
                             error={errors.products[ind].productTitle} 
                         />
                         <TextGroup
@@ -44,7 +42,7 @@ const ProductSettings = props => {
                             placeholder="Can include html tags, < 320 visible characters" 
                             required={false} 
                             value={fields.products[ind].productMessage} 
-                            handleInputChange={props.handleInputChange} 
+                            handleInputChange={handleInputChange} 
                             error={errors.products[ind].productMessage} 
                         />
                     </div>
@@ -58,7 +56,7 @@ const ProductSettings = props => {
                             placeholder="i.e. https://www.cbn.com/giving/special/tolife/assets/images/dvd-img.png" 
                             required={false} 
                             value={fields.products[ind].productImgUrl} 
-                            handleInputChange={props.handleInputChange} 
+                            handleInputChange={handleInputChange} 
                             error={errors.products[ind].productImgUrl} 
                         />
                         <InputGroup
@@ -67,10 +65,10 @@ const ProductSettings = props => {
                             specialStyle="" 
                             label={`Product ${ind+1}: Pledge Amount`}
                             maxLength={7}
-                            placeholder={15} 
+                            placeholder="i.e. 15"
                             required={true} 
                             value={fields.products[ind].PledgeAmount} 
-                            handleInputChange={props.handleInputChange} 
+                            handleInputChange={handleInputChange} 
                             error={errors.products[ind].PledgeAmount} 
                         />
                     </div>
@@ -85,7 +83,7 @@ const ProductSettings = props => {
                             placeholder="i.e. CC01" 
                             required={true} 
                             value={fields.products[ind].DetailName} 
-                            handleInputChange={props.handleInputChange} 
+                            handleInputChange={handleInputChange} 
                             error={errors.products[ind].DetailName} 
                         />
                         <InputGroup
@@ -97,7 +95,7 @@ const ProductSettings = props => {
                             placeholder="i.e. 043251" 
                             required={true} 
                             value={fields.products[ind].DetailCprojMail} 
-                            handleInputChange={props.handleInputChange} 
+                            handleInputChange={handleInputChange} 
                             error={errors.products[ind].DetailCprojMail} 
                         />
                         <InputGroup
@@ -109,7 +107,7 @@ const ProductSettings = props => {
                             placeholder="i.e. 043250" 
                             required={true} 
                             value={fields.products[ind].DetailCprojCredit} 
-                            handleInputChange={props.handleInputChange} 
+                            handleInputChange={handleInputChange} 
                             error={errors.products[ind].DetailCprojCredit} 
                         />
                         <InputGroup
@@ -121,13 +119,13 @@ const ProductSettings = props => {
                             placeholder="i.e. Orphan's Promise Vietnam, Superbook Translation, etc" 
                             required={true} 
                             value={fields.products[ind].DetailDescription} 
-                            handleInputChange={props.handleInputChange} 
+                            handleInputChange={handleInputChange} 
                             error={errors.products[ind].DetailDescription} 
                         />
                     </div>
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                         <div>
-                            <FormButton val="Remove" handleClick={props.handleButtonClick} ctx={{name: "products", val: ind, type: 'Remove'}} />
+                            <FormButton val="Remove" handleClick={handleButtonClick} ctx={{name: "products", val: ind, type: 'Remove'}} />
                         </div>
                     </div>
                 </fieldset>
@@ -137,12 +135,12 @@ const ProductSettings = props => {
 
     return (
         <React.Fragment>
-            <form onSubmit={(e)=>{e.preventDefault(); props.handleButtonClick({name: "store", val: '', type: 'form_setup'})}}>
+            <form onSubmit={(e)=>{e.preventDefault(); handleButtonClick({name: "store", val: '', type: 'form_setup'})}}>
                 <h3>Configure Product Setttings</h3>
                 <p styleName="form.form-info">Note: Currently, monthly gifts cannot be processed together with product orders. You may need two different giving pages to handle these individual needs.</p>
                 <fieldset styleName="form.fieldset">
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
-                        <Checkbox id="addProducts" checked={fields.addProducts} handleInputChange={props.handleInputChange} label="Users can Select Product(s)?"/>
+                        <Checkbox id="addProducts" checked={fields.addProducts} handleInputChange={handleInputChange} label="Users can Select Product(s)?"/>
                     </div>
 
                     { renderProductInputs(fields.numProducts) }
@@ -151,13 +149,13 @@ const ProductSettings = props => {
                         fields.addProducts &&
                             <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                                 <div style={{maxWidth: "170px"}}>
-                                    <FormButton val="Add Setting" handleClick={props.handleButtonClick} ctx={{name: "products", val: '', type: 'Add'}} />
+                                    <FormButton val="Add Setting" handleClick={handleButtonClick} ctx={{name: "products", val: '', type: 'Add'}} />
                                 </div>
                             </div>
                     }
 
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
-                        <Checkbox id="addGift-display" checked={fields.additionalGift.display} handleInputChange={props.handleInputChange} label="Prompt Donors for a special additional gift?"/>
+                        <Checkbox id="addGift-display" checked={fields.additionalGift.display} handleInputChange={handleInputChange} label="Prompt Donors for a special additional gift?"/>
                     </div>
 
                     {
@@ -174,7 +172,7 @@ const ProductSettings = props => {
                                         placeholder="i.e. SGOrphansPromise" 
                                         required={true} 
                                         value={fields.additionalGift.DetailName} 
-                                        handleInputChange={props.handleInputChange} 
+                                        handleInputChange={handleInputChange} 
                                         error={errors.additionalGift.DetailName} 
                                     />
                                     <TextGroup
@@ -187,7 +185,7 @@ const ProductSettings = props => {
                                         placeholder="Please consider a special gift to CBN Ministries" 
                                         required={true} 
                                         value={fields.additionalGift.additionalGiftMessage} 
-                                        handleInputChange={props.handleInputChange} 
+                                        handleInputChange={handleInputChange} 
                                         error={errors.additionalGift.additionalGiftMessage} 
                                     />  
                                 </div>
@@ -201,7 +199,7 @@ const ProductSettings = props => {
                                         placeholder="i.e. 043251" 
                                         required={true} 
                                         value={fields.additionalGift.DetailCprojMail} 
-                                        handleInputChange={props.handleInputChange} 
+                                        handleInputChange={handleInputChange} 
                                         error={errors.additionalGift.DetailCprojMail} 
                                     />
                                     <InputGroup
@@ -213,7 +211,7 @@ const ProductSettings = props => {
                                         placeholder="i.e. 043250" 
                                         required={true} 
                                         value={fields.additionalGift.DetailCprojCredit} 
-                                        handleInputChange={props.handleInputChange} 
+                                        handleInputChange={handleInputChange} 
                                         error={errors.additionalGift.DetailCprojCredit} 
                                     />
                                     <InputGroup
@@ -225,7 +223,7 @@ const ProductSettings = props => {
                                         placeholder="i.e. Orphan's Promise Vietnam, Superbook Translation, etc" 
                                         required={true} 
                                         value={fields.additionalGift.DetailDescription} 
-                                        handleInputChange={props.handleInputChange} 
+                                        handleInputChange={handleInputChange} 
                                         error={errors.additionalGift.DetailDescription} 
                                     />
                                 </div>
@@ -236,11 +234,11 @@ const ProductSettings = props => {
                 <fieldset styleName="form.fieldset">
                     <div style={{maxWidth: "88px"}}>
                         <SaveButton 
-                            handleClick={props.handleButtonClick} 
-                            submitting={props.submitting} 
+                            handleClick={handleButtonClick} 
+                            submitting={submitting} 
                             ctx={{name: "store", val: '', type: 'form_setup'}} 
                             error={errors.formError} 
-                            formMsg={props.updated && !props.saved ? "Changes require saving": ''}
+                            formMsg={updated && !saved ? "Changes require saving": ''}
                         />
                     </div>
                 </fieldset>

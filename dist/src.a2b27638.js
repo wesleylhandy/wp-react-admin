@@ -36642,6 +36642,8 @@ function getDefaultValues(editMode, type, config) {
 
     case "spacing":
       defaultValues = {
+        "--button-border-radius": editMode && config.hasOwnProperty("--button-border-radius") ? config["--button-border-radius"] : "0",
+        "--input-border-radius": editMode && config.hasOwnProperty("--input-border-radius") ? config["--input-border-radius"] : "0",
         "--form-border-radius": editMode && config.hasOwnProperty("--form-border-radius") ? config["--form-border-radius"] : "20px",
         "--form-border-width": editMode && config.hasOwnProperty("--form-border-width") ? config["--form-border-width"] : '2px',
         "--form-padding": editMode && config.hasOwnProperty("--form-padding") ? config["--form-padding"] : '0',
@@ -38595,12 +38597,10 @@ var withFormConfigHandling = function withFormConfigHandling(SettingsComponent) 
 
             var _currentState = JSON.stringify(fields);
 
-            this.setState(function () {
-              return {
-                fields: fields,
-                errors: errors,
-                updated: _currentState != initialState
-              };
+            this.setState({
+              fields: fields,
+              errors: errors,
+              updated: _currentState != initialState
             });
           } else {
             this.setState({
@@ -38626,7 +38626,10 @@ var withFormConfigHandling = function withFormConfigHandling(SettingsComponent) 
 
               var config = _extends({}, _this2.props.config, fields);
 
-              fields.mode = fields.form_status == "prod" ? "production" : "development";
+              if (_this2.props.displayMode.toLowerCase() == "settings") {
+                config.mode = fields.form_status == "prod" ? "production" : "development";
+              }
+
               var promises = [_this2.props.tabFunctions.storeConfig(_this2.state.currentForm.id, type, config, null)];
 
               if (fields.form_status && fields.form_status != _this2.state.currentForm.form_status) {
@@ -38851,7 +38854,10 @@ var FormSettings = function FormSettings(props) {
       });
     }
   }, _react.default.createElement("h3", null, "Configure Main Setttings"), _react.default.createElement("p", {
-    className: "form-info__3Welr"
+    className: "form-info__3Welr",
+    style: {
+      color: "crimson"
+    }
   }, "Note: Each of these tabs load default settings on this page, but you must click SAVE on each tab to store your configuration in the database. If you do not save on each tab, your form will not function properly. Also, please configure all your settings, at least saving the default values, before changing the Form Status from New to Development/Testing."), _react.default.createElement("fieldset", {
     className: "fieldset__3xxg-"
   }, _react.default.createElement("div", {
@@ -39735,9 +39741,14 @@ if (module.hot) {
   });
 }
 
-var ProductSettings = function ProductSettings(props) {
-  var fields = props.fields,
-      errors = props.errors;
+var ProductSettings = function ProductSettings(_ref) {
+  var fields = _ref.fields,
+      errors = _ref.errors,
+      handleInputChange = _ref.handleInputChange,
+      handleButtonClick = _ref.handleButtonClick,
+      saved = _ref.saved,
+      updated = _ref.updated,
+      submitting = _ref.submitting;
 
   var renderProductInputs = function renderProductInputs(num) {
     var arr = Array(num).fill(null);
@@ -39756,7 +39767,7 @@ var ProductSettings = function ProductSettings(props) {
         placeholder: "i.e. To Life DVD",
         required: true,
         value: fields.products[ind].productTitle,
-        handleInputChange: props.handleInputChange,
+        handleInputChange: handleInputChange,
         error: errors.products[ind].productTitle
       }), _react.default.createElement(_TextGroup.default, {
         id: "products-".concat(ind, "-productMessage"),
@@ -39767,7 +39778,7 @@ var ProductSettings = function ProductSettings(props) {
         placeholder: "Can include html tags, < 320 visible characters",
         required: false,
         value: fields.products[ind].productMessage,
-        handleInputChange: props.handleInputChange,
+        handleInputChange: handleInputChange,
         error: errors.products[ind].productMessage
       })), _react.default.createElement("div", {
         className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-axes-center__gx3gz flex-wrap__3nXfa"
@@ -39780,7 +39791,7 @@ var ProductSettings = function ProductSettings(props) {
         placeholder: "i.e. https://www.cbn.com/giving/special/tolife/assets/images/dvd-img.png",
         required: false,
         value: fields.products[ind].productImgUrl,
-        handleInputChange: props.handleInputChange,
+        handleInputChange: handleInputChange,
         error: errors.products[ind].productImgUrl
       }), _react.default.createElement(_InputGroup.default, {
         type: "text",
@@ -39788,10 +39799,10 @@ var ProductSettings = function ProductSettings(props) {
         specialStyle: "",
         label: "Product ".concat(ind + 1, ": Pledge Amount"),
         maxLength: 7,
-        placeholder: 15,
+        placeholder: "i.e. 15",
         required: true,
         value: fields.products[ind].PledgeAmount,
-        handleInputChange: props.handleInputChange,
+        handleInputChange: handleInputChange,
         error: errors.products[ind].PledgeAmount
       })), _react.default.createElement("div", {
         className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-axes-center__gx3gz flex-wrap__3nXfa"
@@ -39804,7 +39815,7 @@ var ProductSettings = function ProductSettings(props) {
         placeholder: "i.e. CC01",
         required: true,
         value: fields.products[ind].DetailName,
-        handleInputChange: props.handleInputChange,
+        handleInputChange: handleInputChange,
         error: errors.products[ind].DetailName
       }), _react.default.createElement(_InputGroup.default, {
         type: "text",
@@ -39815,7 +39826,7 @@ var ProductSettings = function ProductSettings(props) {
         placeholder: "i.e. 043251",
         required: true,
         value: fields.products[ind].DetailCprojMail,
-        handleInputChange: props.handleInputChange,
+        handleInputChange: handleInputChange,
         error: errors.products[ind].DetailCprojMail
       }), _react.default.createElement(_InputGroup.default, {
         type: "text",
@@ -39826,7 +39837,7 @@ var ProductSettings = function ProductSettings(props) {
         placeholder: "i.e. 043250",
         required: true,
         value: fields.products[ind].DetailCprojCredit,
-        handleInputChange: props.handleInputChange,
+        handleInputChange: handleInputChange,
         error: errors.products[ind].DetailCprojCredit
       }), _react.default.createElement(_InputGroup.default, {
         type: "text",
@@ -39837,13 +39848,13 @@ var ProductSettings = function ProductSettings(props) {
         placeholder: "i.e. Orphan's Promise Vietnam, Superbook Translation, etc",
         required: true,
         value: fields.products[ind].DetailDescription,
-        handleInputChange: props.handleInputChange,
+        handleInputChange: handleInputChange,
         error: errors.products[ind].DetailDescription
       })), _react.default.createElement("div", {
         className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-axes-center__gx3gz"
       }, _react.default.createElement("div", null, _react.default.createElement(_FormButton.default, {
         val: "Remove",
-        handleClick: props.handleButtonClick,
+        handleClick: handleButtonClick,
         ctx: {
           name: "products",
           val: ind,
@@ -39856,7 +39867,7 @@ var ProductSettings = function ProductSettings(props) {
   return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("form", {
     onSubmit: function onSubmit(e) {
       e.preventDefault();
-      props.handleButtonClick({
+      handleButtonClick({
         name: "store",
         val: '',
         type: 'form_setup'
@@ -39871,7 +39882,7 @@ var ProductSettings = function ProductSettings(props) {
   }, _react.default.createElement(_Checkbox.default, {
     id: "addProducts",
     checked: fields.addProducts,
-    handleInputChange: props.handleInputChange,
+    handleInputChange: handleInputChange,
     label: "Users can Select Product(s)?"
   })), renderProductInputs(fields.numProducts), fields.addProducts && _react.default.createElement("div", {
     className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-axes-center__gx3gz"
@@ -39881,7 +39892,7 @@ var ProductSettings = function ProductSettings(props) {
     }
   }, _react.default.createElement(_FormButton.default, {
     val: "Add Setting",
-    handleClick: props.handleButtonClick,
+    handleClick: handleButtonClick,
     ctx: {
       name: "products",
       val: '',
@@ -39892,7 +39903,7 @@ var ProductSettings = function ProductSettings(props) {
   }, _react.default.createElement(_Checkbox.default, {
     id: "addGift-display",
     checked: fields.additionalGift.display,
-    handleInputChange: props.handleInputChange,
+    handleInputChange: handleInputChange,
     label: "Prompt Donors for a special additional gift?"
   })), fields.additionalGift.display && _react.default.createElement("fieldset", {
     className: "fieldset__bordered__3MgwP"
@@ -39907,7 +39918,7 @@ var ProductSettings = function ProductSettings(props) {
     placeholder: "i.e. SGOrphansPromise",
     required: true,
     value: fields.additionalGift.DetailName,
-    handleInputChange: props.handleInputChange,
+    handleInputChange: handleInputChange,
     error: errors.additionalGift.DetailName
   }), _react.default.createElement(_TextGroup.default, {
     type: "text",
@@ -39919,7 +39930,7 @@ var ProductSettings = function ProductSettings(props) {
     placeholder: "Please consider a special gift to CBN Ministries",
     required: true,
     value: fields.additionalGift.additionalGiftMessage,
-    handleInputChange: props.handleInputChange,
+    handleInputChange: handleInputChange,
     error: errors.additionalGift.additionalGiftMessage
   })), _react.default.createElement("div", {
     className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-wrap__3nXfa"
@@ -39932,7 +39943,7 @@ var ProductSettings = function ProductSettings(props) {
     placeholder: "i.e. 043251",
     required: true,
     value: fields.additionalGift.DetailCprojMail,
-    handleInputChange: props.handleInputChange,
+    handleInputChange: handleInputChange,
     error: errors.additionalGift.DetailCprojMail
   }), _react.default.createElement(_InputGroup.default, {
     type: "text",
@@ -39943,7 +39954,7 @@ var ProductSettings = function ProductSettings(props) {
     placeholder: "i.e. 043250",
     required: true,
     value: fields.additionalGift.DetailCprojCredit,
-    handleInputChange: props.handleInputChange,
+    handleInputChange: handleInputChange,
     error: errors.additionalGift.DetailCprojCredit
   }), _react.default.createElement(_InputGroup.default, {
     type: "text",
@@ -39954,7 +39965,7 @@ var ProductSettings = function ProductSettings(props) {
     placeholder: "i.e. Orphan's Promise Vietnam, Superbook Translation, etc",
     required: true,
     value: fields.additionalGift.DetailDescription,
-    handleInputChange: props.handleInputChange,
+    handleInputChange: handleInputChange,
     error: errors.additionalGift.DetailDescription
   })))), _react.default.createElement("fieldset", {
     className: "fieldset__3xxg-"
@@ -39963,15 +39974,15 @@ var ProductSettings = function ProductSettings(props) {
       maxWidth: "88px"
     }
   }, _react.default.createElement(_SaveButton.default, {
-    handleClick: props.handleButtonClick,
-    submitting: props.submitting,
+    handleClick: handleButtonClick,
+    submitting: submitting,
     ctx: {
       name: "store",
       val: '',
       type: 'form_setup'
     },
     error: errors.formError,
-    formMsg: props.updated && !props.saved ? "Changes require saving" : ''
+    formMsg: updated && !saved ? "Changes require saving" : ''
   })))));
 };
 
@@ -40042,9 +40053,14 @@ if (module.hot) {
   });
 }
 
-var FundSettings = function FundSettings(props) {
-  var fields = props.fields,
-      errors = props.errors;
+var FundSettings = function FundSettings(_ref) {
+  var fields = _ref.fields,
+      errors = _ref.errors,
+      handleButtonClick = _ref.handleButtonClick,
+      handleInputChange = _ref.handleInputChange,
+      submitting = _ref.submitting,
+      updated = _ref.updated,
+      saved = _ref.saved;
 
   var renderFundInputs = function renderFundInputs(num) {
     var arr = Array(num).fill(null);
@@ -40062,9 +40078,9 @@ var FundSettings = function FundSettings(props) {
         maxLength: 120,
         placeholder: "i.e. Wherever Needed Most",
         required: true,
-        value: props.fields.funds[ind].fundTitle,
-        handleInputChange: props.handleInputChange,
-        error: props.errors.funds[ind].fundTitle
+        value: fields.funds[ind].fundTitle,
+        handleInputChange: handleInputChange,
+        error: errors.funds[ind].fundTitle
       }), _react.default.createElement(_TextGroup.default, {
         id: "funds-".concat(ind, "-FundDescription"),
         specialStyle: "",
@@ -40073,9 +40089,9 @@ var FundSettings = function FundSettings(props) {
         maxLength: 512,
         placeholder: "Can include html tags, < 320 visible characters",
         required: false,
-        value: props.fields.funds[ind].fundDescription,
-        handleInputChange: props.handleInputChange,
-        error: props.errors.funds[ind].fundDescription
+        value: fields.funds[ind].fundDescription,
+        handleInputChange: handleInputChange,
+        error: errors.funds[ind].fundDescription
       })), _react.default.createElement("div", {
         className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-axes-center__gx3gz flex-wrap__3nXfa"
       }, _react.default.createElement(_InputGroup.default, {
@@ -40086,9 +40102,9 @@ var FundSettings = function FundSettings(props) {
         maxLength: 15,
         placeholder: "i.e. Superbook, OrphansPromise, 700Club, etc",
         required: true,
-        value: props.fields.funds[ind].DetailName,
-        handleInputChange: props.handleInputChange,
-        error: props.errors.funds[ind].DetailName
+        value: fields.funds[ind].DetailName,
+        handleInputChange: handleInputChange,
+        error: errors.funds[ind].DetailName
       }), _react.default.createElement(_InputGroup.default, {
         type: "text",
         id: "funds-".concat(ind, "-DetailCprojMail"),
@@ -40097,9 +40113,9 @@ var FundSettings = function FundSettings(props) {
         maxLength: 6,
         placeholder: "i.e. 043251",
         required: true,
-        value: props.fields.funds[ind].DetailCprojMail,
-        handleInputChange: props.handleInputChange,
-        error: props.errors.funds[ind].DetailCprojMail
+        value: fields.funds[ind].DetailCprojMail,
+        handleInputChange: handleInputChange,
+        error: errors.funds[ind].DetailCprojMail
       }), _react.default.createElement(_InputGroup.default, {
         type: "text",
         id: "funds-".concat(ind, "-DetailCprojCredit"),
@@ -40108,9 +40124,9 @@ var FundSettings = function FundSettings(props) {
         maxLength: 6,
         placeholder: "i.e. 043250",
         required: true,
-        value: props.fields.funds[ind].DetailCprojCredit,
-        handleInputChange: props.handleInputChange,
-        error: props.errors.funds[ind].DetailCprojCredit
+        value: fields.funds[ind].DetailCprojCredit,
+        handleInputChange: handleInputChange,
+        error: errors.funds[ind].DetailCprojCredit
       }), _react.default.createElement(_InputGroup.default, {
         type: "text",
         id: "funds-".concat(ind, "-DetailDescription"),
@@ -40119,14 +40135,14 @@ var FundSettings = function FundSettings(props) {
         maxLength: 40,
         placeholder: "i.e. Orphan's Promise Vietname, Superbook Translation, etc",
         required: true,
-        value: props.fields.funds[ind].DetailDescription,
-        handleInputChange: props.handleInputChange,
-        error: props.errors.funds[ind].DetailDescription
+        value: fields.funds[ind].DetailDescription,
+        handleInputChange: handleInputChange,
+        error: errors.funds[ind].DetailDescription
       })), _react.default.createElement("div", {
         className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-axes-center__gx3gz"
       }, _react.default.createElement("div", null, _react.default.createElement(_FormButton.default, {
         val: "Remove",
-        handleClick: props.handleButtonClick,
+        handleClick: handleButtonClick,
         ctx: {
           name: "funds",
           val: ind,
@@ -40139,7 +40155,7 @@ var FundSettings = function FundSettings(props) {
   return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("form", {
     onSubmit: function onSubmit(e) {
       e.preventDefault();
-      props.handleButtonClick({
+      handleButtonClick({
         name: "store",
         val: '',
         type: 'form_setup'
@@ -40154,9 +40170,9 @@ var FundSettings = function FundSettings(props) {
   }, _react.default.createElement(_Checkbox.default, {
     id: "addFunds",
     checked: fields.addFunds,
-    handleInputChange: props.handleInputChange,
+    handleInputChange: handleInputChange,
     label: "Users can Select Different Funds?"
-  })), renderFundInputs(fields.numFunds), fields.addFunds ? _react.default.createElement("div", {
+  })), renderFundInputs(fields.numFunds), fields.addFunds && _react.default.createElement("div", {
     className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-axes-center__gx3gz"
   }, _react.default.createElement("div", {
     style: {
@@ -40164,28 +40180,28 @@ var FundSettings = function FundSettings(props) {
     }
   }, _react.default.createElement(_FormButton.default, {
     val: "Add Setting",
-    handleClick: props.handleButtonClick,
+    handleClick: handleButtonClick,
     ctx: {
       name: "funds",
       val: '',
       type: 'Add'
     }
-  }))) : null), _react.default.createElement("fieldset", {
+  })))), _react.default.createElement("fieldset", {
     className: "fieldset__3xxg-"
   }, _react.default.createElement("div", {
     style: {
       maxWidth: "88px"
     }
   }, _react.default.createElement(_SaveButton.default, {
-    handleClick: props.handleButtonClick,
-    submitting: props.submitting,
+    handleClick: handleButtonClick,
+    submitting: submitting,
     ctx: {
       name: "store",
       val: '',
       type: 'form_setup'
     },
     error: errors.formError,
-    formMsg: props.updated && !props.saved ? "Changes require saving" : ''
+    formMsg: updated && !saved ? "Changes require saving" : ''
   })))));
 };
 
@@ -40287,7 +40303,7 @@ var SubscriptionSettings = function SubscriptionSettings(props) {
         id: "subscriptions-".concat(ind, "-key"),
         specialStyle: "",
         required: true,
-        value: fields.subscriptions[ind]["key"],
+        value: fields.subscriptions[ind]["key"] || subTypes[0].val,
         error: errors.subscriptions[ind]["key"],
         handleInputChange: props.handleInputChange,
         options: options
@@ -40420,13 +40436,19 @@ if (module.hot) {
   });
 }
 
-var EmailSettings = function EmailSettings(props) {
-  var fields = props.fields,
-      errors = props.errors;
+var EmailSettings = function EmailSettings(_ref) {
+  var fields = _ref.fields,
+      errors = _ref.errors,
+      handleButtonClick = _ref.handleButtonClick,
+      handleBlur = _ref.handleBlur,
+      handleInputChange = _ref.handleInputChange,
+      submitting = _ref.submitting,
+      updated = _ref.updated,
+      saved = _ref.saved;
   return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("form", {
     onSubmit: function onSubmit(e) {
       e.preventDefault();
-      props.handleButtonClick({
+      handleButtonClick({
         name: "store",
         val: '',
         type: 'email_setup'
@@ -40449,9 +40471,9 @@ var EmailSettings = function EmailSettings(props) {
     placeholder: "HTML tags for your Email Header, to be used with every email from props form. To have unique headers, leave props blank and put individual headers in the following textareas.",
     required: false,
     value: fields.header,
-    handleInputChange: props.handleInputChange,
+    handleInputChange: handleInputChange,
     error: errors.header,
-    handleBlur: props.handleBlur
+    handleBlur: handleBlur
   })), _react.default.createElement("div", {
     className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-axes-center__gx3gz"
   }, _react.default.createElement(_TextGroup.default, {
@@ -40463,9 +40485,9 @@ var EmailSettings = function EmailSettings(props) {
     placeholder: "HTML tags for the main text/images/content of your email response",
     required: false,
     value: fields.single,
-    handleInputChange: props.handleInputChange,
+    handleInputChange: handleInputChange,
     error: errors.single,
-    handleBlur: props.handleBlur
+    handleBlur: handleBlur
   })), _react.default.createElement("div", {
     className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-axes-center__gx3gz"
   }, _react.default.createElement(_TextGroup.default, {
@@ -40477,9 +40499,9 @@ var EmailSettings = function EmailSettings(props) {
     placeholder: "HTML tags for the main text/images/content of your email response",
     required: false,
     value: fields.monthly,
-    handleInputChange: props.handleInputChange,
+    handleInputChange: handleInputChange,
     error: errors.monthly,
-    handleBlur: props.handleBlur
+    handleBlur: handleBlur
   })), _react.default.createElement("div", {
     className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-axes-center__gx3gz"
   }, _react.default.createElement(_TextGroup.default, {
@@ -40491,19 +40513,19 @@ var EmailSettings = function EmailSettings(props) {
     placeholder: "HTML tags for the main text/images/content of your email response",
     required: false,
     value: fields.product,
-    handleInputChange: props.handleInputChange,
+    handleInputChange: handleInputChange,
     error: errors.product,
-    handleBlur: props.handleBlur
+    handleBlur: handleBlur
   }))), _react.default.createElement(_SaveButton.default, {
-    handleClick: props.handleButtonClick,
-    submitting: props.submitting,
+    handleClick: handleButtonClick,
+    submitting: submitting,
     ctx: {
       name: "store",
       val: '',
       type: 'email_setup'
     },
     error: errors.formError,
-    formMsg: props.updated && !props.saved ? "Changes require saving" : ''
+    formMsg: updated && !saved ? "Changes require saving" : ''
   })));
 };
 
@@ -42687,7 +42709,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54211" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64850" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

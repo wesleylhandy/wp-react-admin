@@ -162,9 +162,7 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
             }
             // console.log({newList: fields[name], newErrors: errors[name]}) 
             let currentState = JSON.stringify(fields);
-            this.setState(() => {
-                return {fields, errors, updated: currentState != initialState}
-            })
+            this.setState({fields, errors, updated: currentState != initialState})
         } else {
             this.setState({submitting: true}, ()=>{
                 this.props.tabFunctions.toggleBtnEnable( false )
