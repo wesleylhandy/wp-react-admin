@@ -54191,8 +54191,11 @@ function (_Component) {
       var errors = _extends({}, this.state.errors);
 
       errors[field] = "";
-      fields[field] = color.hex; // console.log({field, color})
-
+      fields[field] = "rgba(".concat(color.rgb.r, ", ").concat(color.rgb.g, ", ").concat(color.rgb.b, ", ").concat(color.rgb.a, ")");
+      console.log({
+        field: field,
+        color: color
+      });
       var updated = JSON.stringify(fields) !== JSON.stringify(this.state.initialState);
       this.props.tabFunctions.handleStyleInputChange(fields, errors, updated);
     }
@@ -56340,7 +56343,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52447" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55163" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

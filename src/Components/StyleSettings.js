@@ -155,7 +155,7 @@ export default class StyleSettings extends Component {
         const fields = {...this.state.fields}
         const errors = {...this.state.errors};
         errors[field] = "";
-        fields[field] = color.hex;
+        fields[field] = `rgba(${color.rgb.r}, ${color.rgb.g}, ${color.rgb.b}, ${color.rgb.a})`;
         // console.log({field, color})
         const updated = JSON.stringify(fields) !== JSON.stringify(this.state.initialState)
         this.props.tabFunctions.handleStyleInputChange(fields, errors, updated)
