@@ -5,19 +5,21 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "sudo parcel index.html",
-        "reset": "sudo rm -rf dist/ .cache/",
-        "build": "sudo parcel build src/index.js -d src/dist/v1",
-        "build:split": "sudo parcel build src/index.js --detailed-report -d dist/split/v1"
+        "start": "parcel index.html",
+        "reset": "rm -rf dist/ .cache/",
+        "build": "parcel build src/index.js -d src/dist/v1",
+        "build:split": "parcel build src/index.js --detailed-report -d dist/split/v1"
     },
     "author": "Wesley L. Handy",
     "license": "UNLICENSED",
     "dependencies": {
+        "@sweetalert/with-react": "^0.1.1",
         "formdata-polyfill": "^3.0.11",
         "node-rsa": "^1.0.0",
         "promise-polyfill": "^8.1.0",
         "raf": "^3.4.0",
         "react": "^16.6.0",
+        "react-color": "^2.17.0",
         "react-dom": "^16.6.0",
         "sweetalert": "^2.1.0",
         "whatwg-fetch": "^2.0.4"

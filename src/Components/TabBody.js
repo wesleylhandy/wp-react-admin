@@ -23,7 +23,7 @@ export default function TabBody(props) {
         switch (displayMode) {
             case "List":
                 const {k, formList} = tabData;
-                return <ListForms tabFunctions={tabFunctions} k={k} formList={formList}/>
+                return <ListForms tabFunctions={tabFunctions} k={k} formList={formList} user={tabData.user}/>
                 break;
             case "Add": 
                 const {user} = tabData;
@@ -39,7 +39,7 @@ export default function TabBody(props) {
                 return <NameSettings currentForm={currentForm} displayMode={displayMode} tabFunctions={tabFunctions} defaultValues={defaultValues} config={tabData.formConfig}/>;
                 break;
             case "Gifts":
-            console.log({tabData})
+            // console.log({tabData})
                 defaultValues = getDefaultValues(editMode, displayMode, tabData.formConfig)
                 return <GivingSettings currentForm={currentForm} displayMode={displayMode} tabFunctions={tabFunctions} defaultValues={defaultValues} config={tabData.formConfig}/>;
                 break;
@@ -47,7 +47,7 @@ export default function TabBody(props) {
                 defaultValues = getDefaultValues(editMode, displayMode, tabData.formConfig)
                 return <ProductSettings currentForm={currentForm} displayMode={displayMode} tabFunctions={tabFunctions} defaultValues={defaultValues} config={tabData.formConfig}/>;
                 break;
-            case "Funds":
+            case "Designations":
                 defaultValues = getDefaultValues(editMode, displayMode, tabData.formConfig)
                 return <FundSettings currentForm={currentForm} displayMode={displayMode} tabFunctions={tabFunctions} defaultValues={defaultValues} config={tabData.formConfig}/>;
                 break;

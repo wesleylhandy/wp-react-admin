@@ -897,7 +897,9 @@ input[type="radio"].radio-group__input__2RrAr+label:empty:before {
 }
 
 
-/***** END Radio Button STYLES *****/.loading_spinner__37U-R {
+/***** END Radio Button STYLES *****/.color-picker__L5zPh>div {
+    margin: 0 auto !important;
+}.loading_spinner__37U-R {
     -webkit-box-sizing: border-box;
             box-sizing: border-box;
     height: 150px;

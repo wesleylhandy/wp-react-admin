@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 
 import form from './styles/form.css'
 import flex from './styles/flex.css'
@@ -43,10 +43,13 @@ const GivingSettings = ({ fields, errors, handleButtonClick, handleInputChange, 
 
         const amounts = option === "monthly" ? fields.monthlyAmounts : fields.singleAmounts;
 
-        const options = amounts.map((amt, ind) => {
+        let options = amounts.map((amt, ind) => {
             return <option key={`amt-option-${ind}`} value={amt}>{amt}</option>
         })
 
+        options.unshift(<option key="amt-option-none" value={-1}>None</option>);
+
+        // console.log({options})
         return (
             <SelectGroup 
                 id="defaultAmount"
@@ -95,7 +98,7 @@ const GivingSettings = ({ fields, errors, handleButtonClick, handleInputChange, 
                     label={`WhiteMail SOL`}
                     maxLength={6}
                     placeholder="i.e. 043251" 
-                    required={true} 
+                    required={false} 
                     value={fields[type].DetailCprojMail} 
                     handleInputChange={handleInputChange} 
                     error={errors[type].DetailCprojMail} 
@@ -117,23 +120,23 @@ const GivingSettings = ({ fields, errors, handleButtonClick, handleInputChange, 
     }
 
     return (
-        <React.Fragment>
+        <Fragment>
             <form onSubmit={(e)=>{e.preventDefault(); handleButtonClick({name: "store", val: '', type: 'form_setup'})}}>
                 <h3>Configure Giving Setttings</h3>
                 <fieldset styleName="form.fieldset">
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                         <Checkbox id="showGivingArray" checked={fields.showGivingArray} handleInputChange={handleInputChange} label="Show Giving Array(s)?"/>
                     </div>
-
+                    <p styleName="form.form-info">This Setting allows users to either click on a button or manually enter an amount to donate. Do not use this in combination with Product Orders.</p>
                     {
-                        fields.showGivingArray ? (
-                            <React.Fragment>
+                        fields.showGivingArray && (
+                            <Fragment>
                                 <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                                     <Checkbox id="monthlyOption" checked={fields.monthlyOption} handleInputChange={handleInputChange} label="Show Monthly Giving Options?"/>
                                 </div>
 
                                 { 
-                                    fields.monthlyOption ? (
+                                    fields.monthlyOption && (
                                         <fieldset styleName="form.fieldset__bordered">
                                             <h3>Monthly Pledge Settings</h3>
                                             {
@@ -147,8 +150,9 @@ const GivingSettings = ({ fields, errors, handleButtonClick, handleInputChange, 
                                                     <FormButton val="Add Setting" handleClick={handleButtonClick} ctx={{name: "giving", val: 'monthly', type: 'Add'}} />
                                                 </div>
                                             </div>
+                                            <p styleName="form.form-info">Click &ldquo;Add Setting&rdquo; to configure another amount option.</p>
                                         </fieldset>
-                                    ) : null
+                                    ) 
                                 }
 
                                 <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
@@ -156,7 +160,7 @@ const GivingSettings = ({ fields, errors, handleButtonClick, handleInputChange, 
                                 </div>
 
                                 { 
-                                    fields.singleOption ? (
+                                    fields.singleOption && (
                                         <fieldset styleName="form.fieldset__bordered">
                                             <h3>Single Pledge Settings</h3>
                                             {
@@ -170,13 +174,14 @@ const GivingSettings = ({ fields, errors, handleButtonClick, handleInputChange, 
                                                     <FormButton val="Add Setting" handleClick={handleButtonClick} ctx={{name: "giving", val: 'single', type: 'Add'}} />
                                                 </div>
                                             </div>
+                                            <p styleName="form.form-info">Click &ldquo;Add Setting&rdquo; to configure another amount option.</p>
                                         </fieldset>
-                                    ) : null
+                                    )
                                 }
 
                                 {
-                                    fields.singleOption && fields.monthlyOption ? (
-                                        <React.Fragment>
+                                    fields.singleOption && fields.monthlyOption && (
+                                        <Fragment>
                                             <h3>Choose Default Option</h3>
                                             <p styleName="form.form-info">No default option is required.</p>
                                             <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
@@ -187,24 +192,24 @@ const GivingSettings = ({ fields, errors, handleButtonClick, handleInputChange, 
                                                     <RadioButton id="nullgift" name="monthly-toggle" label="No Default Option" checked={fields.defaultOption === ""} handleRadioClick={handleRadioClick}/>
                                                 </div>
                                             </div>
-                                        </React.Fragment>
-                                    ) : null
+                                        </Fragment>
+                                    )
                                 }
 
                                 {
-                                    fields.defaultOption !== '' ? (
-                                        <React.Fragment>
+                                    fields.defaultOption !== '' && (
+                                        <Fragment>
                                             <h3>Select Default Amount</h3>
                                             <p styleName="form.form-info">No default Amount is required. However, if the default amount is not found within the default Giving Options, no default will be set.</p>
                                             <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                                                 { renderDefaultSelect( fields.defaultOption ) }
                                             </div>
-                                        </React.Fragment>
-                                    ) : null
+                                        </Fragment>
+                                    )
                                 }
 
-                            </React.Fragment>
-                        ) : null
+                            </Fragment>
+                        )
                     }
                 </fieldset>
                 <fieldset styleName="form.fieldset">
@@ -219,7 +224,7 @@ const GivingSettings = ({ fields, errors, handleButtonClick, handleInputChange, 
                     </div>
                 </fieldset>
             </form>
-        </React.Fragment>
+        </Fragment>
     )
 }
 

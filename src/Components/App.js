@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { hot } from 'react-hot-loader'
 import { callApi } from './helpers/fetch-helpers'
 
@@ -59,6 +59,7 @@ class App extends Component {
         this.toggleBtnEnable = this.toggleBtnEnable.bind(this)
         this.createForm = this.createForm.bind(this)
         this.deleteForm = this.deleteForm.bind(this)
+        this.duplicateForm = this.duplicateForm.bind(this)
         this.handleStyleButtonClick = this.handleStyleButtonClick.bind(this)
         this.handleStyleInputChange = this.handleStyleInputChange.bind(this)
     }
@@ -180,6 +181,30 @@ class App extends Component {
             return false;
         }
     }
+
+    /**
+     * In response to btn click, accepts form_id and user.id to duplicate an existing form
+     * @param {String} form_id - current form id
+     * @param {String} new_form_name - new_form_name
+     * @param {Number} created_by - user.id
+     * @returns either integer ID of new form or Boolean False
+     */
+    async duplicateForm(form_id, new_form_name, created_by){
+        try {
+            const options = {...this.state.options}
+            options.method = "POST";
+            options.body = JSON.stringify({new_form_name, created_by});
+            const {completed, id} = await callApi(`${this.props.base}cbngiving/v1/admin/forms/single/duplicate/${form_id}`, options);
+            if (completed) {
+                this.setState({currentFormId: id})
+            }
+            return id
+        } catch(err) {    
+            // this.handleAPIErrors(err)
+            return false;
+        }
+    }
+
     /**
      * Stores form config into DB and returns true oif complete
      * @param {Number} id - DB id of form
@@ -321,7 +346,7 @@ class App extends Component {
             <div styleName='main.page-wrapper' id="react-page-top"> 
                 {
                     configured && permissible ? (
-                        <React.Fragment>
+                        <Fragment>
                             <MetaTabs 
                                 k={state.k} 
                                 formList={state.formList} 
@@ -332,6 +357,7 @@ class App extends Component {
                                 setApiKey={this.setApiKey}
                                 createForm={this.createForm}
                                 deleteForm={this.deleteForm}
+                                duplicateForm={this.duplicateForm}
                                 toggleBtnEnable={this.toggleBtnEnable}
                                 user={state.user}
                             />
@@ -362,7 +388,7 @@ class App extends Component {
                                 handleStyleButtonClick={this.handleStyleButtonClick}
                                 styleSettings={state.styleSettings}
                             />
-                        </React.Fragment>
+                        </Fragment>
                     ) : configured && !permissible ? (
                         <h1 styleName="main.not-permissible-heading">You are not Authorized to View These Settings</h1>
                     ) : (

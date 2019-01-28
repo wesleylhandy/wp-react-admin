@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 
 import form from './styles/form.css'
 import flex from './styles/flex.css'
@@ -10,7 +10,7 @@ import withFormConfigHandling from './withFormConfigHandling'
 const EmailSettings = ({fields, errors, handleButtonClick, handleBlur, handleInputChange, submitting, updated, saved}) => {
         
     return (
-        <React.Fragment>
+        <Fragment>
             <form onSubmit={(e)=>{e.preventDefault(); handleButtonClick({name: "store", val: '', type: 'email_setup'})}}>
                 <h3>Configure Email Setttings</h3>
                 <p styleName="form.form-info">The Server generates confirmation emails by looking at the type of donations that the user makes. Depending on the form, donors can give monthly, make single gifts or order products, or some combination thereof. Monthly gifts are prioritized over Products over Single Gifts. The server will take the values within the header and concatenate with the appropriate values afterward. This means, you can send the same email to all types by only configuring the email header. Or, you can have a single, consistent header and you can send unique emails to the various donation types. In the fields below, you can enter any valid HTML/CSS appropriate for an Email, starting with an opening <code styleName="form.form-code">{"<body>"}</code> tag.</p>
@@ -85,7 +85,7 @@ const EmailSettings = ({fields, errors, handleButtonClick, handleBlur, handleInp
                     formMsg={updated && !saved ? "Changes require saving": ''}
                 />
             </form>
-        </React.Fragment>
+        </Fragment>
 
     )
 }

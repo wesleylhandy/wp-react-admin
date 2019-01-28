@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 
 import form from './styles/form.css'
 import flex from './styles/flex.css'
@@ -93,7 +93,7 @@ const ProductSettings = ({fields, errors, handleInputChange, handleButtonClick, 
                             label={`Product ${ind+1}: WhiteMail SOL`}
                             maxLength={6}
                             placeholder="i.e. 043251" 
-                            required={true} 
+                            required={false} 
                             value={fields.products[ind].DetailCprojMail} 
                             handleInputChange={handleInputChange} 
                             error={errors.products[ind].DetailCprojMail} 
@@ -134,7 +134,7 @@ const ProductSettings = ({fields, errors, handleInputChange, handleButtonClick, 
     }
 
     return (
-        <React.Fragment>
+        <Fragment>
             <form onSubmit={(e)=>{e.preventDefault(); handleButtonClick({name: "store", val: '', type: 'form_setup'})}}>
                 <h3>Configure Product Setttings</h3>
                 <p styleName="form.form-info">Note: Currently, monthly gifts cannot be processed together with product orders. You may need two different giving pages to handle these individual needs.</p>
@@ -146,12 +146,16 @@ const ProductSettings = ({fields, errors, handleInputChange, handleButtonClick, 
                     { renderProductInputs(fields.numProducts) }
 
                     { 
-                        fields.addProducts &&
-                            <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
-                                <div style={{maxWidth: "170px"}}>
-                                    <FormButton val="Add Setting" handleClick={handleButtonClick} ctx={{name: "products", val: '', type: 'Add'}} />
+                        fields.addProducts && (
+                            <Fragment>
+                                <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
+                                    <div style={{maxWidth: "170px"}}>
+                                        <FormButton val="Add Setting" handleClick={handleButtonClick} ctx={{name: "products", val: '', type: 'Add'}} />
+                                    </div>
                                 </div>
-                            </div>
+                                <p styleName="form.form-info">Click &ldquo;Add Setting&rdquo; to configure another product.</p>
+                            </Fragment>
+                        )
                     }
 
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
@@ -197,7 +201,7 @@ const ProductSettings = ({fields, errors, handleInputChange, handleButtonClick, 
                                         label={`Additional Gift: WhiteMail SOL`}
                                         maxLength={6}
                                         placeholder="i.e. 043251" 
-                                        required={true} 
+                                        required={false} 
                                         value={fields.additionalGift.DetailCprojMail} 
                                         handleInputChange={handleInputChange} 
                                         error={errors.additionalGift.DetailCprojMail} 
@@ -243,7 +247,7 @@ const ProductSettings = ({fields, errors, handleInputChange, handleButtonClick, 
                     </div>
                 </fieldset>
             </form>
-        </React.Fragment>
+        </Fragment>
     )
 }
 

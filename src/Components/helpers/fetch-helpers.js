@@ -42,7 +42,7 @@ async function loadData(uri, options = {}) {
 
 async function getErrorBody(response, contentType = 'text') {
     let body;
-    if (contentType.includes('application/json')) {
+    if (contentType && contentType.includes('application/json')) {
         body = await response.json();
     } else {
         body = await response.text();

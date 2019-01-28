@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 
 import form from './styles/form.css'
 import flex from './styles/flex.css'
@@ -19,13 +19,13 @@ const FundSettings = ({fields, errors, handleButtonClick, handleInputChange, sub
         return arr.map((el, ind) => {
             return (
                 <fieldset key={`fundRow-${ind}`} styleName='form.fieldset__bordered'>
-                    <h4>Fund {ind + 1}</h4>
+                    <h4>Designation {ind + 1}</h4>
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center flex.flex-wrap">
                         <InputGroup
                             type="text"
-                            id={`funds-${ind}-Title`} 
+                            id={`funds-${ind}-fundTitle`} 
                             specialStyle="" 
-                            label={`Fund ${ind+1}: Title`}
+                            label={`Designation ${ind+1}: Title`}
                             maxLength={120}
                             placeholder="i.e. Wherever Needed Most" 
                             required={true} 
@@ -34,9 +34,9 @@ const FundSettings = ({fields, errors, handleButtonClick, handleInputChange, sub
                             error={errors.funds[ind].fundTitle} 
                         />
                         <TextGroup
-                            id={`funds-${ind}-FundDescription`} 
+                            id={`funds-${ind}-fundDescription`} 
                             specialStyle="" 
-                            label={`Fund ${ind+1}: Description`}
+                            label={`Designation ${ind+1}: Description`}
                             rows={3}
                             maxLength={512}
                             placeholder="Can include html tags, < 320 visible characters" 
@@ -51,7 +51,7 @@ const FundSettings = ({fields, errors, handleButtonClick, handleInputChange, sub
                             type="text"
                             id={`funds-${ind}-DetailName`} 
                             specialStyle="" 
-                            label={`Fund ${ind+1}: Detail Name`}
+                            label={`Designation ${ind+1}: Detail Name`}
                             maxLength={15}
                             placeholder="i.e. Superbook, OrphansPromise, 700Club, etc" 
                             required={true} 
@@ -63,10 +63,10 @@ const FundSettings = ({fields, errors, handleButtonClick, handleInputChange, sub
                             type="text"
                             id={`funds-${ind}-DetailCprojMail`} 
                             specialStyle="" 
-                            label={`Fund ${ind+1}: WhiteMail SOL`}
+                            label={`Designation ${ind+1}: WhiteMail SOL`}
                             maxLength={6}
                             placeholder="i.e. 043251" 
-                            required={true} 
+                            required={false} 
                             value={fields.funds[ind].DetailCprojMail} 
                             handleInputChange={handleInputChange} 
                             error={errors.funds[ind].DetailCprojMail} 
@@ -75,7 +75,7 @@ const FundSettings = ({fields, errors, handleButtonClick, handleInputChange, sub
                             type="text"
                             id={`funds-${ind}-DetailCprojCredit`} 
                             specialStyle="" 
-                            label={`Fund ${ind+1}: Credit SOL`}
+                            label={`Designation ${ind+1}: Credit SOL`}
                             maxLength={6}
                             placeholder="i.e. 043250" 
                             required={true} 
@@ -87,7 +87,7 @@ const FundSettings = ({fields, errors, handleButtonClick, handleInputChange, sub
                             type="text"
                             id={`funds-${ind}-DetailDescription`} 
                             specialStyle="" 
-                            label={`Fund ${ind+1}: SOL Description`}
+                            label={`Designation ${ind+1}: SOL Description`}
                             maxLength={40}
                             placeholder="i.e. Orphan's Promise Vietname, Superbook Translation, etc" 
                             required={true} 
@@ -107,22 +107,25 @@ const FundSettings = ({fields, errors, handleButtonClick, handleInputChange, sub
     }
         
     return (
-        <React.Fragment>
+        <Fragment>
             <form onSubmit={(e)=>{e.preventDefault(); handleButtonClick({name: "store", val: '', type: 'form_setup'})}}>
-                <h3>Configure Fund Setttings</h3>
+                <h3>Configure Designation Setttings</h3>
                 <fieldset styleName="form.fieldset">
-                    <p styleName="form.form-info">Please optimise your form so that the first fund that can be selected matches the fund settings for the single or monthly giving. Also, it is best practice that the first fund be allocated to "General Giving" or to "Wherever Help Is Needed Most".</p>
+                    <p styleName="form.form-info">Please optimise your form so that the first designated SOL that can be selected matches the SOL settings for the single or monthly giving. Also, it is best practice that the first SOL be allocated to "General Giving" or to "Wherever Help Is Needed Most".</p>
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                         <Checkbox id="addFunds" checked={fields.addFunds} handleInputChange={handleInputChange} label="Users can Select Different Funds?"/>
                     </div>
                     { renderFundInputs(fields.numFunds) }
                     { 
                         fields.addFunds && (
-                            <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
-                                <div style={{maxWidth: "170px"}}>
-                                    <FormButton val="Add Setting" handleClick={handleButtonClick} ctx={{name: "funds", val: '', type: 'Add'}} />
+                            <Fragment>
+                                <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
+                                    <div style={{maxWidth: "170px"}}>
+                                        <FormButton val="Add Setting" handleClick={handleButtonClick} ctx={{name: "funds", val: '', type: 'Add'}} />
+                                    </div>
                                 </div>
-                            </div>
+                                <p styleName="form.form-info">Clicking this button allows you to add an empty, configurable Designation setting.</p>
+                            </Fragment>
                         ) 
                     }
                 </fieldset>
@@ -138,7 +141,7 @@ const FundSettings = ({fields, errors, handleButtonClick, handleInputChange, sub
                     </div>
                 </fieldset>
             </form>
-        </React.Fragment>
+        </Fragment>
 
     )
 }

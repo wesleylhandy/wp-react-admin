@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 
 import TabHead from './TabHead'
 import TabBody from './TabBody'
@@ -8,7 +8,7 @@ import tabs from './styles/tabs.css'
 
 export default function FormOptionsTabs(props) {
     const {adminMode, viewMode, setViewMode, formConfig, storeConfig, emailConfig, currentForm, enabled, toggleBtnEnable, options} = props
-    const subHeads = ["Settings", "Name/Address", "Gifts", "Products", "Funds", "Subscriptions", "Emails", "Style"]
+    const subHeads = ["Settings", "Name/Address", "Gifts", "Designations", "Products", "Subscriptions", "Emails", "Style"]
     if (currentForm.form_status !== "new" && viewMode !== "Style") {
         subHeads.push("Preview")
     }
@@ -26,10 +26,10 @@ export default function FormOptionsTabs(props) {
     })
 
     return (
-        <React.Fragment>
+        <Fragment>
             { 
                 adminMode !== "List"  && adminMode !== "Add" && (
-                    <React.Fragment>
+                    <Fragment>
                         <div styleName="tabs.tab-headers__submenu">
                             {tabs}
                         </div>
@@ -43,9 +43,9 @@ export default function FormOptionsTabs(props) {
                                 <FormPreview currentForm={currentForm} options={options}/>
                             ) 
                         }
-                    </React.Fragment>
+                    </Fragment>
                 ) 
             }
-        </React.Fragment>
+        </Fragment>
     )
 }

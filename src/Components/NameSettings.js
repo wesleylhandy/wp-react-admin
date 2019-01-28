@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 
 import form from './styles/form.css'
 import flex from './styles/flex.css'
@@ -11,7 +11,7 @@ const NameSettings = props => {
     
     const { fields, errors } = props;
     return (
-        <React.Fragment>
+        <Fragment>
             <form onSubmit={(e)=>{e.preventDefault(); props.handleButtonClick({name: "store", val: '', type: 'form_setup'})}}>
                 <h3>Configure Name/Address Setttings</h3>
                 <fieldset styleName="form.fieldset">
@@ -48,7 +48,7 @@ const NameSettings = props => {
                     </div>
                 </fieldset>
             </form>
-        </React.Fragment>
+        </Fragment>
     )
 }
 

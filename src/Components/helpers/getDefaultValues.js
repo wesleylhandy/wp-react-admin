@@ -96,6 +96,7 @@ export function getDefaultValues(editMode, type, config) {
                     ContactSource: editMode && config.hasOwnProperty("ContactSource") ? config.ContactSource : '',
                     SectionName: editMode && config.hasOwnProperty("SectionName") ? config.SectionName : '',
                     ActivityName : editMode && config.hasOwnProperty("ActivityName") ? config.ActivityName : '',
+                    showSeals: editMode && config.hasOwnProperty("showSeals") ? config.showSeals : false,
                     form_status: config.form_status
                 },
                 errors : {
@@ -224,7 +225,7 @@ export function getDefaultValues(editMode, type, config) {
                 });
             }
             break;
-        case "funds":
+        case "designations":
             errors = {
                 addFunds: '',
                 numFunds: '',

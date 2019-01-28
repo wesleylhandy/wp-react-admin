@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 
 import flex from './styles/flex.css'
 import input from './styles/input.css'
@@ -34,7 +34,7 @@ export default class ListForms extends Component {
     }
 
     static getDerivedStateFromProps(props, state) {
-        let {k} = props;
+        let { k } = props;
         k = k ? k : '';
         const updateK = state.k !== k
         const updateFormList = JSON.stringify(props.formList) !== JSON.stringify(state.list)
@@ -49,8 +49,8 @@ export default class ListForms extends Component {
         }
     }
 
-    handleButtonClick({type, name, val}) {
-        const { toggleBtnEnable, setApiKey, deleteForm, setAdminMode} = this.props.tabFunctions
+    handleButtonClick({ type, name, val }) {
+        const { toggleBtnEnable, setApiKey, deleteForm, duplicateForm, setAdminMode} = this.props.tabFunctions
         this.setState({submitting: true}, async ()=>{
             toggleBtnEnable( false )
             if (type == "Edit" && name == "apiKey") {
@@ -80,12 +80,43 @@ export default class ListForms extends Component {
                         try {
                             const deleted = await deleteForm( val )
                         } catch(err) {
-                            console.error({err})
+                            console.error({ err })
                         }
                     }
                 } catch(err) {
-                    console.error({err})
+                    console.error({ err })
                 }
+                toggleBtnEnable( true )
+            } else if (type == "Duplicate") {
+                // console.log({ type, name, val })
+                try {
+                    const formName = await swal({
+                        closeOnClickOutside: false,
+                        closeOnEsc: false,
+                        title: "Duplicate Form",
+                        text: 'Please enter the name of the new campaign. It must be unique.',
+                        button: {
+                            text: "Submit"
+                        },
+                        content: {
+                            element: "input",
+                            attributes: {
+                                placeholder: "Enter Name of New Campaign...",
+                                type: "text"
+                            }
+                        }
+                    })
+                    if (formName) {
+                        try {
+                            const duplicated = await duplicateForm( val, formName, this.props.user.id )
+                        } catch(err) {
+                            console.error({ err })
+                        }
+                    }
+                } catch(err) {
+                    console.error({ err })
+                }
+                // console.log({formName})
                 toggleBtnEnable( true )
             } else {
                 toggleBtnEnable( true )
@@ -95,7 +126,7 @@ export default class ListForms extends Component {
     }
 
     async handleEditApiKey() {
-        const {inputValue, allowEdit} = this.state
+        const { inputValue, allowEdit } = this.state
         if (inputValue && !allowEdit) {
             try {
                 let inputDisabled = true;
@@ -110,7 +141,7 @@ export default class ListForms extends Component {
                 if (willEdit) {
                     inputDisabled = false;
                 } 
-                this.setState({inputDisabled, allowEdit: inputDisabled ? false : true})
+                this.setState({ inputDisabled, allowEdit: inputDisabled ? false : true} )
                 this.keyField.current.focus()
                 this.keyField.current.setSelectionRange(0, 1000);
             } catch (err) {
@@ -128,22 +159,37 @@ export default class ListForms extends Component {
         } else {
             error = 'Invalid Characters';
         }
-        this.setState({inputValue, error})
+        this.setState({ inputValue, error })
     }
     
     render() {
-        const self = this;   
-        const tableRows = this.state.list.map((el, ind)=> {
-            if (el.id) {
+        const {
+            handleButtonClick, 
+            handleEditApiKey, 
+            handleInputChange, 
+            keyField, 
+            state: {
+                list, 
+                error, 
+                stored, 
+                inputValue, 
+                inputDisabled, 
+                allowEdit, 
+                submitting 
+            }
+        } = this;   
+        const tableRows = list.map(({ id, form_name, form_status }, ind)=> {
+            if (id) {
                 return (
-                    <tr key={`list-${ind}`} styleName="form.table-row">
-                        <td styleName="form.table-row__cells">{el.id}</td>
-                        <td styleName="form.table-row__cells">{el.form_name}</td>
-                        <td styleName="form.table-row__cells">{el.form_status}</td>
+                    <tr key={`list-${ ind }`} styleName="form.table-row">
+                        <td styleName="form.table-row__cells">{ id }</td>
+                        <td styleName="form.table-row__cells">{ form_name }</td>
+                        <td styleName="form.table-row__cells">{ form_status }</td>
                         <td styleName="form.table-row__cells">
                             <div styleName="flex.flex flex.flex-row flex.flex-axes-center">
-                                <FormButton val="Edit" handleClick={self.handleButtonClick} ctx={{name: "campaign", val: el.id, type: 'Edit'}} />
-                                <FormButton val="Delete" handleClick={self.handleButtonClick} ctx={{name: "campaign", val: el.id, type: 'Delete'}} />
+                                <FormButton val="Edit" handleClick={ handleButtonClick } ctx={ { name: "campaign", val: id, type: 'Edit' } } />
+                                <FormButton val="Delete" handleClick={ handleButtonClick } ctx={ { name: "campaign", val: id, type: 'Delete' } } />
+                                <FormButton val="Duplicate" handleClick={ handleButtonClick } ctx={ { name: "campaign", val: id, type: 'Duplicate' } } />
                             </div>
                         </td>
                     </tr>
@@ -151,7 +197,7 @@ export default class ListForms extends Component {
             } else return null
         });
         return (
-            <React.Fragment>
+            <Fragment>
                 <form onSubmit={(e)=>e.preventDefault()}>
                     <fieldset styleName='form.fieldset'>
                         <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
@@ -159,26 +205,26 @@ export default class ListForms extends Component {
                                 <label htmlFor="apiKey">ApiKey</label>
                                 <input 
                                     id="apiKey"
-                                    styleName={`input.form-control${this.state.error ? " input.error" : ""}${this.state.stored ? " input.stored" : ""}`}
+                                    styleName={`input.form-control${ error ? " input.error" : "" }${ stored ? " input.stored" : "" }`}
                                     type="text"
-                                    value={this.state.inputValue}
-                                    disabled={this.state.inputDisabled}
+                                    value={ inputValue }
+                                    disabled={ inputDisabled }
                                     name="apiKey"
-                                    required={true}
-                                    onChange={this.handleInputChange}
+                                    required={ true }
+                                    onChange={ handleInputChange} 
                                     placeholder="API Key assigned by Giving Services"
-                                    onFocus={this.handleEditApiKey}
-                                    aria-invalid={this.state.error ? true : false} 
-                                    ref={this.keyField}
+                                    onFocus={ handleEditApiKey }
+                                    aria-invalid={ error ? true : false } 
+                                    ref={ keyField }
                                 />
-                                <div styleName="error.error">{this.state.error}</div>
+                                <div styleName="error.error">{error}</div>
                             </div>
                         
-                            <FormButton val="Update" handleClick={this.handleButtonClick} ctx={{name: "apiKey", val: '', type: 'Edit'}} submitting={this.state.submitting}/>
+                            <FormButton val="Update" handleClick={ handleButtonClick } ctx={ { name: "apiKey", val: '', type: 'Edit' } } submitting={ submitting }/>
                             { 
-                                this.state.allowEdit && !this.state.error ? (
-                                    <FormButton val="Save" handleClick={this.handleButtonClick} ctx={{name: 'apiKey', val: '', type: 'Save'}} submitting={this.state.submitting}/>
-                                ) : null
+                                allowEdit && !error && (
+                                    <FormButton val="Save" handleClick={ handleButtonClick } ctx={ { name: 'apiKey', val: '', type: 'Save' } } submitting={ submitting }/>
+                                )
                             }
                         </div>
                     </fieldset>
@@ -201,18 +247,17 @@ export default class ListForms extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {tableRows}
+                        { tableRows }
                         <tr styleName="form.table-row">
                             <td colSpan="4" styleName="form.table-row__cells">
                                 <div styleName="flex.flex flex.flex-row flex.flex-center flex.flex-axes-center">
-                                    <FormButton val="Add New Form" handleClick={this.handleButtonClick} ctx={{name: "campaign", val: '', type: 'Add'}} submitting={this.state.submitting}/>
+                                    <FormButton val="Add New Form" handleClick={ handleButtonClick } ctx={{name: "campaign", val: '', type: 'Add'}} submitting={ submitting} />
                                 </div>
                             </td>
                         </tr>
                     </tbody>
                 </table>
-                
-            </React.Fragment>
+            </Fragment>
         )
     }
 }

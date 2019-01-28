@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 
 import form from './styles/form.css'
 import flex from './styles/flex.css'
@@ -12,7 +12,7 @@ import withFormConfigHandling from './withFormConfigHandling'
 const FormSettings = props => {
     const {fields, errors} = props;
     return (
-        <React.Fragment>
+        <Fragment>
             <form onSubmit={(e)=>{e.preventDefault(); props.handleButtonClick({name: "store", val: '', type: 'form_setup'})}}>
                 <h3>Configure Main Setttings</h3>
                 <p styleName="form.form-info" style={{color: "crimson"}}>Note: Each of these tabs load default settings on this page, but you must click SAVE on each tab to store your configuration in the database. If you do not save on each tab, your form will not function properly. Also, please configure all your settings, at least saving the default values, before changing the Form Status from New to Development/Testing.</p>
@@ -50,7 +50,7 @@ const FormSettings = props => {
                     </div>
                     {
                         fields.AddContactYN === "Y" && (
-                            <React.Fragment>
+                            <Fragment>
                                 <InputGroup
                                     type="text"
                                     id="ContactSource" 
@@ -64,7 +64,7 @@ const FormSettings = props => {
                                     error={errors.ContactSource} 
                                 />
                                 <p styleName="form.form-info">This is generally the same as the campaign name, or <code styleName="form.form-code">{props.currentForm.form_name}</code>.</p>
-                            </React.Fragment>
+                            </Fragment>
                         ) 
                     }
                     </fieldset>
@@ -98,6 +98,10 @@ const FormSettings = props => {
                         />
                     </div>
                     <p styleName="form.form-info">This is generally connected to the campaign name, or <code styleName="form.form-code">{props.currentForm.form_name}-donation-activity</code>.</p>
+                    <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
+                        <Checkbox id="showSeals" checked={fields.showSeals} handleInputChange={props.handleInputChange} label="Show CBN Giving Seals - Digicert & ECFA?"/>
+                    </div>
+                    <p styleName="form.form-info">If your site has it&rsquo;s own set of security and giving seals, leave then unchecked.</p>
                 </fieldset>
                 <fieldset styleName="form.fieldset__bordered">
                     <h3>Toggle Form Status</h3>
@@ -122,7 +126,7 @@ const FormSettings = props => {
                     </div>
                 </fieldset>
             </form>
-        </React.Fragment>
+        </Fragment>
     )
 }
 

@@ -137,6 +137,7 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
                     const numFields = `num${name.substring(0, 1).toUpperCase() + name.substring(1)}`
                     fields[numFields] = +fields[numFields] + 1;
                     newObj = getNewObj(name)
+                    console.log({newObj})
                     fields[name].push({...newObj})
                     errors[name].push({...newObj})
                     break;

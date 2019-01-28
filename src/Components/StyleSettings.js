@@ -1,5 +1,6 @@
-import React, {Component} from 'react'
-
+import React, {Component, Fragment} from 'react'
+import ColorPicker from './ColorPicker'
+import swal from '@sweetalert/with-react'
 import form from './styles/form.css'
 import flex from './styles/flex.css'
 
@@ -26,11 +27,13 @@ export default class StyleSettings extends Component {
                 ...props.defaultValues
             },
             currentForm: props.currentForm,
+            colors: {},
             errors   
         }
 
         this.handleButtonClick=this.handleButtonClick.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
+        this.handlePickerChange=this.handlePickerChange.bind(this)
         this.renderInputs = this.renderInputs.bind(this)
         this.handleUnload=this.handleUnload.bind(this)
     }
@@ -54,7 +57,7 @@ export default class StyleSettings extends Component {
             const newDefaults = nextProps.defaultValues ? JSON.stringify(nextProps.defaultValues) : "";
             const oldDefaults = prevState.defaultValues ? JSON.stringify(prevState.defaultValues) : "";
             if (oldDefaults !== newDefaults) {
-                console.info('New Defaults')
+                // console.info('New Defaults')
                 return {
                     editMode: nextProps.editMode,
                     submitting: false,
@@ -72,7 +75,7 @@ export default class StyleSettings extends Component {
                 return null
             }
         } else if (newSettings !== oldSettings) {
-            console.info('New Settings')
+            // console.info('New Settings')
             return {
                 saved: nextProps.styleSettings.saved,
                 updated: nextProps.styleSettings.updated,
@@ -82,7 +85,7 @@ export default class StyleSettings extends Component {
                 styleSettings: nextProps.styleSettings
             }
         } else if (!errKeys.length && !fieldKeys.length) {
-            console.info('New Defaults, form saved')
+            // console.info('New Defaults, form saved')
             const errors = {
                 formError: ""
             }
@@ -102,7 +105,7 @@ export default class StyleSettings extends Component {
                 errors
             }
         } else {
-            console.info("No New Settings and No New Defaults")
+            // console.info("No New Settings and No New Defaults")
             // console.log({defaultValues: nextProps.defaultValues})
             return {submitting: false}
         }
@@ -145,6 +148,16 @@ export default class StyleSettings extends Component {
         this.props.tabFunctions.handleStyleInputChange(fields, errors, updated)
     }
 
+    handlePickerChange(field, color) {
+        const fields = {...this.state.fields}
+        const errors = {...this.state.errors};
+        errors[field] = "";
+        fields[field] = color.hex;
+        console.log({field, color})
+        const updated = JSON.stringify(fields) !== JSON.stringify(this.state.initialState)
+        this.props.tabFunctions.handleStyleInputChange(fields, errors, updated)
+    }
+
     renderInputs(fields, errors) {
         const fieldNames = Object.keys(fields);
         const groups = fieldNames.reduce((acc, name) => {
@@ -160,14 +173,14 @@ export default class StyleSettings extends Component {
         for ( let group in groups) {
             returnArray.push(groups[group].map((field, ind)=>{
                 return (
-                    <React.Fragment key={`${group}-${ind}`}>
+                    <Fragment key={`${group}-${ind}`}>
                         <InputGroup
                             type="text"
                             id={field}
                             specialStyle="" 
                             label={field.includes('externalFont') ? field : field.substring(2)}
                             placeholder="CSS"
-                            maxLength={32} 
+                            maxLength={field.includes('externalFont') ? 2080 : 32} 
                             required={true} 
                             value={fields[field]} 
                             handleInputChange={this.handleInputChange} 
@@ -175,24 +188,35 @@ export default class StyleSettings extends Component {
                         />
                         { 
                             this.props.displayMode === "Colors" ? (
-                                <div style={
-                                    {
-                                        boxSizing: "border-box", 
-                                        border: "1px solid #ccc", 
-                                        height: "30px", 
-                                        width: "30px", 
-                                        marginLeft: "0", 
-                                        marginTop: "24px", 
-                                        backgroundColor: fields[field]
-                                    }
-                                }></div>
-                            ) : field.includes('externalFont') ? (
+                                <Fragment>
+                                    <div onClick={
+                                        (e) => {
+                                            swal({
+                                                buttons: false,
+                                                content: (
+                                                    <ColorPicker color={fields[field]} field={field} handlePickerChange={this.handlePickerChange}/>
+                                                )
+                                            })
+                                        }
+                                    } style={
+                                        {
+                                            boxSizing: "border-box", 
+                                            border: "1px solid #ccc", 
+                                            height: "30px", 
+                                            width: "30px", 
+                                            marginLeft: "0", 
+                                            marginTop: "24px", 
+                                            backgroundColor: fields[field]
+                                        }
+                                    }></div>
+                                </Fragment>
+                            ) : field.includes('externalFont') && (
                                 <div>
                                     <FormButton val="Remove" handleClick={this.handleButtonClick} ctx={{name: "externalFonts", val: field, type: 'Remove'}} />
                                 </div>
-                            ) : null
+                            ) 
                         }
-                    </React.Fragment>
+                    </Fragment>
                 )
             }));
         }
@@ -211,7 +235,7 @@ export default class StyleSettings extends Component {
         const { fields, errors, currentForm: {form_status} } = this.state;
         let title = this.props.displayMode == "Spacing" ? "Spacing" : this.props.displayMode.slice(0, -1);
         return (
-            <React.Fragment>
+            <Fragment>
                 <form onSubmit={(e)=>{e.preventDefault(); this.handleButtonClick({name: "store", val: '', type: 'css_setup'})}}>
                     <h3>Configure {title} Setttings</h3>
                     {
@@ -220,13 +244,16 @@ export default class StyleSettings extends Component {
                     <fieldset styleName="form.fieldset">
                         {this.renderInputs(fields, errors)}
                         {
-                            this.props.displayMode === "Fonts" ? (
-                                <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
-                                    <div style={{maxWidth: "225px"}}>
-                                        <FormButton val="Add External Font" handleClick={this.handleButtonClick} ctx={{name: "externalFonts", val: '', type: 'Add'}} />
+                            this.props.displayMode === "Fonts" && (
+                                <Fragment>
+                                    <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
+                                        <div style={{maxWidth: "225px"}}>
+                                            <FormButton val="Add External Font" handleClick={this.handleButtonClick} ctx={{name: "externalFonts", val: '', type: 'Add'}} />
+                                        </div>
                                     </div>
-                                </div>
-                            ) : null
+                                    <p styleName="form.form-info">Click &ldquo;Add External Font&rdquo; to enter the URI of the online font. This will be the url that is the 'href' of the font stylesheet.</p>
+                                </Fragment>
+                            )
                         }
                     </fieldset>
 
@@ -238,7 +265,7 @@ export default class StyleSettings extends Component {
                         formMsg={this.state.updated && !this.state.saved ? "Changes require saving": ''}
                     />
                  </form>
-            </React.Fragment>
+            </Fragment>
         )
     }
 }

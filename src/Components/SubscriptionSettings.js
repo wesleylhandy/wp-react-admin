@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 
 import form from './styles/form.css'
 import flex from './styles/flex.css'
@@ -22,7 +22,7 @@ const SubscriptionSettings = props => {
             const subTypes = [
                 { val: 'NewsletterSubs', label: 'Newsletter Subscribe'},
                 { val: 'NewsletterUnSubs', label: 'Newsletter Unsubscribe'},
-                { val: 'MarketingUnSubs', label: 'Marketing Unubscribe'},
+                { val: 'MarketingUnSubs', label: 'Marketing Unsubscribe'},
             ]
 
             const options = subTypes.map((subType, sTind) => {
@@ -68,10 +68,10 @@ const SubscriptionSettings = props => {
     }
 
     return (
-        <React.Fragment>
+        <Fragment>
             <form onSubmit={(e)=>{e.preventDefault(); props.handleButtonClick({name: "store", val: '', type: 'form_setup'})}}>
                 <h3>Configure Subscription Setttings</h3>
-
+                <p styleName="form.form-info">Use these settings to either subscribe or unsubscribe to newsletters or to unsubscribe from default CBN marketing lists. Contact the Digital Media Group for help with these settings.</p>
                 { renderSubInputs(fields.subscriptions.length) }
 
                 <fieldset styleName="form.fieldset">
@@ -91,7 +91,7 @@ const SubscriptionSettings = props => {
                 </div>
                 </fieldset>
             </form>
-        </React.Fragment>
+        </Fragment>
     )
 }
 

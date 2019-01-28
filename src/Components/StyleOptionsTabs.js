@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 
 import TabHead from './TabHead'
 import TabBody from './TabBody'
@@ -40,10 +40,10 @@ export default function StyleOptionsTabs(props) {
     })
 
     return (
-        <React.Fragment>
+        <Fragment>
             { 
-                adminMode !== "List" && adminMode !== "Add" && viewMode === "Style" ? (
-                    <React.Fragment>
+                adminMode !== "List" && adminMode !== "Add" && viewMode === "Style" && (
+                    <Fragment>
                         <div styleName="tabs.tab-headers__submenu--tertiary">
                             {tabs}
                         </div>
@@ -61,11 +61,9 @@ export default function StyleOptionsTabs(props) {
                                 <FormPreview currentForm={currentForm} options={options}/>
                             ) : null
                         }
-                    </React.Fragment>
-                ) : (
-                    null
-                )
+                    </Fragment>
+                ) 
             }
-        </React.Fragment>
+        </Fragment>
     )
 }

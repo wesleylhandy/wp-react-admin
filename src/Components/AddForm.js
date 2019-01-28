@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 
 import flex from './styles/flex.css'
 import input from './styles/input.css'
@@ -61,7 +61,7 @@ export default class AddForm extends Component {
     
     render() {
         return (
-            <React.Fragment>
+            <Fragment>
                 <form onSubmit={(e)=>{e.preventDefault(); this.handleButtonClick({name: "create", val: this.state.form_name, type: 'form_name'})}}>
                     <h3>Add New Form</h3>
                     <fieldset styleName="form.fieldset">
@@ -70,7 +70,7 @@ export default class AddForm extends Component {
                                 type="text"
                                 id="form_name" 
                                 specialStyle="" 
-                                label="Campaign Name/URL Slug" 
+                                label="Campaign Name" 
                                 placeholder="i.e. Giving, or End-of-Year" 
                                 maxLength="256" 
                                 required={true} 
@@ -91,7 +91,7 @@ export default class AddForm extends Component {
                         </div>
                     </fieldset>
                 </form>
-            </React.Fragment>
+            </Fragment>
 
         )
     }
