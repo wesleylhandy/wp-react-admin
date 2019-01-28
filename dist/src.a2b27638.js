@@ -54156,7 +54156,15 @@ function (_Component) {
   }, {
     key: "handleButtonClick",
     value: function handleButtonClick(ctx) {
-      this.props.tabFunctions.handleStyleButtonClick(ctx, this.state.fields, this.state.errors, this.state.initialState, this.state.currentForm.form_status);
+      var _this$state = this.state,
+          initialState = _this$state.initialState,
+          form_status = _this$state.currentForm.form_status;
+
+      var fields = _extends({}, this.state.fields);
+
+      var errors = _extends({}, this.state.errors);
+
+      this.props.tabFunctions.handleStyleButtonClick(ctx, fields, errors, initialState, form_status);
     }
   }, {
     key: "handleInputChange",
@@ -54183,11 +54191,8 @@ function (_Component) {
       var errors = _extends({}, this.state.errors);
 
       errors[field] = "";
-      fields[field] = color.hex;
-      console.log({
-        field: field,
-        color: color
-      });
+      fields[field] = color.hex; // console.log({field, color})
+
       var updated = JSON.stringify(fields) !== JSON.stringify(this.state.initialState);
       this.props.tabFunctions.handleStyleInputChange(fields, errors, updated);
     }
@@ -54198,7 +54203,7 @@ function (_Component) {
 
       var fieldNames = Object.keys(fields);
       var groups = fieldNames.reduce(function (acc, name) {
-        var fieldGroup = name.substring(2).split("-")[0];
+        var fieldGroup = name.includes('externalFont') ? "External Fonts" : name.substring(2).split("-")[0];
 
         if (!acc[fieldGroup]) {
           acc[fieldGroup] = [name];
@@ -54207,7 +54212,8 @@ function (_Component) {
         }
 
         return acc;
-      }, {});
+      }, {}); // console.log({fieldNames, groups})
+
       var returnArray = [];
 
       var _loop = function _loop(group) {
@@ -54220,7 +54226,7 @@ function (_Component) {
             specialStyle: "",
             label: field.includes('externalFont') ? field : field.substring(2),
             placeholder: "CSS",
-            maxLength: field.includes('externalFont') ? 2080 : 32,
+            maxLength: field.includes('externalFont') ? 2080 : 64,
             required: true,
             value: fields[field],
             handleInputChange: _this2.handleInputChange,
@@ -54278,11 +54284,15 @@ function (_Component) {
     value: function render() {
       var _this3 = this;
 
-      var _this$state = this.state,
-          fields = _this$state.fields,
-          errors = _this$state.errors,
-          form_status = _this$state.currentForm.form_status;
-      var title = this.props.displayMode == "Spacing" ? "Spacing" : this.props.displayMode.slice(0, -1);
+      var _this$state2 = this.state,
+          fields = _this$state2.fields,
+          errors = _this$state2.errors,
+          form_status = _this$state2.currentForm.form_status,
+          submitting = _this$state2.submitting,
+          updated = _this$state2.updated,
+          saved = _this$state2.saved;
+      var displayMode = this.props.displayMode;
+      var title = displayMode == "Spacing" ? "Spacing" : displayMode.slice(0, -1);
       return _react.default.createElement(_react.Fragment, null, _react.default.createElement("form", {
         onSubmit: function onSubmit(e) {
           e.preventDefault();
@@ -54297,7 +54307,7 @@ function (_Component) {
         className: "form-info__3Welr"
       }, "Be sure to change and/or save these settings before changing Form Status to Development/Testing"), _react.default.createElement("fieldset", {
         className: "fieldset__3xxg-"
-      }, this.renderInputs(fields, errors), this.props.displayMode === "Fonts" && _react.default.createElement(_react.Fragment, null, _react.default.createElement("div", {
+      }, this.renderInputs(fields, errors), displayMode === "Fonts" && _react.default.createElement(_react.Fragment, null, _react.default.createElement("div", {
         className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-axes-center__gx3gz"
       }, _react.default.createElement("div", {
         style: {
@@ -54315,14 +54325,14 @@ function (_Component) {
         className: "form-info__3Welr"
       }, "Click \u201CAdd External Font\u201D to enter the URI of the online font. This will be the url that is the 'href' of the font stylesheet."))), _react.default.createElement(_SaveButton.default, {
         handleClick: this.handleButtonClick,
-        submitting: this.state.submitting,
+        submitting: submitting,
         ctx: {
           name: "store",
-          val: '',
+          val: displayMode,
           type: 'css_setup'
         },
         error: errors.formError,
-        formMsg: this.state.updated && !this.state.saved ? "Changes require saving" : ''
+        formMsg: updated && !saved ? "Changes require saving" : ''
       })));
     }
   }, {
@@ -55946,21 +55956,17 @@ function (_Component) {
           while (1) {
             switch (_context9.prev = _context9.next) {
               case 0:
-                console.log({
-                  key: key,
-                  method: method
-                });
-                _context9.prev = 1;
+                _context9.prev = 0;
                 options = _extends({}, this.state.options);
                 options.method = method;
                 options.body = JSON.stringify({
                   api_key: key
                 }); // console.log({options: JSON.stringify(options, null, 5)})
 
-                _context9.next = 7;
+                _context9.next = 6;
                 return (0, _fetchHelpers.callApi)("".concat(this.props.base, "cbngiving/v1/admin/forms/api"), options);
 
-              case 7:
+              case 6:
                 completed = _context9.sent;
 
                 // console.log({completed})
@@ -55972,12 +55978,12 @@ function (_Component) {
 
                 return _context9.abrupt("return", true);
 
-              case 12:
-                _context9.prev = 12;
-                _context9.t0 = _context9["catch"](1);
+              case 11:
+                _context9.prev = 11;
+                _context9.t0 = _context9["catch"](0);
 
                 if (!_context9.t0.message.includes("Duplicate value.")) {
-                  _context9.next = 19;
+                  _context9.next = 18;
                   break;
                 }
 
@@ -55986,16 +55992,16 @@ function (_Component) {
                 });
                 return _context9.abrupt("return", true);
 
-              case 19:
+              case 18:
                 this.handleAPIErrors(_context9.t0);
                 return _context9.abrupt("return", false);
 
-              case 21:
+              case 20:
               case "end":
                 return _context9.stop();
             }
           }
-        }, _callee9, this, [[1, 12]]);
+        }, _callee9, this, [[0, 11]]);
       }));
 
       return function setApiKey(_x9, _x10) {
@@ -56035,16 +56041,21 @@ function (_Component) {
 
   }, {
     key: "handleStyleButtonClick",
-    value: function handleStyleButtonClick(ctx, fields, errors, initialState, form_status) {
+    value: function handleStyleButtonClick(_ref9, fields, errors, initialState, form_status) {
       var _this5 = this;
+
+      var name = _ref9.name,
+          val = _ref9.val,
+          type = _ref9.type;
 
       var styleSettings = _extends({}, this.state.styleSettings);
 
-      if (ctx.name === "externalFonts") {
+      if (name === "externalFonts") {
         // console.log({ctx})
-        if (ctx.type === "Remove") {
-          delete fields[ctx.val];
-          delete errors[ctx.val];
+        if (type === "Remove") {
+          // console.log({val})
+          delete fields[val];
+          delete errors[val]; // console.log({fields})
         } else {
           var _getFontInfo = (0, _getFontInfo2.getFontInfo)(true, "externalFont", fields),
               count = _getFontInfo.count; //add empty field to setting
@@ -56071,13 +56082,58 @@ function (_Component) {
         }, function () {
           _this5.toggleBtnEnable(false);
 
-          var cssConfig = _extends({}, _this5.state.cssConfig, fields);
+          var config = _extends({}, _this5.state.cssConfig);
 
-          _this5.storeConfig(_this5.state.currentForm.id, ctx.type, cssConfig, form_status).then(function (success) {
-            console.log({
-              success: success
+          if (val == "Fonts") {
+            var fieldKeys = Object.keys(fields);
+            var configKeys = Object.keys(config);
+            var fieldFonts = fieldKeys.filter(function (k) {
+              return k.includes("externalFont");
             });
+            var configFonts = configKeys.filter(function (k) {
+              return k.includes("externalFont");
+            }); // console.log({fieldFonts, configFonts})
 
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+              for (var _iterator = configFonts[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                var k = _step.value;
+                // remove any previous config settings
+                delete config[k];
+              } // console.log({config})
+
+            } catch (err) {
+              _didIteratorError = true;
+              _iteratorError = err;
+            } finally {
+              try {
+                if (!_iteratorNormalCompletion && _iterator.return != null) {
+                  _iterator.return();
+                }
+              } finally {
+                if (_didIteratorError) {
+                  throw _iteratorError;
+                }
+              }
+            }
+
+            fieldFonts.forEach(function (font, ind) {
+              // set new config settings to align with length of fieldFonts
+              // this will always set list of externalFonts to be zero-indexed
+              config["externalFont".concat(ind)] = fields[font]; // deleting field font will prevent duplication of higher indexed fonts from initial state
+
+              delete fields[font];
+            });
+          }
+
+          var cssConfig = _extends({}, config, fields); // console.log({cssConfig})
+
+
+          _this5.storeConfig(_this5.state.currentForm.id, type, cssConfig, form_status).then(function (success) {
+            // console.log({success})
             if (success) {
               //update settings
               styleSettings.submitting = false;
@@ -56284,7 +56340,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62271" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52447" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

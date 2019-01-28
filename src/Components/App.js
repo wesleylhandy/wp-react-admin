@@ -240,7 +240,7 @@ class App extends Component {
     }
 
     async setApiKey(key, method) {
-        console.log({key, method})
+        // console.log({key, method})
         try {
             const options = {...this.state.options}
             options.method = method;
@@ -284,13 +284,15 @@ class App extends Component {
      * @param {Object} fields 
      * @param {Object} errors 
      */
-    handleStyleButtonClick(ctx, fields, errors, initialState, form_status) {
+    handleStyleButtonClick({name, val, type}, fields, errors, initialState, form_status) {
         const styleSettings = {...this.state.styleSettings}
-        if (ctx.name === "externalFonts") {
+        if (name === "externalFonts") {
             // console.log({ctx})
-            if (ctx.type === "Remove") {
-                delete fields[ctx.val]
-                delete errors[ctx.val]
+            if (type === "Remove") {
+                // console.log({val})
+                delete fields[val]
+                delete errors[val]
+                // console.log({fields})
             } else {
                 const {count} = getFontInfo(true, "externalFont", fields)
                 //add empty field to setting
@@ -309,10 +311,31 @@ class App extends Component {
             styleSettings.errors = errors;
             this.setState({styleSettings}, ()=>{
                 this.toggleBtnEnable( false )
-                const cssConfig = {...this.state.cssConfig, ...fields};
-                this.storeConfig(this.state.currentForm.id, ctx.type, cssConfig, form_status)
+                let config = {...this.state.cssConfig}
+                if (val == "Fonts") {
+                    const fieldKeys = Object.keys(fields)
+                    const configKeys = Object.keys(config)
+                    const fieldFonts = fieldKeys.filter(k=> k.includes("externalFont"))
+                    const configFonts = configKeys.filter(k=> k.includes("externalFont"))
+                    // console.log({fieldFonts, configFonts})
+                    for (let k of configFonts) {
+                        // remove any previous config settings
+                        delete config[k]
+                    }
+                    // console.log({config})
+                    fieldFonts.forEach((font, ind)=>{
+                        // set new config settings to align with length of fieldFonts
+                        // this will always set list of externalFonts to be zero-indexed
+                        config[`externalFont${ind}`] = fields[font];
+                        // deleting field font will prevent duplication of higher indexed fonts from initial state
+                        delete fields[font]
+                    })
+                }
+                const cssConfig = {...config, ...fields};
+                // console.log({cssConfig})
+                this.storeConfig(this.state.currentForm.id, type, cssConfig, form_status)
                 .then(success=>{
-                    console.log({success})
+                    // console.log({success})
                     if (success) {
                         //update settings
                         styleSettings.submitting = false;

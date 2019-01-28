@@ -131,7 +131,10 @@ export default class StyleSettings extends Component {
     }
 
     handleButtonClick(ctx) {
-        this.props.tabFunctions.handleStyleButtonClick(ctx, this.state.fields, this.state.errors, this.state.initialState, this.state.currentForm.form_status)
+        const {initialState, currentForm: {form_status}} = this.state;
+        const fields = {...this.state.fields}
+        const errors = {...this.state.errors}
+        this.props.tabFunctions.handleStyleButtonClick(ctx, fields, errors, initialState, form_status)
     }
 
     handleInputChange(e) {
@@ -153,7 +156,7 @@ export default class StyleSettings extends Component {
         const errors = {...this.state.errors};
         errors[field] = "";
         fields[field] = color.hex;
-        console.log({field, color})
+        // console.log({field, color})
         const updated = JSON.stringify(fields) !== JSON.stringify(this.state.initialState)
         this.props.tabFunctions.handleStyleInputChange(fields, errors, updated)
     }
@@ -161,7 +164,7 @@ export default class StyleSettings extends Component {
     renderInputs(fields, errors) {
         const fieldNames = Object.keys(fields);
         const groups = fieldNames.reduce((acc, name) => {
-            const fieldGroup = name.substring(2).split("-")[0];
+            const fieldGroup = name.includes('externalFont') ? "External Fonts" : name.substring(2).split("-")[0];
             if ( !acc[fieldGroup] ) {
                 acc[fieldGroup] = [name]
             } else {
@@ -169,6 +172,7 @@ export default class StyleSettings extends Component {
             }
             return acc
         }, {})
+        // console.log({fieldNames, groups})
         const returnArray = [];
         for ( let group in groups) {
             returnArray.push(groups[group].map((field, ind)=>{
@@ -180,7 +184,7 @@ export default class StyleSettings extends Component {
                             specialStyle="" 
                             label={field.includes('externalFont') ? field : field.substring(2)}
                             placeholder="CSS"
-                            maxLength={field.includes('externalFont') ? 2080 : 32} 
+                            maxLength={field.includes('externalFont') ? 2080 : 64} 
                             required={true} 
                             value={fields[field]} 
                             handleInputChange={this.handleInputChange} 
@@ -232,8 +236,9 @@ export default class StyleSettings extends Component {
     }
    
     render() {
-        const { fields, errors, currentForm: {form_status} } = this.state;
-        let title = this.props.displayMode == "Spacing" ? "Spacing" : this.props.displayMode.slice(0, -1);
+        const { fields, errors, currentForm: {form_status}, submitting, updated, saved} = this.state;
+        const {displayMode} = this.props;
+        let title = displayMode == "Spacing" ? "Spacing" : displayMode.slice(0, -1);
         return (
             <Fragment>
                 <form onSubmit={(e)=>{e.preventDefault(); this.handleButtonClick({name: "store", val: '', type: 'css_setup'})}}>
@@ -244,7 +249,7 @@ export default class StyleSettings extends Component {
                     <fieldset styleName="form.fieldset">
                         {this.renderInputs(fields, errors)}
                         {
-                            this.props.displayMode === "Fonts" && (
+                            displayMode === "Fonts" && (
                                 <Fragment>
                                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                                         <div style={{maxWidth: "225px"}}>
@@ -259,10 +264,10 @@ export default class StyleSettings extends Component {
 
                     <SaveButton 
                         handleClick={this.handleButtonClick} 
-                        submitting={this.state.submitting} 
-                        ctx={{name: "store", val: '', type: 'css_setup'}} 
+                        submitting={submitting} 
+                        ctx={{name: "store", val: displayMode, type: 'css_setup'}} 
                         error={errors.formError} 
-                        formMsg={this.state.updated && !this.state.saved ? "Changes require saving": ''}
+                        formMsg={updated && !saved ? "Changes require saving": ''}
                     />
                  </form>
             </Fragment>
