@@ -835,6 +835,12 @@ input[type="radio"].radio-group__input__2RrAr+label:empty:before {
 
 .error__32APg.amount-error__3Nc_3 {
     text-align: center;
-}.color-picker__L5zPh>div {
+}.color-picker__L5zPh {
+    background-color: rgba(0,0,0, .24);
+    padding: 10px 0;
+    margin: 0;
+    border-radius: 4px;
+}
+.color-picker__L5zPh>div {
     margin: 0 auto !important;
 }

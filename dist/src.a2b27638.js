@@ -37282,7 +37282,7 @@ function (_Component) {
                   return toggleBtnEnable(true);
                 });
 
-                _context.next = 59;
+                _context.next = 61;
                 break;
 
               case 6:
@@ -37309,7 +37309,7 @@ function (_Component) {
 
                   toggleBtnEnable(true);
                 });
-                _context.next = 59;
+                _context.next = 61;
                 break;
 
               case 11:
@@ -37365,12 +37365,12 @@ function (_Component) {
 
               case 31:
                 toggleBtnEnable(true);
-                _context.next = 59;
+                _context.next = 61;
                 break;
 
               case 34:
                 if (!(type == "Duplicate")) {
-                  _context.next = 57;
+                  _context.next = 59;
                   break;
                 }
 
@@ -37397,7 +37397,7 @@ function (_Component) {
                 formName = _context.sent;
 
                 if (!formName) {
-                  _context.next = 49;
+                  _context.next = 51;
                   break;
                 }
 
@@ -37407,43 +37407,50 @@ function (_Component) {
 
               case 43:
                 duplicated = _context.sent;
-                _context.next = 49;
+                toggleBtnEnable(true);
+
+                if (duplicated) {
+                  // console.log({duplicated, val})
+                  setAdminMode("Edit", duplicated);
+                }
+
+                _context.next = 51;
                 break;
 
-              case 46:
-                _context.prev = 46;
+              case 48:
+                _context.prev = 48;
                 _context.t2 = _context["catch"](40);
                 console.error({
                   err: _context.t2
                 });
 
-              case 49:
-                _context.next = 54;
+              case 51:
+                _context.next = 56;
                 break;
 
-              case 51:
-                _context.prev = 51;
+              case 53:
+                _context.prev = 53;
                 _context.t3 = _context["catch"](35);
                 console.error({
                   err: _context.t3
                 });
 
-              case 54:
+              case 56:
                 // console.log({formName})
                 toggleBtnEnable(true);
-                _context.next = 59;
+                _context.next = 61;
                 break;
 
-              case 57:
+              case 59:
                 toggleBtnEnable(true);
                 setAdminMode(type, val);
 
-              case 59:
+              case 61:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[12, 28], [17, 23], [35, 51], [40, 46]]);
+        }, _callee, this, [[12, 28], [17, 23], [35, 53], [40, 48]]);
       })));
     }
   }, {
@@ -37591,7 +37598,9 @@ function (_Component) {
           }))));
         } else return null;
       });
-      return _react.default.createElement(_react.Fragment, null, _react.default.createElement("form", {
+      return _react.default.createElement(_react.Fragment, null, _react.default.createElement("p", {
+        className: "form-info__3Welr"
+      }, "Please contact Digital Media Group with your domain name and the URI of your first giving Form to obtain an API Key. Whenever you add a new giving form, please submit the Campaign Name to Digital Media so that your form can connect to the API."), _react.default.createElement("form", {
         onSubmit: function onSubmit(e) {
           return e.preventDefault();
         }
@@ -38027,7 +38036,9 @@ function (_Component) {
             type: 'form_name'
           });
         }
-      }, _react.default.createElement("h3", null, "Add New Form"), _react.default.createElement("fieldset", {
+      }, _react.default.createElement("h3", null, "Add New Form"), _react.default.createElement("p", {
+        className: "form-info__3Welr"
+      }, "Whenever you add a new giving form, please submit the Campaign Name to Digital Media so that your form can connect to the API."), _react.default.createElement("fieldset", {
         className: "fieldset__3xxg-"
       }, _react.default.createElement("div", {
         className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-axes-center__gx3gz"
@@ -38042,7 +38053,9 @@ function (_Component) {
         value: this.state.form_name,
         handleInputChange: this.handleInputChange,
         error: this.state.error
-      }))), _react.default.createElement("fieldset", {
+      }))), _react.default.createElement("p", {
+        className: "form-info__3Welr"
+      }, "For security purposes, if avoidable, please use a campaign name that differs from the slug of the page where it will be hosted."), _react.default.createElement("fieldset", {
         className: "fieldset__3xxg-"
       }, _react.default.createElement("div", {
         style: {
@@ -54191,11 +54204,8 @@ function (_Component) {
       var errors = _extends({}, this.state.errors);
 
       errors[field] = "";
-      fields[field] = "rgba(".concat(color.rgb.r, ", ").concat(color.rgb.g, ", ").concat(color.rgb.b, ", ").concat(color.rgb.a, ")");
-      console.log({
-        field: field,
-        color: color
-      });
+      fields[field] = "rgba(".concat(color.rgb.r, ", ").concat(color.rgb.g, ", ").concat(color.rgb.b, ", ").concat(color.rgb.a, ")"); // console.log({field, color})
+
       var updated = JSON.stringify(fields) !== JSON.stringify(this.state.initialState);
       this.props.tabFunctions.handleStyleInputChange(fields, errors, updated);
     }
@@ -54237,12 +54247,13 @@ function (_Component) {
           }), _this2.props.displayMode === "Colors" ? _react.default.createElement(_react.Fragment, null, _react.default.createElement("div", {
             onClick: function onClick(e) {
               (0, _withReact.default)({
-                buttons: false,
+                button: "Submit",
                 content: _react.default.createElement(_ColorPicker.default, {
                   color: fields[field],
                   field: field,
                   handlePickerChange: _this2.handlePickerChange
-                })
+                }),
+                title: field.substring(2)
               });
             },
             style: {
@@ -56343,7 +56354,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55163" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65525" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

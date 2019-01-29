@@ -64,6 +64,7 @@ export default class AddForm extends Component {
             <Fragment>
                 <form onSubmit={(e)=>{e.preventDefault(); this.handleButtonClick({name: "create", val: this.state.form_name, type: 'form_name'})}}>
                     <h3>Add New Form</h3>
+                    <p styleName="form.form-info">Whenever you add a new giving form, please submit the Campaign Name to Digital Media so that your form can connect to the API.</p>
                     <fieldset styleName="form.fieldset">
                         <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                             <InputGroup
@@ -80,6 +81,7 @@ export default class AddForm extends Component {
                             />
                         </div>
                     </fieldset>
+                    <p styleName="form.form-info">For security purposes, if avoidable, please use a campaign name that differs from the slug of the page where it will be hosted.</p>
                     <fieldset styleName="form.fieldset">
                         <div style={{maxWidth: "88px"}}>
                             <FormButton 

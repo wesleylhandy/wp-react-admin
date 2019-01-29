@@ -196,10 +196,11 @@ export default class StyleSettings extends Component {
                                     <div onClick={
                                         (e) => {
                                             swal({
-                                                buttons: false,
+                                                button: "Submit",
                                                 content: (
                                                     <ColorPicker color={fields[field]} field={field} handlePickerChange={this.handlePickerChange}/>
-                                                )
+                                                ),
+                                                title: field.substring(2)
                                             })
                                         }
                                     } style={

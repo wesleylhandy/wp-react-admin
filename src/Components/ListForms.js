@@ -109,6 +109,11 @@ export default class ListForms extends Component {
                     if (formName) {
                         try {
                             const duplicated = await duplicateForm( val, formName, this.props.user.id )
+                            toggleBtnEnable( true )
+                            if (duplicated) {
+                                // console.log({duplicated, val})
+                                setAdminMode("Edit", duplicated);
+                            }
                         } catch(err) {
                             console.error({ err })
                         }
@@ -198,6 +203,7 @@ export default class ListForms extends Component {
         });
         return (
             <Fragment>
+                <p styleName="form.form-info">Please contact Digital Media Group with your domain name and the URI of your first giving Form to obtain an API Key. Whenever you add a new giving form, please submit the Campaign Name to Digital Media so that your form can connect to the API.</p>
                 <form onSubmit={(e)=>e.preventDefault()}>
                     <fieldset styleName='form.fieldset'>
                         <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
