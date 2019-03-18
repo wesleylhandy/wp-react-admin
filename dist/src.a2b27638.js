@@ -36657,12 +36657,14 @@ function getDefaultValues(editMode, type, config) {
     case "emails":
       defaultValues = {
         fields: {
+          EmailSubjectLine: editMode && config.hasOwnProperty('EmailSubjectLine') ? config.EmailSubjectLine : "",
           header: editMode && config.hasOwnProperty('header') ? config.header : "<body><table width='553' border='0' align='center' cellpadding='0' cellspacing='5'><tr><td height='43' align='left' valign='top'><img src='http://www.cbn.com/images/CBN-header-email.gif' alt='CBN.com' width='553' height='41' /></td></tr><tr><td align='left' valign='top'>",
           single: editMode && config.hasOwnProperty('single') ? config.single : "<p>Dear #FirstName#,</p><p>Thank you for giving to CBN. It is with the help of friends like you that CBN is able to take  the Gospel to the nations - and people are hearing a message of hope in Jesus  Christ.&nbsp; Every day, through <em>The 700 Club</em>,  CBN News, and other CBN programs, the truth of God's Word is being broadcast to  precious people through satellite, terrestrial television, and cable, as well  as the Internet.</p><p>Thank you for your  help in making all of this possible. May God richly bless you for your  faithfulness to Him.</p><p>In Christ,<br /><img src='http://www.cbn.com/images/PRobertson_signature.jpg' alt='Signature' width='124' height='49' /><br />Pat Robertson<br /></p><p><a href='http://www1.cbn.com/cbn-partners'>Find out more about CBN Ministries</a></p><hr />",
           monthly: editMode && config.hasOwnProperty('monthly') ? config.monthly : "<p>Dear #FirstName#,</p><p>Thank you for giving to CBN. It is with the help of friends like you that CBN is able to take  the Gospel to the nations - and people are hearing a message of hope in Jesus  Christ.&nbsp; Every day, through <em>The 700 Club</em>,  CBN News, and other CBN programs, the truth of God's Word is being broadcast to  precious people through satellite, terrestrial television, and cable, as well  as the Internet.</p><p>Thank you for your  help in making all of this possible. May God richly bless you for your  faithfulness to Him.</p><p>In Christ,<br /><img src='http://www.cbn.com/images/PRobertson_signature.jpg' alt='Signature' width='124' height='49' /><br />Pat Robertson<br /></p><p><a href='http://www1.cbn.com/cbn-partners'>Find out more about CBN Ministries</a></p><hr />",
           product: editMode && config.hasOwnProperty('product') ? config.product : "<p>Dear #FirstName#,</p><p>Thank you for giving to CBN. It is with the help of friends like you that CBN is able to take  the Gospel to the nations - and people are hearing a message of hope in Jesus  Christ.&nbsp; Every day, through <em>The 700 Club</em>,  CBN News, and other CBN programs, the truth of God's Word is being broadcast to  precious people through satellite, terrestrial television, and cable, as well  as the Internet.</p><p>Thank you for your  help in making all of this possible. May God richly bless you for your  faithfulness to Him.</p><p>In Christ,<br /><img src='http://www.cbn.com/images/PRobertson_signature.jpg' alt='Signature' width='124' height='49' /><br />Pat Robertson<br /></p><p><a href='http://www1.cbn.com/cbn-partners'>Find out more about CBN Ministries</a></p><hr />"
         },
         errors: {
+          EmailSubjectLine: '',
           header: '',
           single: '',
           monthly: '',
@@ -40555,6 +40557,8 @@ var _form = _interopRequireDefault(require("./styles/form.css"));
 
 var _flex = _interopRequireDefault(require("./styles/flex.css"));
 
+var _InputGroup = _interopRequireDefault(require("./InputGroup"));
+
 var _TextGroup = _interopRequireDefault(require("./TextGroup"));
 
 var _SaveButton = _interopRequireDefault(require("./SaveButton"));
@@ -40608,6 +40612,19 @@ var EmailSettings = function EmailSettings(_ref) {
   }, "<body>"), " tag."), _react.default.createElement("fieldset", {
     className: "fieldset__3xxg-"
   }, _react.default.createElement("div", {
+    className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-axes-center__gx3gz"
+  }, _react.default.createElement(_InputGroup.default, {
+    type: "text",
+    id: "EmailSubjectLine",
+    specialStyle: "",
+    label: "Email Subject Line",
+    value: fields.EmailSubjectLine,
+    placeholder: "i.e. Thank You For Your Contribution",
+    maxLength: "200",
+    required: false,
+    error: errors.EmailSubjectLine,
+    handleInputChange: handleInputChange
+  })), _react.default.createElement("div", {
     className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-axes-center__gx3gz"
   }, _react.default.createElement(_TextGroup.default, {
     id: "header",
@@ -40697,7 +40714,7 @@ exports.default = _default2;
 })();
 
 ;
-},{"react-hot-loader":"node_modules/react-hot-loader/index.js","react":"node_modules/react/index.js","./styles/form.css":"src/Components/styles/form.css","./styles/flex.css":"src/Components/styles/flex.css","./TextGroup":"src/Components/TextGroup.js","./SaveButton":"src/Components/SaveButton.js","./withFormConfigHandling":"src/Components/withFormConfigHandling.js"}],"node_modules/lodash/_freeGlobal.js":[function(require,module,exports) {
+},{"react-hot-loader":"node_modules/react-hot-loader/index.js","react":"node_modules/react/index.js","./styles/form.css":"src/Components/styles/form.css","./styles/flex.css":"src/Components/styles/flex.css","./InputGroup":"src/Components/InputGroup.js","./TextGroup":"src/Components/TextGroup.js","./SaveButton":"src/Components/SaveButton.js","./withFormConfigHandling":"src/Components/withFormConfigHandling.js"}],"node_modules/lodash/_freeGlobal.js":[function(require,module,exports) {
 var global = arguments[3];
 /** Detect free variable `global` from Node.js. */
 var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
@@ -56354,7 +56371,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65525" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61524" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
