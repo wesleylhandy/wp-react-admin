@@ -15,6 +15,8 @@
     "dependencies": {
         "@sweetalert/with-react": "^0.1.1",
         "formdata-polyfill": "^3.0.11",
+        "highlight.js": "^9.15.6",
+        "marked": "^0.6.1",
         "promise-polyfill": "^8.1.0",
         "raf": "^3.4.0",
         "react": "^16.6.0",

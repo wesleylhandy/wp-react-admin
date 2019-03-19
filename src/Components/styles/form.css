@@ -255,6 +255,11 @@ tbody>tr.table-row:last-child>td.table-row__cells+td.table-row__cells {
     border-left: none;
 }
 
+.fullWidth {
+    width: unset;
+    text-align: left;
+}
+
 @media screen and (max-width: 365px) {
     .submit-button {
         max-width: 270px;

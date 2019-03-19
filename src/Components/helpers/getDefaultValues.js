@@ -1,3 +1,31 @@
+const defaultMarkDown = `# This is an h1 header 
+## This is an h2 header
+**This is Bold**, *This is Italicized*, This is plain text
+
+1. This is an ordered list
+2. Next item
+
+* This is an unordered list
+* Next Item
+
+Click &ldquo;Preview&rdquo; -> to see more!
+
+[This is a link](http://www1.cbn.com)`;
+
+const defaultHTML = `<h1 id="this-is-an-h1-header">This is an h1 header</h1>
+<h2 id="this-is-an-h2-header">This is an h2 header</h2>
+<p><strong>This is Bold</strong>, <em>This is Italicized</em>, This is plain text</p>
+<ol>
+<li>This is an ordered list</li>
+<li>Next item</li>
+</ol>
+<ul>
+<li>This is an unordered list</li>
+<li>Next Item</li>
+</ul>
+<p>Click &ldquo;Preview&rdquo; -&gt; to see more!</p>
+<p><a href="http://www1.cbn.com">This is a link</a></p>`
+
 /**
  * Takes in an object and fills with default values or returns existing value
  * @param {Boolean} editMode - only read existing config if in editMode
@@ -55,15 +83,27 @@ export function getDefaultValues(editMode, type, config) {
                 "--placeholder-color": editMode && config.hasOwnProperty("--placeholder-color") ? config["--placeholder-color"]: '#7F8C9A',
                 "--link-color": editMode && config.hasOwnProperty("--link-color") ? config["--link-color"]: "#1775BC",
                 "--link-hover-color": editMode && config.hasOwnProperty("--link-hover-color") ? config["--link-hover-color"]: "#66afe9",
-                "--btn-text-color": editMode && config.hasOwnProperty("--btn-text-color") ? config["--btn-text-color"] : '#fff'
+                "--btn-text-color": editMode && config.hasOwnProperty("--btn-text-color") ? config["--btn-text-color"] : '#fff',
+                "--amt-tab-bg-color": editMode && config.hasOwnProperty("----amt-tab-bg-color") ? config["----amt-tab-bg-color"] :"transparent",
+                "--amt-tab-hover-bg-color": editMode && config.hasOwnProperty("--amt-tab-hover-bg-color") ? config["--amt-tab-hover-bg-color"] :"#73bf43",
+                "--amt-tab-text-color": editMode && config.hasOwnProperty("--amt-tab-text-color") ? config["--amt-tab-text-color"] :"#091d44",
+                "--tab-bg-color": editMode && config.hasOwnProperty("--tab-bg-color") ? config["--tab-bg-color"] :"transparent",
+                "--tab-border-color": editMode && config.hasOwnProperty("--tab-border-color") ? config["--tab-border-color"] :"#73bf43",
+                "--tab-hover-text-color": editMode && config.hasOwnProperty("--tab-hover-text-color") ? config["--tab-hover-text-color"] :"#fff",
+                "--tab-hover-bg-color": editMode && config.hasOwnProperty("--tab-hover-bg-color") ? config["--tab-hover-bg-color"] :"#73bf43",
+                "--tab-hover-border-color": editMode && config.hasOwnProperty("--tab-hover-border-color") ? config["--tab-hover-border-color"] :"#091d44",
+                "--tab-text-color": editMode && config.hasOwnProperty("--tab-text-color") ? config["--tab-text-color"] :"#091d44",
             }
             break;
         case "spacing":
             defaultValues = {
                 "--btn-border-radius": editMode && config.hasOwnProperty("--btn-border-radius") ? config["--btn-border-radius"]: "0",
+                "--amt-tab-border-radius": editMode && config.hasOwnProperty("--amt-tab-border-radius") ? config["--amt-tab-border-radius"] :"4px",
+                "--tab-border-radius": editMode && config.hasOwnProperty("--tab-border-radius") ? config["--tab-border-radius"] :"4px",
                 "--input-border-radius": editMode && config.hasOwnProperty("--input-border-radius") ? config["--input-border-radius"]: "0",
                 "--form-border-radius": editMode && config.hasOwnProperty("--form-border-radius") ? config["--form-border-radius"]: "20px",
                 "--form-border-width": editMode && config.hasOwnProperty("--form-border-width") ? config["--form-border-width"]: '2px',
+                "--form-max-width": editMode && config.hasOwnProperty("--form-max-width") ? config["--form-max-width"]: '680px',
                 "--form-padding": editMode && config.hasOwnProperty("--form-padding") ? config["--form-padding"] : '0',
                 "--panel-border-radius": editMode && config.hasOwnProperty("--panel-border-radius") ? config["--panel-border-radius"]: "0",
                 "--panel-border-width": editMode && config.hasOwnProperty("--panel-border-width") ? config["--panel-border-width"]: '0',
@@ -75,10 +115,14 @@ export function getDefaultValues(editMode, type, config) {
             defaultValues = {
                 fields: {
                     EmailSubjectLine: editMode && config.hasOwnProperty('EmailSubjectLine') ? config.EmailSubjectLine : "", 
-                    header: editMode && config.hasOwnProperty('header') ? config.header : "<body><table width='553' border='0' align='center' cellpadding='0' cellspacing='5'><tr><td height='43' align='left' valign='top'><img src='http://www.cbn.com/images/CBN-header-email.gif' alt='CBN.com' width='553' height='41' /></td></tr><tr><td align='left' valign='top'>",
-                    single: editMode && config.hasOwnProperty('single') ? config.single : "<p>Dear #FirstName#,</p><p>Thank you for giving to CBN. It is with the help of friends like you that CBN is able to take  the Gospel to the nations - and people are hearing a message of hope in Jesus  Christ.&nbsp; Every day, through <em>The 700 Club</em>,  CBN News, and other CBN programs, the truth of God's Word is being broadcast to  precious people through satellite, terrestrial television, and cable, as well  as the Internet.</p><p>Thank you for your  help in making all of this possible. May God richly bless you for your  faithfulness to Him.</p><p>In Christ,<br /><img src='http://www.cbn.com/images/PRobertson_signature.jpg' alt='Signature' width='124' height='49' /><br />Pat Robertson<br /></p><p><a href='http://www1.cbn.com/cbn-partners'>Find out more about CBN Ministries</a></p><hr />",
-                    monthly: editMode && config.hasOwnProperty('monthly') ? config.monthly : "<p>Dear #FirstName#,</p><p>Thank you for giving to CBN. It is with the help of friends like you that CBN is able to take  the Gospel to the nations - and people are hearing a message of hope in Jesus  Christ.&nbsp; Every day, through <em>The 700 Club</em>,  CBN News, and other CBN programs, the truth of God's Word is being broadcast to  precious people through satellite, terrestrial television, and cable, as well  as the Internet.</p><p>Thank you for your  help in making all of this possible. May God richly bless you for your  faithfulness to Him.</p><p>In Christ,<br /><img src='http://www.cbn.com/images/PRobertson_signature.jpg' alt='Signature' width='124' height='49' /><br />Pat Robertson<br /></p><p><a href='http://www1.cbn.com/cbn-partners'>Find out more about CBN Ministries</a></p><hr />",
-                    product: editMode && config.hasOwnProperty('product') ? config.product : "<p>Dear #FirstName#,</p><p>Thank you for giving to CBN. It is with the help of friends like you that CBN is able to take  the Gospel to the nations - and people are hearing a message of hope in Jesus  Christ.&nbsp; Every day, through <em>The 700 Club</em>,  CBN News, and other CBN programs, the truth of God's Word is being broadcast to  precious people through satellite, terrestrial television, and cable, as well  as the Internet.</p><p>Thank you for your  help in making all of this possible. May God richly bless you for your  faithfulness to Him.</p><p>In Christ,<br /><img src='http://www.cbn.com/images/PRobertson_signature.jpg' alt='Signature' width='124' height='49' /><br />Pat Robertson<br /></p><p><a href='http://www1.cbn.com/cbn-partners'>Find out more about CBN Ministries</a></p><hr />"
+                    header: editMode && config.hasOwnProperty('header') ? config.header : `<img src="https://source.unsplash.com/900x300/?art,color" alt="Random Unsplash Colorful and Artistic Image"/>`,
+                    headerMarkdown: editMode && config.hasOwnProperty('headerMarkdown') ? config.headerMarkdown : `![Random Unsplash Colorful and Artistic Image](https://source.unsplash.com/900x300/?art,color)`,
+                    single: editMode && config.hasOwnProperty('single') ? config.single : defaultHTML,
+                    singleMarkdown: editMode && config.hasOwnProperty('singleMarkdown') ? config.singleMarkdown : defaultMarkDown,
+                    monthly: editMode && config.hasOwnProperty('monthly') ? config.monthly : defaultHTML,
+                    monthlyMarkdown: editMode && config.hasOwnProperty('monthlyMarkdown') ? config.monthlyMarkdown : defaultMarkDown,
+                    product: editMode && config.hasOwnProperty('product') ? config.product : defaultHTML,
+                    productMarkdown: editMode && config.hasOwnProperty('productMarkdown') ? config.productMarkdown : defaultMarkDown
                 },
                 errors: {
                     EmailSubjectLine: '',

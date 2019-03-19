@@ -684,6 +684,11 @@ tbody>tr.table-row__suM-a:last-child>td.table-row__cells__2cY5Z+td.table-row__ce
     border-left: none;
 }
 
+.fullWidth__2FASH {
+    width: unset;
+    text-align: left;
+}
+
 @media screen and (max-width: 365px) {
     .submit-button__23Pfl {
         max-width: 270px;
@@ -897,7 +902,14 @@ input[type="radio"].radio-group__input__2RrAr+label:empty:before {
 }
 
 
-/***** END Radio Button STYLES *****/.color-picker__L5zPh {
+/***** END Radio Button STYLES *****/.markdown-view__1XwDm {
+    background-color: #fff;
+    padding: 10px;
+    margin: 0 auto;
+    border-radius: 4px;
+    border: 1px solid #000;
+}
+.color-picker__L5zPh {
     background-color: rgba(0,0,0, .24);
     padding: 10px 0;
     margin: 0;

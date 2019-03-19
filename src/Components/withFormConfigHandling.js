@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 
 import {getNewObj} from './helpers/getNewObj'
 import swal from 'sweetalert'
+import {parseMarkdown} from './helpers/parseMarkdown'
 
 async function clickAlert() {
     const willEdit = await swal({
@@ -40,6 +41,7 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
         this.handleRadioClick = this.handleRadioClick.bind(this)
         this.handleButtonClick = this.handleButtonClick.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
+        this.handleMarkdownInput = this.handleMarkdownInput.bind(this)
         this.handleUnload = this.handleUnload.bind(this)
         this.handleBlur = this.handleBlur.bind(this)
     }
@@ -202,6 +204,19 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
         }
     }
 
+    handleMarkdownInput(e) {
+        const target = e.target;
+        let value = target.value;
+        let name = target.name;
+        const fields = {...this.state.fields},  errors = {...this.state.errors};
+        const error = '';
+        errors[name] = error;     
+        fields[`${name}Markdown`] = value;
+        fields[name] = parseMarkdown(value);
+        const updated = JSON.stringify(fields) !== JSON.stringify(this.state.initialState)
+        this.setState({ fields, errors, updated }, ()=> this.props.tabFunctions.toggleBtnEnable( updated ? false : true ));
+    }
+
     handleInputChange(e) {
         const target = e.target;
         let value = target.type === 'checkbox' ? target.checked : target.value;
@@ -266,6 +281,7 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
             fields={this.state.fields}
             errors={this.state.errors}
             currentForm={this.state.currentForm}
+            handleMarkdownInput={this.handleMarkdownInput}
             handleInputChange={this.handleInputChange}
             handleButtonClick={this.handleButtonClick}
             handleRadioClick={this.handleRadioClick}

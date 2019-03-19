@@ -268,7 +268,8 @@ module.exports = {
   "table-head": "table-head__3aOby",
   "table-row": "table-row__suM-a",
   "table-row__headers": "table-row__headers__1Gt68",
-  "table-row__cells": "table-row__cells__2cY5Z"
+  "table-row__cells": "table-row__cells__2cY5Z",
+  "fullWidth": "fullWidth__2FASH"
 };
 },{"_css_loader":"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"src/Components/styles/input.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
@@ -344,7 +345,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61524" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51922" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

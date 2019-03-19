@@ -520,6 +520,11 @@ tbody>tr.table-row__suM-a:last-child>td.table-row__cells__2cY5Z+td.table-row__ce
     border-left: none;
 }
 
+.fullWidth__2FASH {
+    width: unset;
+    text-align: left;
+}
+
 @media screen and (max-width: 365px) {
     .submit-button__23Pfl {
         max-width: 270px;
