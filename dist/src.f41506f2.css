@@ -90,7 +90,7 @@
     width: 100%;
     min-height: 100vh;
     overflow: auto;
-    max-width: 980px;
+    max-width: 1040px;
 }
 
 h1.not-permissible-heading__zbeGs {
@@ -489,12 +489,17 @@ input[type="submit"].submit-button__23Pfl>.error__1TlOt {
     border-color: crimson !important;
 }
 
+.array-style-radio__2Hvl4,
 .monthly-radio__1dy5Z,
 .form-status-radio__2wgQK {
     -webkit-box-sizing: border-box;
             box-sizing: border-box;
     margin: 20px 0;
     max-width: 450px;
+}
+
+.array-style-radio__2Hvl4 {
+    margin: 0;
 }
 
 table.table__2izRV {

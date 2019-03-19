@@ -262,6 +262,7 @@ module.exports = {
   "submit-button": "submit-button__23Pfl",
   "form-btn": "form-btn__aTROS",
   "invalid": "invalid__1JtXL",
+  "array-style-radio": "array-style-radio__2Hvl4",
   "monthly-radio": "monthly-radio__1dy5Z",
   "form-status-radio": "form-status-radio__2wgQK",
   "table": "table__2izRV",
@@ -345,7 +346,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51922" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63997" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

@@ -36995,6 +36995,7 @@ module.exports = {
   "submit-button": "submit-button__23Pfl",
   "form-btn": "form-btn__aTROS",
   "invalid": "invalid__1JtXL",
+  "array-style-radio": "array-style-radio__2Hvl4",
   "monthly-radio": "monthly-radio__1dy5Z",
   "form-status-radio": "form-status-radio__2wgQK",
   "table": "table__2izRV",
@@ -62724,7 +62725,7 @@ var withFormConfigHandling = function withFormConfigHandling(SettingsComponent) 
       }, {
         key: "handleRadioClick",
         value: function handleRadioClick(e) {
-          console.log("click");
+          // console.log("click");
           var id = e.target.id;
 
           var fields = _extends({}, this.state.fields);
@@ -62735,11 +62736,15 @@ var withFormConfigHandling = function withFormConfigHandling(SettingsComponent) 
             "prod-status": "prod",
             "monthlygift": "monthly",
             "singlegift": "single",
-            "nullgift": ""
+            "nullgift": "",
+            "buttonarray": "buttons",
+            "tabarray": "tabs"
           };
 
           if (id.includes('gift')) {
             fields.defaultOption = ids[id];
+          } else if (id.includes('array')) {
+            fields.givingFormat = ids[id];
           } else {
             if (id === "prod-status") {
               clickAlert().then(function (update) {
@@ -62797,10 +62802,8 @@ var withFormConfigHandling = function withFormConfigHandling(SettingsComponent) 
                 //have to increase record of num of fields as well as add empty object
                 var numFields = "num".concat(name.substring(0, 1).toUpperCase() + name.substring(1));
                 fields[numFields] = +fields[numFields] + 1;
-                newObj = (0, _getNewObj.getNewObj)(name);
-                console.log({
-                  newObj: newObj
-                });
+                newObj = (0, _getNewObj.getNewObj)(name); // console.log({newObj})
+
                 fields[name].push(_extends({}, newObj));
                 errors[name].push(_extends({}, newObj));
                 break;
@@ -63739,7 +63742,25 @@ var GivingSettings = function GivingSettings(_ref) {
     label: "Show Giving Array(s)?"
   })), _react.default.createElement("p", {
     className: "form-info__3Welr"
-  }, "This Setting allows users to either click on a button or manually enter an amount to donate. Do not use this in combination with Product Orders."), fields.showGivingArray && _react.default.createElement(_react.Fragment, null, _react.default.createElement("div", {
+  }, "This Setting allows users to either click on a button or manually enter an amount to donate. Do not use this in combination with Product Orders."), fields.showGivingArray && _react.default.createElement(_react.Fragment, null, _react.default.createElement("h3", null, "Choose Giving Style"), _react.default.createElement("p", {
+    className: "form-info__3Welr"
+  }, "You must choose either Buttons or Tabs"), _react.default.createElement("div", {
+    className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-axes-center__gx3gz"
+  }, _react.default.createElement("div", {
+    className: "flex__2SHge flex-row__M7mg4 flex-between__2MQaD array-style-radio__2Hvl4"
+  }, _react.default.createElement(_RadioButton.default, {
+    id: "buttonarray",
+    name: "array-style-toggle",
+    label: "Buttons",
+    checked: fields.givingFormat === "buttons",
+    handleRadioClick: handleRadioClick
+  }), _react.default.createElement(_RadioButton.default, {
+    id: "tabarray",
+    name: "array-style-toggle",
+    label: "Tabs",
+    checked: fields.givingFormat === "tabs",
+    handleRadioClick: handleRadioClick
+  }))), _react.default.createElement("div", {
     className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-axes-center__gx3gz"
   }, _react.default.createElement(_Checkbox.default, {
     id: "monthlyOption",
@@ -80697,7 +80718,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51922" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63997" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

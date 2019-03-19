@@ -225,11 +225,16 @@ input[type="submit"].submit-button>.error {
     border-color: crimson !important;
 }
 
+.array-style-radio,
 .monthly-radio,
 .form-status-radio {
     box-sizing: border-box;
     margin: 20px 0;
     max-width: 450px;
+}
+
+.array-style-radio {
+    margin: 0;
 }
 
 table.table {

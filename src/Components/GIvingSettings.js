@@ -131,6 +131,14 @@ const GivingSettings = ({ fields, errors, handleButtonClick, handleInputChange, 
                     {
                         fields.showGivingArray && (
                             <Fragment>
+                                <h3>Choose Giving Array Style</h3>
+                                <p styleName="form.form-info">You must choose either Buttons or Tabs</p>
+                                <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
+                                    <div styleName="flex.flex flex.flex-row flex.flex-between form.array-style-radio">
+                                        <RadioButton id="buttonarray" name="array-style-toggle" label="Buttons" checked={fields.givingFormat === "buttons"} handleRadioClick={handleRadioClick}/>
+                                        <RadioButton id="tabarray" name="array-style-toggle" label="Tabs" checked={fields.givingFormat === "tabs"} handleRadioClick={handleRadioClick}/>
+                                    </div>
+                                </div>
                                 <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                                     <Checkbox id="monthlyOption" checked={fields.monthlyOption} handleInputChange={handleInputChange} label="Show Monthly Giving Options?"/>
                                 </div>
