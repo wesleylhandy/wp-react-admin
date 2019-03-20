@@ -194,7 +194,8 @@ export function getDefaultValues(editMode, type, config) {
                     monthlyAmounts: editMode && config.hasOwnProperty("monthlyAmounts") ? [...config.monthlyAmounts] : [],
                     singleAmounts: editMode && config.hasOwnProperty("singleAmounts") ? [...config.singleAmounts] : [],
                     defaultOption: editMode && config.hasOwnProperty("defaultOption") ? config.defaultOption : "",
-                    defaultAmount: editMode && config.hasOwnProperty("defaultAmount") ? config.defaultAmount : -1
+                    defaultAmount: editMode && config.hasOwnProperty("defaultAmount") ? config.defaultAmount : -1,
+                    givingFormat: editMode && config.hasOwnProperty("givingFormat") ? config.givingFormat : "buttons"
                 }, 
                 errors: {
                     monthlyPledgeData : {
@@ -215,7 +216,8 @@ export function getDefaultValues(editMode, type, config) {
                     monthlyAmounts: '',
                     singleAmounts: '',
                     defaultOption: '',
-                    defaultAmount: ''
+                    defaultAmount: '',
+                    givingFormat: ''
                 }
             }
             if (editMode) {

@@ -36755,7 +36755,8 @@ function getDefaultValues(editMode, type, config) {
           monthlyAmounts: editMode && config.hasOwnProperty("monthlyAmounts") ? _toConsumableArray(config.monthlyAmounts) : [],
           singleAmounts: editMode && config.hasOwnProperty("singleAmounts") ? _toConsumableArray(config.singleAmounts) : [],
           defaultOption: editMode && config.hasOwnProperty("defaultOption") ? config.defaultOption : "",
-          defaultAmount: editMode && config.hasOwnProperty("defaultAmount") ? config.defaultAmount : -1
+          defaultAmount: editMode && config.hasOwnProperty("defaultAmount") ? config.defaultAmount : -1,
+          givingFormat: editMode && config.hasOwnProperty("givingFormat") ? config.givingFormat : "buttons"
         },
         errors: {
           monthlyPledgeData: {
@@ -36776,7 +36777,8 @@ function getDefaultValues(editMode, type, config) {
           monthlyAmounts: '',
           singleAmounts: '',
           defaultOption: '',
-          defaultAmount: ''
+          defaultAmount: '',
+          givingFormat: ''
         }
       };
 
@@ -63742,7 +63744,7 @@ var GivingSettings = function GivingSettings(_ref) {
     label: "Show Giving Array(s)?"
   })), _react.default.createElement("p", {
     className: "form-info__3Welr"
-  }, "This Setting allows users to either click on a button or manually enter an amount to donate. Do not use this in combination with Product Orders."), fields.showGivingArray && _react.default.createElement(_react.Fragment, null, _react.default.createElement("h3", null, "Choose Giving Style"), _react.default.createElement("p", {
+  }, "This Setting allows users to either click on a button or manually enter an amount to donate. Do not use this in combination with Product Orders."), fields.showGivingArray && _react.default.createElement(_react.Fragment, null, _react.default.createElement("h3", null, "Choose Giving Array Style"), _react.default.createElement("p", {
     className: "form-info__3Welr"
   }, "You must choose either Buttons or Tabs"), _react.default.createElement("div", {
     className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-axes-center__gx3gz"
@@ -80718,7 +80720,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63997" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54412" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
