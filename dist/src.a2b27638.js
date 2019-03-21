@@ -12687,7 +12687,46 @@ define(String.prototype, "padRight", "".padEnd);
 "pop,reverse,shift,keys,values,entries,indexOf,every,some,forEach,map,filter,find,findIndex,includes,join,slice,concat,push,splice,unshift,sort,lastIndexOf,reduce,reduceRight,copyWithin,fill".split(",").forEach(function (key) {
   [][key] && define(Array, key, Function.call.bind([][key]));
 });
-},{"core-js/shim":"node_modules/core-js/shim.js","regenerator-runtime/runtime":"node_modules/babel-polyfill/node_modules/regenerator-runtime/runtime.js","core-js/fn/regexp/escape":"node_modules/core-js/fn/regexp/escape.js"}],"node_modules/promise-polyfill/src/finally.js":[function(require,module,exports) {
+},{"core-js/shim":"node_modules/core-js/shim.js","regenerator-runtime/runtime":"node_modules/babel-polyfill/node_modules/regenerator-runtime/runtime.js","core-js/fn/regexp/escape":"node_modules/core-js/fn/regexp/escape.js"}],"src/require-babel-polyfill.js":[function(require,module,exports) {
+var global = arguments[3];
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+(function () {
+  var enterModule = require('react-hot-loader').enterModule;
+
+  enterModule && enterModule(module);
+})();
+
+var _default = function () {
+  if (!global || !global._babelPolyfill) {
+    require('babel-polyfill');
+  }
+}();
+
+var _default2 = _default;
+exports.default = _default2;
+;
+
+(function () {
+  var reactHotLoader = require('react-hot-loader').default;
+
+  var leaveModule = require('react-hot-loader').leaveModule;
+
+  if (!reactHotLoader) {
+    return;
+  }
+
+  reactHotLoader.register(_default, "default", "/Users/wehand/Code/cbngiving-wp-admin-react/src/require-babel-polyfill.js");
+  leaveModule(module);
+})();
+
+;
+},{"react-hot-loader":"node_modules/react-hot-loader/index.js","babel-polyfill":"node_modules/babel-polyfill/lib/index.js"}],"node_modules/promise-polyfill/src/finally.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -80640,7 +80679,7 @@ exports.default = _default2;
 },{"react-hot-loader":"node_modules/react-hot-loader/index.js","react":"node_modules/react/index.js","./helpers/fetch-helpers":"src/Components/helpers/fetch-helpers.js","./Metatabs.js":"src/Components/Metatabs.js","./FormOptionsTabs":"src/Components/FormOptionsTabs.js","./Spinner":"src/Components/Spinner.js","./styles/main.css":"src/Components/styles/main.css","./StyleOptionsTabs":"src/Components/StyleOptionsTabs.js","./helpers/getFontInfo":"src/Components/helpers/getFontInfo.js"}],"src/index.js":[function(require,module,exports) {
 "use strict";
 
-require("babel-polyfill");
+require("./require-babel-polyfill");
 
 var _promisePolyfill = _interopRequireDefault(require("promise-polyfill"));
 
@@ -80693,7 +80732,7 @@ ReactDOM.render(_react.default.createElement(_App.default, {
 })();
 
 ;
-},{"react-hot-loader":"node_modules/react-hot-loader/index.js","babel-polyfill":"node_modules/babel-polyfill/lib/index.js","promise-polyfill":"node_modules/promise-polyfill/src/index.js","raf/polyfill":"node_modules/raf/polyfill.js","whatwg-fetch":"node_modules/whatwg-fetch/fetch.js","react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js","./Components/App":"src/Components/App.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"react-hot-loader":"node_modules/react-hot-loader/index.js","./require-babel-polyfill":"src/require-babel-polyfill.js","promise-polyfill":"node_modules/promise-polyfill/src/index.js","raf/polyfill":"node_modules/raf/polyfill.js","whatwg-fetch":"node_modules/whatwg-fetch/fetch.js","react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js","./Components/App":"src/Components/App.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -80720,7 +80759,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54412" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53719" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

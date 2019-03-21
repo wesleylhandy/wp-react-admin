@@ -1,4 +1,4 @@
-import "babel-polyfill";
+import "./require-babel-polyfill"
 import Promise from 'promise-polyfill';
 import 'raf/polyfill';
 import 'whatwg-fetch';
