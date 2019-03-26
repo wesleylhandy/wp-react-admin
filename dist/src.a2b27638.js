@@ -36687,7 +36687,13 @@ function getDefaultValues(editMode, type, config) {
         "--tab-hover-text-color": editMode && config.hasOwnProperty("--tab-hover-text-color") ? config["--tab-hover-text-color"] : "#fff",
         "--tab-hover-bg-color": editMode && config.hasOwnProperty("--tab-hover-bg-color") ? config["--tab-hover-bg-color"] : "#73bf43",
         "--tab-hover-border-color": editMode && config.hasOwnProperty("--tab-hover-border-color") ? config["--tab-hover-border-color"] : "#091d44",
-        "--tab-text-color": editMode && config.hasOwnProperty("--tab-text-color") ? config["--tab-text-color"] : "#091d44"
+        "--tab-text-color": editMode && config.hasOwnProperty("--tab-text-color") ? config["--tab-text-color"] : "#091d44",
+        "--submit-btn-bg-color": editMode && config.hasOwnProperty("--submit-btn-bg-color") ? config["--submit-btn-bg-color"] : "#262626",
+        "--submit-btn-border-color": editMode && config.hasOwnProperty("--submit-btn-border-color") ? config["--submit-btn-border-color"] : "#262626",
+        "--submit-btn-txt-color": editMode && config.hasOwnProperty("--submit-btn-txt-color") ? config["--submit-btn-txt-color"] : "#fff",
+        "--submit-btn-hover-txt-color": editMode && config.hasOwnProperty("--submit-btn-hover-txt-color") ? config["--submit-btn-hover-txt-color"] : "#262626",
+        "--submit-btn-hover-bg-color": editMode && config.hasOwnProperty("--submit-btn-hover-bg-color") ? config["--submit-btn-hover-bg-color"] : "#fff",
+        "--submit-btn-hover-border-color": editMode && config.hasOwnProperty("--submit-btn-hover-border-color") ? config["--submit-btn-hover-border-color"] : "#262626"
       };
       break;
 
@@ -37044,7 +37050,9 @@ module.exports = {
   "table-row": "table-row__suM-a",
   "table-row__headers": "table-row__headers__1Gt68",
   "table-row__cells": "table-row__cells__2cY5Z",
-  "fullWidth": "fullWidth__2FASH"
+  "fullWidth": "fullWidth__2FASH",
+  "copy-btn": "copy-btn__1_ap2",
+  "copy-btn--copied": "copy-btn--copied__3jHok"
 };
 },{"_css_loader":"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"src/Components/FormButton.js":[function(require,module,exports) {
 "use strict";
@@ -37237,13 +37245,15 @@ var _styleModuleImportMap = {
     "submit-button": "submit-button__23Pfl",
     "form-btn": "form-btn__aTROS",
     "invalid": "invalid__1JtXL",
+    "array-style-radio": "array-style-radio__2Hvl4",
     "monthly-radio": "monthly-radio__1dy5Z",
     "form-status-radio": "form-status-radio__2wgQK",
     "table": "table__2izRV",
     "table-head": "table-head__3aOby",
     "table-row": "table-row__suM-a",
     "table-row__headers": "table-row__headers__1Gt68",
-    "table-row__cells": "table-row__cells__2cY5Z"
+    "table-row__cells": "table-row__cells__2cY5Z",
+    "fullWidth": "fullWidth__2FASH"
   }
 };
 
@@ -38167,7 +38177,226 @@ exports.default = AddForm;
 })();
 
 ;
-},{"react-hot-loader":"node_modules/react-hot-loader/index.js","react":"node_modules/react/index.js","./styles/flex.css":"src/Components/styles/flex.css","./styles/input.css":"src/Components/styles/input.css","./styles/error.css":"src/Components/styles/error.css","./styles/form.css":"src/Components/styles/form.css","./FormButton":"src/Components/FormButton.js","./InputGroup":"src/Components/InputGroup.js"}],"src/Components/SaveButton.js":[function(require,module,exports) {
+},{"react-hot-loader":"node_modules/react-hot-loader/index.js","react":"node_modules/react/index.js","./styles/flex.css":"src/Components/styles/flex.css","./styles/input.css":"src/Components/styles/input.css","./styles/error.css":"src/Components/styles/error.css","./styles/form.css":"src/Components/styles/form.css","./FormButton":"src/Components/FormButton.js","./InputGroup":"src/Components/InputGroup.js"}],"node_modules/toggle-selection/index.js":[function(require,module,exports) {
+
+module.exports = function () {
+  var selection = document.getSelection();
+  if (!selection.rangeCount) {
+    return function () {};
+  }
+  var active = document.activeElement;
+
+  var ranges = [];
+  for (var i = 0; i < selection.rangeCount; i++) {
+    ranges.push(selection.getRangeAt(i));
+  }
+
+  switch (active.tagName.toUpperCase()) { // .toUpperCase handles XHTML
+    case 'INPUT':
+    case 'TEXTAREA':
+      active.blur();
+      break;
+
+    default:
+      active = null;
+      break;
+  }
+
+  selection.removeAllRanges();
+  return function () {
+    selection.type === 'Caret' &&
+    selection.removeAllRanges();
+
+    if (!selection.rangeCount) {
+      ranges.forEach(function(range) {
+        selection.addRange(range);
+      });
+    }
+
+    active &&
+    active.focus();
+  };
+};
+
+},{}],"node_modules/copy-to-clipboard/index.js":[function(require,module,exports) {
+'use strict';
+
+var deselectCurrent = require('toggle-selection');
+
+var defaultMessage = 'Copy to clipboard: #{key}, Enter';
+
+function format(message) {
+  var copyKey = (/mac os x/i.test(navigator.userAgent) ? '⌘' : 'Ctrl') + '+C';
+  return message.replace(/#{\s*key\s*}/g, copyKey);
+}
+
+function copy(text, options) {
+  var debug, message, reselectPrevious, range, selection, mark, success = false;
+  if (!options) { options = {}; }
+  debug = options.debug || false;
+  try {
+    reselectPrevious = deselectCurrent();
+
+    range = document.createRange();
+    selection = document.getSelection();
+
+    mark = document.createElement('span');
+    mark.textContent = text;
+    // reset user styles for span element
+    mark.style.all = 'unset';
+    // prevents scrolling to the end of the page
+    mark.style.position = 'fixed';
+    mark.style.top = 0;
+    mark.style.clip = 'rect(0, 0, 0, 0)';
+    // used to preserve spaces and line breaks
+    mark.style.whiteSpace = 'pre';
+    // do not inherit user-select (it may be `none`)
+    mark.style.webkitUserSelect = 'text';
+    mark.style.MozUserSelect = 'text';
+    mark.style.msUserSelect = 'text';
+    mark.style.userSelect = 'text';
+
+    document.body.appendChild(mark);
+
+    range.selectNode(mark);
+    selection.addRange(range);
+
+    var successful = document.execCommand('copy');
+    if (!successful) {
+      throw new Error('copy command was unsuccessful');
+    }
+    success = true;
+  } catch (err) {
+    debug && console.error('unable to copy using execCommand: ', err);
+    debug && console.warn('trying IE specific stuff');
+    try {
+      window.clipboardData.setData('text', text);
+      success = true;
+    } catch (err) {
+      debug && console.error('unable to copy using clipboardData: ', err);
+      debug && console.error('falling back to prompt');
+      message = format('message' in options ? options.message : defaultMessage);
+      window.prompt(message, text);
+    }
+  } finally {
+    if (selection) {
+      if (typeof selection.removeRange == 'function') {
+        selection.removeRange(range);
+      } else {
+        selection.removeAllRanges();
+      }
+    }
+
+    if (mark) {
+      document.body.removeChild(mark);
+    }
+    reselectPrevious();
+  }
+
+  return success;
+}
+
+module.exports = copy;
+
+},{"toggle-selection":"node_modules/toggle-selection/index.js"}],"node_modules/react-copy-to-clipboard/lib/Component.js":[function(require,module,exports) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.CopyToClipboard = undefined;
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _copyToClipboard = require('copy-to-clipboard');
+
+var _copyToClipboard2 = _interopRequireDefault(_copyToClipboard);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var CopyToClipboard = exports.CopyToClipboard = function (_React$PureComponent) {
+  _inherits(CopyToClipboard, _React$PureComponent);
+
+  function CopyToClipboard() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    _classCallCheck(this, CopyToClipboard);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = CopyToClipboard.__proto__ || Object.getPrototypeOf(CopyToClipboard)).call.apply(_ref, [this].concat(args))), _this), _this.onClick = function (event) {
+      var _this$props = _this.props,
+          text = _this$props.text,
+          onCopy = _this$props.onCopy,
+          children = _this$props.children,
+          options = _this$props.options;
+
+
+      var elem = _react2.default.Children.only(children);
+
+      var result = (0, _copyToClipboard2.default)(text, options);
+
+      if (onCopy) {
+        onCopy(text, result);
+      }
+
+      // Bypass onClick if it was present
+      if (elem && elem.props && typeof elem.props.onClick === 'function') {
+        elem.props.onClick(event);
+      }
+    }, _temp), _possibleConstructorReturn(_this, _ret);
+  }
+
+  _createClass(CopyToClipboard, [{
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          _text = _props.text,
+          _onCopy = _props.onCopy,
+          _options = _props.options,
+          children = _props.children,
+          props = _objectWithoutProperties(_props, ['text', 'onCopy', 'options', 'children']);
+
+      var elem = _react2.default.Children.only(children);
+
+      return _react2.default.cloneElement(elem, _extends({}, props, { onClick: this.onClick }));
+    }
+  }]);
+
+  return CopyToClipboard;
+}(_react2.default.PureComponent);
+
+CopyToClipboard.defaultProps = {
+  onCopy: undefined,
+  options: undefined
+};
+},{"react":"node_modules/react/index.js","copy-to-clipboard":"node_modules/copy-to-clipboard/index.js"}],"node_modules/react-copy-to-clipboard/lib/index.js":[function(require,module,exports) {
+'use strict';
+
+var _require = require('./Component'),
+    CopyToClipboard = _require.CopyToClipboard;
+
+CopyToClipboard.CopyToClipboard = CopyToClipboard;
+module.exports = CopyToClipboard;
+},{"./Component":"node_modules/react-copy-to-clipboard/lib/Component.js"}],"src/Components/SaveButton.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -62700,6 +62929,7 @@ var withFormConfigHandling = function withFormConfigHandling(SettingsComponent) 
         _this.state = {
           updated: false,
           saved: false,
+          copied: false,
           initialState: _extends({}, props.defaultValues.fields),
           fields: _extends({}, props.defaultValues.fields),
           errors: _extends({}, props.defaultValues.errors),
@@ -62709,6 +62939,7 @@ var withFormConfigHandling = function withFormConfigHandling(SettingsComponent) 
         _this.handleButtonClick = _this.handleButtonClick.bind(_assertThisInitialized(_assertThisInitialized(_this)));
         _this.handleInputChange = _this.handleInputChange.bind(_assertThisInitialized(_assertThisInitialized(_this)));
         _this.handleMarkdownInput = _this.handleMarkdownInput.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+        _this.handleCopy = _this.handleCopy.bind(_assertThisInitialized(_assertThisInitialized(_this)));
         _this.handleUnload = _this.handleUnload.bind(_assertThisInitialized(_assertThisInitialized(_this)));
         _this.handleBlur = _this.handleBlur.bind(_assertThisInitialized(_assertThisInitialized(_this)));
         return _this;
@@ -62764,6 +62995,21 @@ var withFormConfigHandling = function withFormConfigHandling(SettingsComponent) 
           return void 0;
         }
       }, {
+        key: "handleCopy",
+        value: function handleCopy() {
+          var _this2 = this;
+
+          this.setState({
+            copied: true
+          }, function () {
+            setTimeout(function () {
+              return _this2.setState({
+                copied: false
+              });
+            }, 5000);
+          });
+        }
+      }, {
         key: "handleRadioClick",
         value: function handleRadioClick(e) {
           // console.log("click");
@@ -62808,7 +63054,7 @@ var withFormConfigHandling = function withFormConfigHandling(SettingsComponent) 
       }, {
         key: "handleButtonClick",
         value: function handleButtonClick(ctx) {
-          var _this2 = this;
+          var _this3 = this;
 
           var fields = _extends({}, this.state.fields),
               errors = _extends({}, this.state.errors);
@@ -62890,9 +63136,9 @@ var withFormConfigHandling = function withFormConfigHandling(SettingsComponent) 
             this.setState({
               submitting: true
             }, function () {
-              _this2.props.tabFunctions.toggleBtnEnable(false);
+              _this3.props.tabFunctions.toggleBtnEnable(false);
 
-              if (_this2.props.displayMode.toLowerCase() === "giving") {
+              if (_this3.props.displayMode.toLowerCase() === "giving") {
                 var fieldKeys = Object.keys(fields);
                 var monthlyKeys = fieldKeys.filter(function (el) {
                   return el.includes("monthlyAmt");
@@ -62908,40 +63154,40 @@ var withFormConfigHandling = function withFormConfigHandling(SettingsComponent) 
                 });
               }
 
-              var config = _extends({}, _this2.props.config, fields);
+              var config = _extends({}, _this3.props.config, fields);
 
-              if (_this2.props.displayMode.toLowerCase() == "settings") {
+              if (_this3.props.displayMode.toLowerCase() == "settings") {
                 config.mode = fields.form_status == "prod" ? "production" : "development";
               }
 
-              var promises = [_this2.props.tabFunctions.storeConfig(_this2.state.currentForm.id, type, config, null)];
+              var promises = [_this3.props.tabFunctions.storeConfig(_this3.state.currentForm.id, type, config, null)];
 
-              if (fields.form_status && fields.form_status != _this2.state.currentForm.form_status) {
-                promises.push(_this2.props.tabFunctions.storeConfig(_this2.state.currentForm.id, "form_status", null, fields.form_status));
+              if (fields.form_status && fields.form_status != _this3.state.currentForm.form_status) {
+                promises.push(_this3.props.tabFunctions.storeConfig(_this3.state.currentForm.id, "form_status", null, fields.form_status));
               }
 
               Promise.all(promises).then(function (success) {
                 // console.log({success})
-                _this2.props.tabFunctions.toggleBtnEnable(true);
+                _this3.props.tabFunctions.toggleBtnEnable(true);
 
-                _this2.setState({
+                _this3.setState({
                   saved: false,
                   updated: false,
                   submitting: false,
-                  errors: _extends({}, _this2.props.defaultValues.errors)
+                  errors: _extends({}, _this3.props.defaultValues.errors)
                 });
               }).catch(function (err) {
                 console.error(err);
                 errors['formError'] = "Unable to Save";
 
-                _this2.setState({
+                _this3.setState({
                   errors: errors,
                   submitting: false
                 }, function () {
-                  _this2.props.tabFunctions.toggleBtnEnable(true);
+                  _this3.props.tabFunctions.toggleBtnEnable(true);
 
                   setTimeout(function () {
-                    _this2.setState({
+                    _this3.setState({
                       saved: false
                     });
                   }, 300);
@@ -62953,7 +63199,7 @@ var withFormConfigHandling = function withFormConfigHandling(SettingsComponent) 
       }, {
         key: "handleMarkdownInput",
         value: function handleMarkdownInput(e) {
-          var _this3 = this;
+          var _this4 = this;
 
           var target = e.target;
           var value = target.value;
@@ -62972,13 +63218,13 @@ var withFormConfigHandling = function withFormConfigHandling(SettingsComponent) 
             errors: errors,
             updated: updated
           }, function () {
-            return _this3.props.tabFunctions.toggleBtnEnable(updated ? false : true);
+            return _this4.props.tabFunctions.toggleBtnEnable(updated ? false : true);
           });
         }
       }, {
         key: "handleInputChange",
         value: function handleInputChange(e) {
-          var _this4 = this;
+          var _this5 = this;
 
           var target = e.target;
           var value = target.type === 'checkbox' ? target.checked : target.value;
@@ -63031,7 +63277,7 @@ var withFormConfigHandling = function withFormConfigHandling(SettingsComponent) 
             errors: errors,
             updated: updated
           }, function () {
-            return _this4.props.tabFunctions.toggleBtnEnable(updated ? false : true);
+            return _this5.props.tabFunctions.toggleBtnEnable(updated ? false : true);
           });
         }
       }, {
@@ -63057,6 +63303,7 @@ var withFormConfigHandling = function withFormConfigHandling(SettingsComponent) 
           return _react.default.createElement(SettingsComponent, _extends({}, this.props, {
             saved: this.state.saved,
             updated: this.state.updated,
+            copied: this.state.copied,
             fields: this.state.fields,
             errors: this.state.errors,
             currentForm: this.state.currentForm,
@@ -63064,7 +63311,8 @@ var withFormConfigHandling = function withFormConfigHandling(SettingsComponent) 
             handleInputChange: this.handleInputChange,
             handleButtonClick: this.handleButtonClick,
             handleRadioClick: this.handleRadioClick,
-            handleBlur: this.handleBlur
+            handleBlur: this.handleBlur,
+            handleCopy: this.handleCopy
           }));
         }
       }, {
@@ -63115,7 +63363,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _getClassName2 = _interopRequireDefault(require("babel-plugin-react-css-modules/dist/browser/getClassName"));
+
 var _react = _interopRequireWildcard(require("react"));
+
+var _reactCopyToClipboard = require("react-copy-to-clipboard");
 
 var _form = _interopRequireDefault(require("./styles/form.css"));
 
@@ -63131,15 +63383,71 @@ var _RadioButton = _interopRequireDefault(require("./RadioButton"));
 
 var _withFormConfigHandling = _interopRequireDefault(require("./withFormConfigHandling"));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 (function () {
   var enterModule = require('react-hot-loader').enterModule;
 
   enterModule && enterModule(module);
 })();
+
+var _styleModuleImportMap = {
+  "form": {
+    "form-wrapper": "form-wrapper__2a0fw",
+    "fieldset": "fieldset__3xxg-",
+    "fieldset__bordered": "fieldset__bordered__3MgwP",
+    "form-header": "form-header__34R5N",
+    "divider-title": "divider-title__1eXF8",
+    "form-header--small": "form-header--small__GmxBS",
+    "form-header__subheader": "form-header__subheader__3FWLj",
+    "cc-img": "cc-img__1dRYR",
+    "line": "line__1moVv",
+    "form-row": "form-row__2dOBD",
+    "form-btn--wrapper": "form-btn--wrapper__176A4",
+    "flex-wrap": "flex-wrap__1rTS-",
+    "form-info": "form-info__3Welr",
+    "form-code": "form-code__1MNHp",
+    "code-block": "code-block__Yd3XK",
+    "form-msg": "form-msg__28n2S",
+    "error": "error__1TlOt",
+    "amount-error": "amount-error__3oLo2",
+    "submit-error": "submit-error__fI5EQ",
+    "submit-row": "submit-row__3WlWC",
+    "submit-button": "submit-button__23Pfl",
+    "form-btn": "form-btn__aTROS",
+    "invalid": "invalid__1JtXL",
+    "array-style-radio": "array-style-radio__2Hvl4",
+    "monthly-radio": "monthly-radio__1dy5Z",
+    "form-status-radio": "form-status-radio__2wgQK",
+    "table": "table__2izRV",
+    "table-head": "table-head__3aOby",
+    "table-row": "table-row__suM-a",
+    "table-row__headers": "table-row__headers__1Gt68",
+    "table-row__cells": "table-row__cells__2cY5Z",
+    "fullWidth": "fullWidth__2FASH",
+    "copy-btn": "copy-btn__1_ap2",
+    "copy-btn--copied": "copy-btn--copied__3jHok"
+  },
+  "flex": {
+    "flex": "flex__2SHge",
+    "flex-row": "flex-row__M7mg4",
+    "flex-center": "flex-center__yyA4g",
+    "flex-around": "flex-around___Gjak",
+    "flex-between": "flex-between__2MQaD",
+    "flex-left": "flex-left__2XM1d",
+    "flex-start": "flex-start__2Ga6n",
+    "flex-end": "flex-end__Cg2Gv",
+    "flex-row-reverse": "flex-row-reverse__3dS2V",
+    "flex-axes-center": "flex-axes-center__gx3gz",
+    "flex-column": "flex-column__3YwsY",
+    "flex-wrap": "flex-wrap__3nXfa",
+    "flex-grow": "flex-grow__1RrI1",
+    "flex-no-grow": "flex-no-grow__2xRX_",
+    "flex-shrink": "flex-shrink__3Yf-r"
+  }
+};
 
 if (module.hot) {
   module.hot.accept("./styles/flex.css", function () {
@@ -63185,7 +63493,17 @@ var FormSettings = function FormSettings(props) {
     className: "form-info__3Welr"
   }, "You can now use the Wordpress Shortcode ", _react.default.createElement("code", {
     className: "form-code__1MNHp"
-  }, "[cbngivingform form_name=\"", props.currentForm.form_name, "\"]"), " on page. Please be sure to test as a draft before putting into production."), _react.default.createElement("div", {
+  }, "[cbngivingform form_name=\"", props.currentForm.form_name, "\"]"), "\xA0", _react.default.createElement(_reactCopyToClipboard.CopyToClipboard, {
+    text: "[cbngivingform form_name=\"".concat(props.currentForm.form_name, "\"]"),
+    onCopy: function onCopy() {
+      console.log("Copied");
+      props.handleCopy();
+    }
+  }, _react.default.createElement("span", {
+    className: (0, _getClassName2.default)("form.copy-btn ".concat(props.copied ? "form.copy-btn--copied" : ""), _styleModuleImportMap, {
+      "handleMissingStyleName": "warn"
+    })
+  }, props.copied ? "Copied" : "Copy to Clipboard")), "\xA0on page. Please be sure to test as a draft before putting into production."), _react.default.createElement("div", {
     className: "form-row__2dOBD flex__2SHge flex-row__M7mg4 flex-axes-center__gx3gz"
   }, _react.default.createElement(_InputGroup.default, {
     type: "text",
@@ -63233,7 +63551,7 @@ var FormSettings = function FormSettings(props) {
     id: "SectionName",
     specialStyle: "",
     label: "Giving Classification (Section Name)",
-    placeholder: "i.e. 700Club, General, Special, etc",
+    placeholder: "i.e. OrphansPromise, OperationBlessing, Superbook, CBN, etc",
     maxLength: "20",
     required: true,
     value: fields.SectionName,
@@ -63246,7 +63564,7 @@ var FormSettings = function FormSettings(props) {
     id: "ActivityName",
     specialStyle: "",
     label: "Activity Name",
-    placeholder: "i.e. ".concat(props.currentForm.form_name, "-donation-activity"),
+    placeholder: "i.e. Giving - ".concat(fields.SectionName, " - ").concat(props.currentForm.form_name),
     maxLength: "50",
     required: true,
     value: fields.ActivityName,
@@ -63332,7 +63650,7 @@ exports.default = _default2;
 })();
 
 ;
-},{"react-hot-loader":"node_modules/react-hot-loader/index.js","react":"node_modules/react/index.js","./styles/form.css":"src/Components/styles/form.css","./styles/flex.css":"src/Components/styles/flex.css","./SaveButton":"src/Components/SaveButton.js","./Checkbox":"src/Components/Checkbox.js","./InputGroup":"src/Components/InputGroup.js","./RadioButton":"src/Components/RadioButton.js","./withFormConfigHandling":"src/Components/withFormConfigHandling.js"}],"src/Components/NameSettings.js":[function(require,module,exports) {
+},{"react-hot-loader":"node_modules/react-hot-loader/index.js","babel-plugin-react-css-modules/dist/browser/getClassName":"node_modules/babel-plugin-react-css-modules/dist/browser/getClassName.js","react":"node_modules/react/index.js","react-copy-to-clipboard":"node_modules/react-copy-to-clipboard/lib/index.js","./styles/form.css":"src/Components/styles/form.css","./styles/flex.css":"src/Components/styles/flex.css","./SaveButton":"src/Components/SaveButton.js","./Checkbox":"src/Components/Checkbox.js","./InputGroup":"src/Components/InputGroup.js","./RadioButton":"src/Components/RadioButton.js","./withFormConfigHandling":"src/Components/withFormConfigHandling.js"}],"src/Components/NameSettings.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -80759,7 +81077,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53719" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59417" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

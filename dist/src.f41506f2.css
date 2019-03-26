@@ -530,6 +530,23 @@ tbody>tr.table-row__suM-a:last-child>td.table-row__cells__2cY5Z+td.table-row__ce
     text-align: left;
 }
 
+.copy-btn__1_ap2 {
+    font-size: 12px;
+    padding: 2px 5px;
+    border: 1px solid #0085ba;
+    cursor: pointer;
+    color: #0085ba;
+    border-radius: 16px;
+    -webkit-transition: color 200ms ease-in-out, border-color 200ms ease-in-out;
+    -o-transition: color 200ms ease-in-out, border-color 200ms ease-in-out;
+    transition: color 200ms ease-in-out, border-color 200ms ease-in-out;
+}
+
+.copy-btn__1_ap2.copy-btn--copied__3jHok {
+    color: crimson;
+    border-color: crimson;
+}
+
 @media screen and (max-width: 365px) {
     .submit-button__23Pfl {
         max-width: 270px;

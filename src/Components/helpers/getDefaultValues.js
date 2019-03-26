@@ -93,6 +93,12 @@ export function getDefaultValues(editMode, type, config) {
                 "--tab-hover-bg-color": editMode && config.hasOwnProperty("--tab-hover-bg-color") ? config["--tab-hover-bg-color"] :"#73bf43",
                 "--tab-hover-border-color": editMode && config.hasOwnProperty("--tab-hover-border-color") ? config["--tab-hover-border-color"] :"#091d44",
                 "--tab-text-color": editMode && config.hasOwnProperty("--tab-text-color") ? config["--tab-text-color"] :"#091d44",
+                "--submit-btn-bg-color": editMode && config.hasOwnProperty("--submit-btn-bg-color") ? config["--submit-btn-bg-color"] : "#262626",
+                "--submit-btn-border-color": editMode && config.hasOwnProperty("--submit-btn-border-color") ? config["--submit-btn-border-color"] : "#262626",
+                "--submit-btn-txt-color": editMode && config.hasOwnProperty("--submit-btn-txt-color") ? config["--submit-btn-txt-color"] : "#fff",
+                "--submit-btn-hover-txt-color": editMode && config.hasOwnProperty("--submit-btn-hover-txt-color") ? config["--submit-btn-hover-txt-color"] : "#262626",
+                "--submit-btn-hover-bg-color": editMode && config.hasOwnProperty("--submit-btn-hover-bg-color") ? config["--submit-btn-hover-bg-color"] : "#fff",
+                "--submit-btn-hover-border-color": editMode && config.hasOwnProperty("--submit-btn-hover-border-color") ? config["--submit-btn-hover-border-color"] : "#262626"
             }
             break;
         case "spacing":

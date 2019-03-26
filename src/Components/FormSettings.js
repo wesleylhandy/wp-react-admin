@@ -1,4 +1,5 @@
-import React, {Fragment} from 'react'
+import React, { Fragment } from 'react'
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import form from './styles/form.css'
 import flex from './styles/flex.css'
@@ -27,7 +28,23 @@ const FormSettings = props => {
                             disabled={true}
                         />
                     </div>
-                    <p styleName="form.form-info">You can now use the Wordpress Shortcode <code styleName="form.form-code">[cbngivingform form_name="{props.currentForm.form_name}"]</code> on page. Please be sure to test as a draft before putting into production.</p>
+                    <p styleName="form.form-info">
+                        You can now use the Wordpress Shortcode <code styleName="form.form-code">[cbngivingform form_name="{props.currentForm.form_name}"]</code>
+                        &nbsp;
+                        <CopyToClipboard 
+                            text={`[cbngivingform form_name="${props.currentForm.form_name}"]`}
+                            onCopy={
+                                ()=>{
+                                    console.log("Copied")
+                                    props.handleCopy()
+                                }
+                            }
+                        >
+                            <span styleName={`form.copy-btn ${props.copied ? "form.copy-btn--copied" : ""}`}>{props.copied ? "Copied" : "Copy to Clipboard"}</span>
+                        </CopyToClipboard>
+                        &nbsp;on page. Please be sure to test as a draft before putting into production.
+                        
+                    </p>
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                         <InputGroup
                             type="text"
@@ -75,7 +92,7 @@ const FormSettings = props => {
                             id="SectionName" 
                             specialStyle="" 
                             label="Giving Classification (Section Name)" 
-                            placeholder="i.e. 700Club, General, Special, etc" 
+                            placeholder="i.e. OrphansPromise, OperationBlessing, Superbook, CBN, etc" 
                             maxLength="20" 
                             required={true} 
                             value={fields.SectionName} 
@@ -89,7 +106,7 @@ const FormSettings = props => {
                             id="ActivityName" 
                             specialStyle="" 
                             label="Activity Name" 
-                            placeholder={`i.e. ${ props.currentForm.form_name }-donation-activity`} 
+                            placeholder={`i.e. Giving - ${ fields.SectionName } - ${ props.currentForm.form_name }`} 
                             maxLength="50" 
                             required={true} 
                             value={fields.ActivityName} 
