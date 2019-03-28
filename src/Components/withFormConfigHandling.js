@@ -27,7 +27,6 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
         this.state = {
             updated: false,
             saved: false,
-            copied: false,
             initialState: {
                 ...props.defaultValues.fields
             },
@@ -43,7 +42,6 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
         this.handleButtonClick = this.handleButtonClick.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
         this.handleMarkdownInput = this.handleMarkdownInput.bind(this)
-        this.handleCopy = this.handleCopy.bind(this)
         this.handleUnload = this.handleUnload.bind(this)
         this.handleBlur = this.handleBlur.bind(this)
     }
@@ -82,12 +80,6 @@ const withFormConfigHandling = SettingsComponent => class extends Component {
             return "Are you sure you want to go back?\n You may lose all your changes to this page."
         }
         return void (0);
-    }
-
-    handleCopy(){
-        this.setState({copied: true}, ()=>{
-            setTimeout(()=> this.setState({copied: false}), 5000);
-        });
     }
 
     handleRadioClick(e) {

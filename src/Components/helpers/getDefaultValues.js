@@ -1,30 +1,50 @@
-const defaultMarkDown = `# This is an h1 header 
-## This is an h2 header
-**This is Bold**, *This is Italicized*, This is plain text
+const defaultMarkDown = `<div style="max-width: 1280px">
 
-1. This is an ordered list
-2. Next item
+![header](https://path/to/header/image.jpg)
 
-* This is an unordered list
-* Next Item
+# EMAIL HEADLINE
 
-Click &ldquo;Preview&rdquo; -> to see more!
+Dear #FirstName#,
 
-[This is a link](http://www1.cbn.com)`;
+**Some Bold Text** *Some Italic Text* [Some Link text](https://path/to/some/other/page) Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text 
 
-const defaultHTML = `<h1 id="this-is-an-h1-header">This is an h1 header</h1>
-<h2 id="this-is-an-h2-header">This is an h2 header</h2>
-<p><strong>This is Bold</strong>, <em>This is Italicized</em>, This is plain text</p>
+## Secondary Headline
+
+Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text 
+
+ 1. Some Ordered List
+ 2. Next item
+
+ - Some Unordered List
+ - Next Item
+
+<button style="display: block; max-width: 300px; height: 40px; border-radius: 20px; padding: 0 20px; line-height: 40px; text-transform: uppercase; color: white; background: crimson">Call To Action</button>
+
+Gratefully yours in Christ,
+
+![Image For Someone's Signature](https://path/to/signature/image.jpg)
+
+</div>`;
+
+const defaultHTML = `<div style="max-width: 1280px">
+<p><img src="https://path/to/header/image.jpg" alt="header" scale="0"></p>
+<h1 id="email-headline">EMAIL HEADLINE</h1>
+<p>Dear #FirstName#,</p>
+<p><strong>Some Bold Text</strong> <em>Some Italic Text</em> <a href="https://path/to/some/other/page">Some Link text</a> Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text </p>
+<h2 id="secondary-headline">Secondary Headline</h2>
+<p>Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text Some text </p>
 <ol>
-<li>This is an ordered list</li>
+<li>Some Ordered List</li>
 <li>Next item</li>
 </ol>
 <ul>
-<li>This is an unordered list</li>
+<li>Some Unordered List</li>
 <li>Next Item</li>
 </ul>
-<p>Click &ldquo;Preview&rdquo; -&gt; to see more!</p>
-<p><a href="http://www1.cbn.com">This is a link</a></p>`
+<p><button style="display: block; max-width: 300px; height: 40px; border-radius: 20px; padding: 0 20px; line-height: 40px; text-transform: uppercase; color: white; background: crimson">Call To Action</button></p>
+<p>Gratefully yours in Christ,</p>
+<p><img src="https://path/to/signature/image.jpg" alt="Image For Someone's Signature" scale="0"></p>
+</div>`
 
 /**
  * Takes in an object and fills with default values or returns existing value
@@ -185,10 +205,10 @@ export function getDefaultValues(editMode, type, config) {
                 DetailCprojMail: editMode && config.hasOwnProperty('monthlyPledgeData') ? config.monthlyPledgeData.DetailCprojMail: '', 
             }
             const singlePledgeData = {
-                DetailName: editMode && config.hasOwnProperty('singlePledgeData') ? config.monthlyPledgeData.DetailName: '',
-                DetailDescription:editMode && config.hasOwnProperty('singlePledgeData') ? config.monthlyPledgeData.DetailDescription: '',
-                DetailCprojCredit: editMode && config.hasOwnProperty('singlePledgeData') ? config.monthlyPledgeData.DetailCprojCredit: '',
-                DetailCprojMail: editMode && config.hasOwnProperty('singlePledgeData') ? config.monthlyPledgeData.DetailCprojMail: '', 
+                DetailName: editMode && config.hasOwnProperty('singlePledgeData') ? config.singlePledgeData.DetailName: '',
+                DetailDescription:editMode && config.hasOwnProperty('singlePledgeData') ? config.singlePledgeData.DetailDescription: '',
+                DetailCprojCredit: editMode && config.hasOwnProperty('singlePledgeData') ? config.singlePledgeData.DetailCprojCredit: '',
+                DetailCprojMail: editMode && config.hasOwnProperty('singlePledgeData') ? config.singlePledgeData.DetailCprojMail: '', 
              }
             defaultValues = {
                 fields: {

@@ -9,9 +9,9 @@ import tabs from './styles/tabs.css'
 export default function FormOptionsTabs(props) {
     const {adminMode, viewMode, setViewMode, formConfig, storeConfig, emailConfig, currentForm, enabled, toggleBtnEnable, options} = props
     const subHeads = ["Settings", "Name/Address", "Gifts", "Designations", "Products", "Subscriptions", "Emails", "Style"]
-    if (currentForm.form_status !== "new" && viewMode !== "Style") {
-        subHeads.push("Preview")
-    }
+    // if (currentForm.form_status !== "new" && viewMode !== "Style") {
+    //     subHeads.push("Preview")
+    // }
     const tabs = subHeads.map((th, ind)=>{
         return (
             <TabHead

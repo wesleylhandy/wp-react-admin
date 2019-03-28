@@ -265,21 +265,6 @@ tbody>tr.table-row:last-child>td.table-row__cells+td.table-row__cells {
     text-align: left;
 }
 
-.copy-btn {
-    font-size: 12px;
-    padding: 2px 5px;
-    border: 1px solid #0085ba;
-    cursor: pointer;
-    color: #0085ba;
-    border-radius: 16px;
-    transition: color 200ms ease-in-out, border-color 200ms ease-in-out;
-}
-
-.copy-btn.copy-btn--copied {
-    color: crimson;
-    border-color: crimson;
-}
-
 @media screen and (max-width: 365px) {
     .submit-button {
         max-width: 270px;

@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+
 
 import form from './styles/form.css'
 import flex from './styles/flex.css'
@@ -8,6 +8,7 @@ import SaveButton from './SaveButton'
 import Checkbox from './Checkbox';
 import InputGroup from './InputGroup';
 import RadioButton from './RadioButton';
+import Clipboard from './Clipboard';
 import withFormConfigHandling from './withFormConfigHandling'
 
 const FormSettings = props => {
@@ -29,21 +30,10 @@ const FormSettings = props => {
                         />
                     </div>
                     <p styleName="form.form-info">
-                        You can now use the Wordpress Shortcode <code styleName="form.form-code">[cbngivingform form_name="{props.currentForm.form_name}"]</code>
-                        &nbsp;
-                        <CopyToClipboard 
-                            text={`[cbngivingform form_name="${props.currentForm.form_name}"]`}
-                            onCopy={
-                                ()=>{
-                                    console.log("Copied")
-                                    props.handleCopy()
-                                }
-                            }
-                        >
-                            <span styleName={`form.copy-btn ${props.copied ? "form.copy-btn--copied" : ""}`}>{props.copied ? "Copied" : "Copy to Clipboard"}</span>
-                        </CopyToClipboard>
+                        You can now use the Wordpress Shortcode&nbsp;
+                        <code styleName="form.form-code">[cbngivingform form_name="{props.currentForm.form_name}"]</code>&nbsp;
+                        <Clipboard text={`[cbngivingform form_name="${props.currentForm.form_name}"]`}/>
                         &nbsp;on page. Please be sure to test as a draft before putting into production.
-                        
                     </p>
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                         <InputGroup
@@ -73,14 +63,14 @@ const FormSettings = props => {
                                     id="ContactSource" 
                                     specialStyle="" 
                                     label="Contact Source" 
-                                    placeholder={`i.e. ${ props.currentForm.form_name }`}
+                                    placeholder={`i.e. OP General Donor, OB Disaster Donor, CBN Wells Donor, etc.`}
                                     maxLength="20" 
                                     required={true} 
                                     value={fields.ContactSource} 
                                     handleInputChange={props.handleInputChange} 
                                     error={errors.ContactSource} 
                                 />
-                                <p styleName="form.form-info">This is generally the same as the campaign name, or <code styleName="form.form-code">{props.currentForm.form_name}</code>.</p>
+                                <p styleName="form.form-info">This is generally the abbreviation for your brand, the type of donation being processed and the word Donor, for instance,  <code styleName="form.form-code">OP General Donor</code> or <code styleName="form.form-code">OB Disaster Donor</code>.</p>
                             </Fragment>
                         ) 
                     }
@@ -100,6 +90,7 @@ const FormSettings = props => {
                             error={errors.SectionName} 
                         />
                     </div>
+                    <p styleName="form.form-info">This is generally the name of your brand, minus any spaces, for instance, <code styleName="form.form-code">OrphansPromise</code> or <code styleName="form.form-code">OperationBlessing</code>.</p>
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                         <InputGroup
                             type="text"
@@ -114,7 +105,11 @@ const FormSettings = props => {
                             error={errors.ActivityName} 
                         />
                     </div>
-                    <p styleName="form.form-info">This is generally connected to the campaign name, or <code styleName="form.form-code">{props.currentForm.form_name}-donation-activity</code>.</p>
+                    <p styleName="form.form-info">
+                        This is generally connected to the campaign name, or&nbsp;
+                        <code styleName="form.form-code">Giving - {fields.SectionName} - {props.currentForm.form_name}</code>.&nbsp;
+                        <Clipboard text={`Giving - ${fields.SectionName} - ${props.currentForm.form_name}`}/>
+                    </p>
                     <div styleName="form.form-row flex.flex flex.flex-row flex.flex-axes-center">
                         <Checkbox id="showSeals" checked={fields.showSeals} handleInputChange={props.handleInputChange} label="Show CBN Giving Seals - Digicert & ECFA?"/>
                     </div>

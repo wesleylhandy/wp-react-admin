@@ -1,3 +1,4 @@
+import "./vendors";
 import "./require-babel-polyfill"
 import Promise from 'promise-polyfill';
 import 'raf/polyfill';

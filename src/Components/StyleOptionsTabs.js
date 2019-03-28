@@ -23,9 +23,9 @@ export default function StyleOptionsTabs(props) {
         styleSettings
     } = props
     const subHeads = ["Colors", "Fonts", "Spacing"]
-    if (currentForm.form_status !== "new") {
-        subHeads.push("Preview")
-    }
+    // if (currentForm.form_status !== "new") {
+    //     subHeads.push("Preview")
+    // }
     const tabs = subHeads.map((th, ind)=>{
         return (
             <TabHead

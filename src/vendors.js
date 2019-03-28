@@ -1,8 +1,10 @@
-import("babel-polyfill");
 import('promise-polyfill');
 import('raf/polyfill');
 import('whatwg-fetch');
 import('react-hot-loader');
+import('react-copy-to-clipboard')
 import('sweetalert');
 import('react');
 import('react-dom');
+import('marked');
+import('highlight.js');
