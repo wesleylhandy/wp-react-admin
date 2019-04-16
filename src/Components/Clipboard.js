@@ -5,13 +5,12 @@ import withClipboard from './withClipboard'
 import styles from './styles/clipboard.css'
 
 function Clipboard({text, handleCopy, copied}) {
-    console.log({text, handleCopy, copied})
     return (
         <CopyToClipboard 
             text={text}
             onCopy={
                 ()=>{
-                    console.log("Copied")
+                    console.log(`Copied ${text} to Clipboard.`)
                     handleCopy()
                 }
             }

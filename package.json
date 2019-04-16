@@ -1,14 +1,13 @@
 {
     "name": "cbngiving-wp-admin-react",
-    "version": "1.6.6",
+    "version": "1.7.1",
     "description": "Interface to handle initialization of cbn giving forms for the CBNGiving-Plugin for Wordpress",
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "parcel index.html",
         "reset": "rm -rf dist/ .cache/",
-        "build": "parcel build src/index.js -d src/dist/v1",
-        "build:split": "parcel build src/index.js --detailed-report -d dist/split/v1"
+        "build": "parcel build src/index.js -d --detailed-report dist",
     },
     "author": "Wesley L. Handy",
     "license": "Private",
