@@ -7,7 +7,8 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "parcel index.html",
         "reset": "rm -rf dist/ .cache/",
-        "build": "parcel build src/index.js -d --detailed-report dist",
+        "build": "parcel build src/portal.js -d --detailed-report dist",
+        "postbuild": "pax -rws /index/portal/ dist/index* . && rm dist/index*"
     },
     "author": "Wesley L. Handy",
     "license": "Private",
