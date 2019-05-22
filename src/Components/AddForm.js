@@ -55,6 +55,7 @@ export default class AddForm extends Component {
         let inputValue = target.type === 'checkbox' ? target.checked : target.value.trim();
         let {error} = this.state;
         error = ''
+        inputValue = inputValue.replace(/[^\w-]*/g, "");
         const updated = inputValue ? true : false
         this.setState({form_name: inputValue, error, updated})
     }
@@ -75,7 +76,8 @@ export default class AddForm extends Component {
                                 placeholder="i.e. Giving, or End-of-Year" 
                                 maxLength="256" 
                                 required={true} 
-                                value={this.state.form_name} 
+                                value={this.state.form_name}
+                                validation={"[^\w]*"}
                                 handleInputChange={this.handleInputChange} 
                                 error={this.state.error}
                             />
@@ -94,7 +96,6 @@ export default class AddForm extends Component {
                     </fieldset>
                 </form>
             </Fragment>
-
         )
     }
 }
