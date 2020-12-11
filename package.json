@@ -1,7 +1,7 @@
 {
-    "name": "cbngiving-wp-admin-react",
+    "name": "wp-admin-react",
     "version": "1.7.1",
-    "description": "Interface to handle initialization of cbn giving forms for the CBNGiving-Plugin for Wordpress",
+    "description": "Interface to handle initialization of react giving forms for Wordpress plugin",
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,7 +10,7 @@
         "build": "parcel build src/portal.js -d dist --detailed-report",
         "postbuild": "pax -rws /index/portal/ dist/index* . && rm dist/index*"
     },
-    "author": "Wesley L. Handy",
+    "author": "Wesley L. Handy <wesley@wearecreativ.media>",
     "license": "Private",
     "dependencies": {
         "@sweetalert/with-react": "^0.1.1",
